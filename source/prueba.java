@@ -10,7 +10,7 @@ public class prueba
 	{
 		
 		
-		
+		int a;
 		
 		Date fechaActual =new Date();
 		SimpleDateFormat format = new SimpleDateFormat("yyyyMMMMEEEE", Locale.US);
