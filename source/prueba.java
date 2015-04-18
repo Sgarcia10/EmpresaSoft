@@ -9,12 +9,16 @@ public class prueba
 	public static void main(String[] args) 
 	{
 		
-		int b;
-		int f;
 		int a;
+		int b;
 		int c;
+		int f;
+		
+		
 		
 		double z;
+
+		double x;
 		
 		Date fechaActual =new Date();
 		SimpleDateFormat format = new SimpleDateFormat("yyyyMMMMEEEE", Locale.US);
