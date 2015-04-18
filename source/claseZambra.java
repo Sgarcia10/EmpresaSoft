@@ -1,7 +1,7 @@
 
 public class claseZambra {
 	
-	int zzzzz;
+	int zzzzz = 9;
 	void a()
 	{
 		
@@ -10,4 +10,6 @@ public class claseZambra {
 	//Prueba CATM
 	
 	String m;
+	
+	double x;
 }
