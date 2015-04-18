@@ -14,7 +14,7 @@ public class prueba
 		int c;
 		int f;
 		
-		
+		String aaa= "";
 		
 		double z;
 
