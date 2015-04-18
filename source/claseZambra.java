@@ -8,9 +8,7 @@ public class claseZambra {
 	}
 	
 	//Prueba CATM
-	
-	hhg;
-	
+		
 	String m;
 	
 	double x;
