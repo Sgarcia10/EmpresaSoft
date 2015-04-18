@@ -11,6 +11,8 @@ public class prueba
 		
 		int b;
 		int f;
+		int a;
+		int c;
 		
 		double z;
 		
