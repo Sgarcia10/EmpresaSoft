@@ -12,6 +12,8 @@ public class prueba
 		int b;
 		int f;
 		
+		double z;
+		
 		Date fechaActual =new Date();
 		SimpleDateFormat format = new SimpleDateFormat("yyyyMMMMEEEE", Locale.US);
 		System.out.println(""+format.format(fechaActual));
