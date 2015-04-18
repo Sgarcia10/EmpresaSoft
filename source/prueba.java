@@ -11,6 +11,7 @@ public class prueba
 		
 		
 		int a;
+		double c;
 		
 		Date fechaActual =new Date();
 		SimpleDateFormat format = new SimpleDateFormat("yyyyMMMMEEEE", Locale.US);
