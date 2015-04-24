@@ -24,9 +24,14 @@ import javax.swing.table.DefaultTableModel;
 
 
 
+
+
 import java.awt.Toolkit;
 
 import javax.swing.JButton;
+
+import mundo.DiasNoLaborados;
+import mundo.Prestamo;
 
 import java.awt.Dialog.ModalityType;
 
@@ -38,7 +43,7 @@ public class DialogoDeduccionesPrestamos extends JDialog implements ActionListen
 	private ArrayList<Integer> indices;
 	private Date fecha;
 	private int cont;
-	private JTable tableNovedaesHoras;
+	private JTable tableDeduccionesPrestamos;
 	private DecimalFormat formatea;
 	private String titulo;
 	private JPanel panel;
@@ -68,8 +73,8 @@ public class DialogoDeduccionesPrestamos extends JDialog implements ActionListen
 		panel.setBounds(10, 11, 652, 288);
 		getContentPane().add(panel);
 		Object[] dataHoras = { "", "",""};
-		Object[] columnsHoras = {"Fecha Ingreso","Usuario","Fecha Préstamo","Concepto","Total","Cuota Período","Saldo"};
-		DefaultTableModel modN = new DefaultTableModel(columnsHoras, 0)
+		Object[] columnsPrestamos = {"Fecha Ingreso","Usuario","Fecha Préstamo","Concepto","Total","Cuota Período","Saldo"};
+		DefaultTableModel modN = new DefaultTableModel(columnsPrestamos, 0)
 		{
 
 			@Override
@@ -78,10 +83,10 @@ public class DialogoDeduccionesPrestamos extends JDialog implements ActionListen
 				return false;
 			}
 		};
-		tableNovedaesHoras = new JTable(modN);
-		tableNovedaesHoras.getTableHeader().setReorderingAllowed(false);
+		tableDeduccionesPrestamos = new JTable(modN);
+		tableDeduccionesPrestamos.getTableHeader().setReorderingAllowed(false);
 
-		JScrollPane scrollPane = new JScrollPane(tableNovedaesHoras);
+		JScrollPane scrollPane = new JScrollPane(tableDeduccionesPrestamos);
 		scrollPane.setBounds(10, 22, 632, 221);
 		panel.add(scrollPane);
 
@@ -110,8 +115,22 @@ public class DialogoDeduccionesPrestamos extends JDialog implements ActionListen
 		getContentPane().add(btnSiguiente);
 
 		actualizarTitulo();
-		//		actualizarAbonos();
-		//		actualizarNotas();
+		actualizarInformacion();
+		
+	}
+
+
+	private void actualizarInformacion() {
+		// TODO Auto-generated method stub
+		ArrayList listaPrestamos = control.getListaDeduccionesPrestamos( );
+
+		if( !listaPrestamos.isEmpty( ) ){
+			for (int i = 0; i < listaPrestamos.size(); i++){
+				Prestamo prestamoActual = (Prestamo) listaPrestamos.get(i);
+				DefaultTableModel model = (DefaultTableModel) tableDeduccionesPrestamos.getModel();
+				model.addRow(new Object[]{prestamoActual.getFecha(), prestamoActual.getUser().getUser(), prestamoActual.getFechaExpedicion().toLocaleString(), prestamoActual.getConcepto(), prestamoActual.getCantidad(), prestamoActual.getCuotaPeriodo(), prestamoActual.getSaldo()});
+			}
+		}
 	}
 
 

@@ -280,5 +280,11 @@ public class Control {
 		ArrayList rta = new ArrayList( );
 		return rta;
 	}
+
+	public ArrayList getListaDeduccionesPrestamos() {
+		// TODO Auto-generated method stub
+		ArrayList rta = new ArrayList( );
+		return rta;
+	}
 	
 }
