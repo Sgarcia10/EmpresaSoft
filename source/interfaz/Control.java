@@ -268,5 +268,17 @@ public class Control {
 		ArrayList rta = new ArrayList( );
 		return rta;
 	}
+
+	public ArrayList getListaDominicalExtraNocturno() {
+		// TODO Auto-generated method stub
+		ArrayList rta = new ArrayList( );
+		return rta;
+	}
+
+	public ArrayList getListaDominicalDiasDominicalesYFestivos() {
+		// TODO Auto-generated method stub
+		ArrayList rta = new ArrayList( );
+		return rta;
+	}
 	
 }
