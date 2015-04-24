@@ -128,8 +128,8 @@ public class DialogoDevengadoHoras extends JDialog implements ActionListener
 		case 0: titulo = "Ordinaria - Extra Diurno"; actualizarOrdinariaExtraDiurno(); break;
 		case 1: titulo = "Ordinaria - Extra Nocturno"; actualizarOrdinariaExtraNocturno(); btnAnterior.setEnabled(true); break;
 		case 2: titulo = "Dominical y Festivo - Extra Diurno";  actualizarDominicalExtraDiurno(); break;
-		case 3: titulo = "Dominical y Festivo - Extra Nocturno";  break;
-		case 4: titulo = "Dominical y Festivo - Dominical y Festivo"; break;
+		case 3: titulo = "Dominical y Festivo - Extra Nocturno";  actualizarDominicalExtraNocturno( ); break;
+		case 4: titulo = "Dominical y Festivo - Dominical y Festivo"; actualizarDominicalDiasDomYFestivos( ); break;
 		case 5: 
 			this.setVisible(false);
 			this.dispose();
@@ -140,6 +140,34 @@ public class DialogoDevengadoHoras extends JDialog implements ActionListener
 		}
 		panel.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), titulo, TitledBorder.LEADING, TitledBorder.TOP, null, null));
 	}
+
+	private void actualizarDominicalDiasDomYFestivos() {
+		// TODO Auto-generated method stub
+		ArrayList listaDominicalDominicales = control.getListaDominicalDiasDominicalesYFestivos( );
+
+		if( !listaDominicalDominicales.isEmpty( ) ){
+			for (int i = 0; i < listaDominicalDominicales.size(); i++){
+				HoraExtra hora = (HoraExtra) listaDominicalDominicales.get(i);
+				DefaultTableModel model = (DefaultTableModel) tableNovedaesHoras.getModel();
+				model.addRow(new Object[]{hora.getFecha(), hora.getUser().getUser(), hora.getFechaLaborada().toLocaleString(), hora.getNumeroHoras(), hora.getConcepto(), hora.getValorUnitario(), hora.getSubTotal()});
+			}
+		}
+	}
+
+
+	private void actualizarDominicalExtraNocturno() {
+		// TODO Auto-generated method stub
+		ArrayList listaDominicalExtraNocturno = control.getListaDominicalExtraNocturno( );
+
+		if( !listaDominicalExtraNocturno.isEmpty( ) ){
+			for (int i = 0; i < listaDominicalExtraNocturno.size(); i++){
+				HoraExtra hora = (HoraExtra) listaDominicalExtraNocturno.get(i);
+				DefaultTableModel model = (DefaultTableModel) tableNovedaesHoras.getModel();
+				model.addRow(new Object[]{hora.getFecha(), hora.getUser().getUser(), hora.getFechaLaborada().toLocaleString(), hora.getNumeroHoras(), hora.getConcepto(), hora.getValorUnitario(), hora.getSubTotal()});
+			}
+		}
+	}
+
 
 	private void actualizarDominicalExtraDiurno() {
 		// TODO Auto-generated method stub
