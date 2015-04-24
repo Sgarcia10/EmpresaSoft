@@ -3,6 +3,8 @@ package interfaz;
 import java.util.ArrayList;
 import java.util.Date;
 
+import javax.swing.ImageIcon;
+
 import mundo.Empleado;
 import mundo.Empresa;
 import mundo.IEmpresa;
@@ -11,11 +13,18 @@ public class Control {
 	
 	private IEmpresa empresa;
 	
-	public Control() 
+	public Control() throws Exception
 	{
 		empresa = new Empresa( );
+		
+		empresa.cargarEstado(Empresa.RUTA_ARCHIVO_PERSISTENCIA);
 	}
 
+	public void agregarEmpleado(){
+		
+		empresa.agregarEmpleado();
+	}
+	
 	public boolean validacionUsuario(String usuarioP, String contraseniaP) 
 	{
 		return empresa.validacionUsuario(usuarioP, contraseniaP);
@@ -29,6 +38,14 @@ public class Control {
 		empresa.crearEmpleadoNuevo(identificacion, tipoDocumento, nombre, apellidos, sexo, 
 				fechaNacimiento, estadoCivil, correo, edad, telefono, celularP, direccion, 
 				ciudad, departamento, nacionalidad);
+	}
+	
+	public void agregarConyugueEmpleadoNuevo(String nombresParejaP, String apellidosParejaP, double cedulaParejaP,
+			double telefonoParejaP, Date fechaNacimientoParejaP, String sexoParejaP,
+			String direccionParejaP, String ciudadParejaP){
+		
+		Empleado e = empresa.getEmpleadoNuevo();
+		empresa.agregarConyugueEmpleado(e, nombresParejaP, apellidosParejaP, cedulaParejaP, telefonoParejaP, fechaNacimientoParejaP, sexoParejaP, direccionParejaP, ciudadParejaP);
 	}
 	
 	public void agregarReferenciaEmpleadoNuevo(String nombresP, String apellidosP, int telefonoP, 
@@ -45,6 +62,15 @@ public class Control {
 		empresa.agregarExperienciaEmpleado(e, cargoP, empresaP, tipoContratoP, fechaInicioP, fechaFinP);
 	}
 	
+	public void agregarHijoEmpleadoNuevo(String nombreP,String apellidosP,int telefonoP,int identificacionP, String sexoP,
+			String direccionP, String ciudadP, String departamentoP, String tipoDocumentoP, Date fechaNacimientoP)
+	{
+		
+		Empleado e = empresa.getEmpleadoNuevo();
+		empresa.agregarHijos(e, nombreP, apellidosP, telefonoP, identificacionP, sexoP, direccionP, ciudadP, departamentoP, tipoDocumentoP, fechaNacimientoP);
+
+	}
+	
 	public void eliminarReferenciaEmpleadoNuevo(int index){
 		Empleado e = empresa.getEmpleadoNuevo();
 		empresa.eliminarReferenciaEmpleado(e, index);
@@ -54,6 +80,38 @@ public class Control {
 		Empleado e = empresa.getEmpleadoNuevo();
 		empresa.eliminarExperienciaEmpleado(e, index);
 	}
+	
+	public void eliminarHijoEmpleadoNuevo(int index){
+		Empleado e = empresa.getEmpleadoNuevo();
+		empresa.eliminarHijoEmpleado(e, index);
+	}
+	
+	public void editarReferenciaEmpleadoNuevo(int posicion, String tipoP,
+			String nombresP, String apellidosP, int documentoP,
+			int telefonoP,String sexoP, String direccionP,
+			String ciudadP,String empresaP,String conceptoP){
+		
+		Empleado e = empresa.getEmpleadoNuevo();
+		empresa.editarReferenciaEmpleado(e,posicion, tipoP,
+				nombresP, apellidosP,documentoP,telefonoP,sexoP,
+				direccionP,	ciudadP,empresaP,conceptoP);		
+	}
+	
+	public void editarExperienciaEmpleadoNuevo( int index, String empresaP, 
+			String cargoP, String tipoP, Date fechaInicioP, Date fechaFinP){
+		
+		Empleado e = empresa.getEmpleadoNuevo();
+		empresa.editarExperienciaEmpleado(e, index, empresaP, cargoP, tipoP, fechaInicioP, fechaFinP);
+		
+	}
+	
+	public void editarHijoEmpleadoNuevo(int index, String nombreP, String apellidosP, String tipoP,
+			int identificacionP, String sexoP, Date fechaP, String direccionP){
+		
+		Empleado e = empresa.getEmpleadoNuevo();
+		empresa.editarHijoEmpleado(e, index, nombreP, apellidosP, tipoP, identificacionP, sexoP, fechaP, direccionP);
+	}
+	
 	
 	public ArrayList darListaReferecnias(){
 		return empresa.getEmpleadoNuevo().getReferencias();
@@ -65,6 +123,30 @@ public class Control {
 	
 	public Empleado getEmpleado(){
 		return empresa.getEmpleadoNuevo();
+	}
+	
+	public ArrayList getEmpleados(){
+		return empresa.getEmpleados();
+	}
+	
+	public ArrayList darListaReferecniasEmpleadoNuevo(){
+		return empresa.getEmpleadoNuevo().getReferencias();
+	}
+	
+	public ArrayList darListaExperienciaEmpleadoNuevo(){
+		return empresa.getEmpleadoNuevo().getExperiencia();
+	}
+	
+	public ArrayList darListaHijosEmpleadoNuevo(){
+		return empresa.getEmpleadoNuevo().getHijos();
+	}
+	
+	public ArrayList darListaEmpleados(){
+		return empresa.getEmpleados();
+	}
+	
+	public Empresa getEmpresa(){
+		return (Empresa) empresa;
 	}
 	
 //	public String getPeriodoNomina() {
@@ -285,6 +367,31 @@ public class Control {
 		// TODO Auto-generated method stub
 		ArrayList rta = new ArrayList( );
 		return rta;
+	}
+	
+	public void agregarInfoLaboralEmpleadoNuevo(String cargoP,
+			int salarioFijoP, int horasP, String tipoP, String duracionP,
+			Date fechaInicioP, Date fechaFinP, int tipoLiquidacionP, String saludP,
+			String pensionesP, String arlP, boolean solidaridadP, String cajaCompensacionP,
+			Date fechaAfiliacionP, boolean auxilioP) {
+		
+		Empleado e = empresa.getEmpleadoNuevo();
+		empresa.agregarInfoLaboralEmpleado( e, cargoP, salarioFijoP,  
+				horasP,  tipoP,  duracionP, fechaInicioP,  fechaFinP,  
+				tipoLiquidacionP,  saludP, pensionesP,  arlP,  solidaridadP,  
+				cajaCompensacionP, fechaAfiliacionP, auxilioP); 
+		
+	}
+	
+	public void agregarInfoPersonalEmpleadoNuevo(String nombreP,String apellidosP,
+			String tipoP, int documentoP, String sexoP, String estadoCivilP, 
+			Date fechaP, String direccionP, String ciudadP, int telefonoP,int celularP,
+			ImageIcon fotoP)
+	{
+		Empleado e = empresa.getEmpleadoNuevo();
+		empresa.agregarInfoPersonalEmpleado( e,  nombreP, apellidosP,
+				 tipoP,  documentoP,  sexoP,  estadoCivilP, 
+				 fechaP,  direccionP,  ciudadP,  telefonoP, celularP,fotoP);
 	}
 	
 }

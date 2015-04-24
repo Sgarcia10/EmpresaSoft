@@ -1,8 +1,9 @@
 package mundo;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Experiencia {
+public class Experiencia implements Serializable{
 
 	private String empresa;
 	private String cargo;

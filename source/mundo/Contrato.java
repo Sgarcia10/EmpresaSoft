@@ -1,8 +1,9 @@
 package mundo;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Contrato 
+public class Contrato implements Serializable
 {
 	private String cargo;
 	
@@ -18,9 +19,11 @@ public class Contrato
 	
 	private  Date fechaFin;
 	
-	private String tipoSalario;
+	private String duracionContrato;
 	
 	private int horasSemana;
+	
+	public final static double AUXILIO = 75000;
 	
 	public Contrato(String cargoP, int sueldoBasicoP, boolean auxilioTransporteP, int periodoLiquidacionP,
 			Date fechaInicioP, String tipoContratoP, Date fechaFinP, String tipoSalarioP, int horasSemanaP)
@@ -39,7 +42,7 @@ public class Contrato
 		
 		tipoContrato = tipoContratoP;
 		
-		tipoSalario = tipoSalarioP;
+		duracionContrato = tipoSalarioP;
 		
 		horasSemana = horasSemanaP;
 	}
@@ -73,7 +76,7 @@ public class Contrato
 	}
 
 	protected void setTipoSalario(String tipoSalario) {
-		this.tipoSalario = tipoSalario;
+		this.duracionContrato = tipoSalario;
 	}
 
 	protected void setHorasSemana(int horasSemana) {
@@ -84,8 +87,16 @@ public class Contrato
 		return cargo;
 	}
 
-	public int getSueldoBasico() {
+	public double getSueldoBasico() {
 		return sueldoBasico;
+	}
+	
+	public double getSueldoTotal() {
+		double res = getSueldoBasico();
+		if (auxilioTransporte){
+			res = res + this.AUXILIO;
+		}
+		return res;
 	}
 
 	public boolean isAuxilioTransporte() {
@@ -109,7 +120,7 @@ public class Contrato
 	}
 
 	public String getTipoSalario() {
-		return tipoSalario;
+		return duracionContrato;
 	}
 
 	public int getHorasSemana() {

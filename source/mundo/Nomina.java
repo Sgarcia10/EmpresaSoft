@@ -33,7 +33,7 @@ public class Nomina
 	
 	public Nomina(Empleado empleadoP)
 	{
-		salarioBasico = empleadoP.getContrato().getSueldoBasico();
+		salarioBasico = (int) empleadoP.getContrato().getSueldoBasico();
 		
 		auxilioTransporte = empleadoP.getContrato().isAuxilioTransporte();
 		

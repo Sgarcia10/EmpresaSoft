@@ -43,8 +43,10 @@ import javax.swing.border.LineBorder;
 import com.toedter.calendar.JMonthChooser;
 import com.toedter.calendar.JYearChooser;
 
+import mundo.Contrato;
+import mundo.Empleado;
 import mundo.Empresa;
-import mundo.ReferenciaPersonal;
+import mundo.Referencia;
 
 public class InterfazNomina extends JFrame implements ActionListener{
 	private JTextField busquedaEmpleados;
@@ -65,6 +67,10 @@ public class InterfazNomina extends JFrame implements ActionListener{
 	private JRadioButton radioButtonPeriodo2;
 	private ButtonGroup botonesPeriodo;
 	
+	private JList listaEmpleados;
+	
+	private JLabel lblFoto;
+	
 	public InterfazNomina() {
 
 		setTitle("Liquidación de Nómina");
@@ -73,7 +79,13 @@ public class InterfazNomina extends JFrame implements ActionListener{
 		setResizable(false);
 		setVisible(false);
 		
-		control = new Control();
+		try {
+			control = new Control();
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			System.out.println(e.getMessage());
+		}
 		
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		JPanel panel = new JPanel();
@@ -92,6 +104,10 @@ public class InterfazNomina extends JFrame implements ActionListener{
 		fotoEmpleado.setBorder(new LineBorder(new Color(0, 0, 0)));
 		fotoEmpleado.setBackground(Color.WHITE);
 		fotoEmpleado.setBounds(10, 24, 138, 172);
+		
+		lblFoto = new JLabel("");
+		lblFoto.setSize(138, 172);
+		fotoEmpleado.add(lblFoto);
 		panel_1.add(fotoEmpleado);
 		
 		nombresEmpleado = new JTextField();
@@ -189,7 +205,7 @@ public class InterfazNomina extends JFrame implements ActionListener{
 		scrollPane.setBounds(10, 52, 201, 401);
 		panel_3.add(scrollPane);
 		
-		JList listaEmpleados = new JList();
+		listaEmpleados = new JList();
 		scrollPane.setRowHeaderView(listaEmpleados);
 		
 		JLabel lblBuscar = new JLabel("Buscar");
@@ -291,6 +307,8 @@ public class InterfazNomina extends JFrame implements ActionListener{
 		DialogoLogin loggin = new DialogoLogin(this, control);
 		loggin.setLocationRelativeTo(this);
 		loggin.setVisible(true);
+		
+		actualizarListaEmpleados();
 	}
 	
 	public static void main(String[] args) {
@@ -325,6 +343,7 @@ public class InterfazNomina extends JFrame implements ActionListener{
 	{
 		try
 		{
+			control.getEmpresa().guardarEstado(Empresa.RUTA_ARCHIVO_PERSISTENCIA);
 			super.dispose();
 			System.out.println("se cerro correctamente el proyecto");
 		}
@@ -347,7 +366,7 @@ public class InterfazNomina extends JFrame implements ActionListener{
 		
 		if(command.equals("Agregar"))
 		{
-			DialogoAgregarEmpleado agregarEmpleado = new DialogoAgregarEmpleado(control);
+			DialogoAgregarEmpleado agregarEmpleado = new DialogoAgregarEmpleado(control,this);
 			agregarEmpleado.setLocationRelativeTo(this);
 			agregarEmpleado.setVisible(true);
 		}
@@ -386,5 +405,56 @@ public class InterfazNomina extends JFrame implements ActionListener{
 		String periodo = botonesPeriodo.getSelection().getActionCommand();
 		String year = "" + anoPeriodo.getValue();
 		return periodo + " " + mes + ", " + year;
+	}
+	
+	public void actualizarListaEmpleados(){
+		
+		ArrayList<Empleado> listaE = control.getEmpleados();
+		
+		if( !listaE.isEmpty( ) ){
+			listaEmpleados.setListData( listaE.toArray( ) );
+			System.out.println(listaE.size());
+			listaEmpleados.setSelectedIndex( listaE.size() - 1);
+			actualizarResumenDatosEmpleadoSeleccionado(listaE.size() - 1);
+
+		}
+		
+		
+	}
+	
+	public void actualizarResumenDatosEmpleadoSeleccionado(int posicionP){
+		Empleado e = (Empleado) control.darListaEmpleados().get(posicionP);
+		Contrato c = e.getContrato();
+		
+		nombresEmpleado.setText(e.getNombres());
+		apellidosEmpleado.setText(e.getApellidos());
+		cedulaEmpleado.setText(String.valueOf(e.getIdentificacion()));
+		direccionEmpleado.setText(e.getDireccion());
+		telefenoFijoEmpleado.setText(String.valueOf(e.getTelefono()));
+		cargoEmpleado.setText(c.getCargo());
+
+		salarioTotalEmpleado.setText(String.valueOf(c.getSueldoTotal()));
+		telefonoCelularEmpleado.setText(String.valueOf(e.getCelular()));
+		
+		if (!(e.getFoto() == null) ){
+			
+			lblFoto.setSize(138, 172);
+			ImageIcon icono0 = e.getFoto();
+			ImageIcon icon = new ImageIcon(icono0.getImage().getScaledInstance(lblFoto.getWidth(), lblFoto.getHeight(), Image.SCALE_DEFAULT));
+			
+	        lblFoto.setIcon(icon); // ADDED
+
+	        Dimension imageSize = new Dimension(130,150); // ADDED
+	        lblFoto.setPreferredSize(imageSize); // ADDED
+
+	        lblFoto.revalidate(); // ADDED
+	        lblFoto.repaint();
+		}
+		else {
+			lblFoto.setIcon(null); // ADDED
+
+	        lblFoto.revalidate(); // ADDED
+	        lblFoto.repaint();
+		}
 	}
 }

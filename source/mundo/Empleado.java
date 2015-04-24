@@ -3,15 +3,21 @@ package mundo;
 import java.util.ArrayList;
 import java.util.Date;
 
+import javax.swing.ImageIcon;
+
 public class Empleado extends Persona{
 
 //TODO extends Persona
 	
-	private ArrayList<Hijo> hijos;
+private ArrayList<Hijo> hijos;
 	
-	private ArrayList <ReferenciaPersonal> referencias;
+	private ArrayList <Referencia> referencias;
 	
 	private ArrayList <Experiencia> experiencia;
+	
+	private ArrayList <Nomina> nominas;
+	
+	private ImageIcon foto;
 	
 	private Contrato contrato;
 	
@@ -21,9 +27,13 @@ public class Empleado extends Persona{
 	
 	private String arl;
 	
-	private String solidaridad;
+	private String cajaCompensacion;
+	
+	private boolean solidaridad;
 	
 	private Date fechaAfiliacionSS;
+	
+	private Conyuge conyugue;
 		
 	
 	public Empleado(int identificacion, String tipoDocumento, String nombre, 
@@ -34,14 +44,26 @@ public class Empleado extends Persona{
 		super(identificacion, tipoDocumento, nombre, apellidos, sexo, fechaNacimiento,
 				estadoCivil, correo, edad, telefono, celularP, direccion, ciudad, 
 				departamento, nacionalidad);		
+		
+		hijos = new ArrayList();
+		referencias = new ArrayList();
+		experiencia = new ArrayList();
+		nominas = new ArrayList<>();
+		foto = null;
 	}
 	
+	public void agregarConyugue( String nombresParejaP, String apellidosParejaP, double cedulaParejaP,
+			double telefonoParejaP, Date fechaNacimientoParejaP, String sexoParejaP,
+			String direccionParejaP, String ciudadParejaP){
+		
+		conyugue = new Conyuge(nombresParejaP, apellidosParejaP, cedulaParejaP, telefonoParejaP, fechaNacimientoParejaP, sexoParejaP, direccionParejaP, ciudadParejaP);
+	}
 	
 	public void agregarReferencia(String nombre, String apellidos, int telefono,
 			int identificacion, String sexo, String direccion, String ciudad, String departamento,
 			String tipoP, String empresaP, String conceptoP) {
 		
-		ReferenciaPersonal nueva = new ReferenciaPersonal(nombre, apellidos, telefono,
+		Referencia nueva = new Referencia(nombre, apellidos, telefono,
 				identificacion, sexo, direccion, ciudad, departamento,
 				tipoP, empresaP, conceptoP);
 		referencias.add(nueva);
@@ -49,6 +71,25 @@ public class Empleado extends Persona{
 	
 	public void eliminarReferencia(int index){
 		referencias.remove(index);
+	}
+	
+	public void editarReferencia(int posicion, String tipoP, String nombresP,
+			String apellidosP, int documentoP, int telefonoP, String sexoP,
+			String direccionP, String ciudadP, String empresaP, String conceptoP) {
+		
+		// TODO Auto-generated method stub
+		Referencia ref = referencias.get(posicion);
+		
+		ref.setTipo(tipoP);
+		ref.setNombres(nombresP);
+		ref.setApellidos(apellidosP);
+		ref.setIdentificacion(documentoP);
+		ref.setTelefono(telefonoP);
+		ref.setSexo(sexoP);
+		ref.setDireccion(direccionP);
+		ref.setCiudad(ciudadP);
+		ref.setEmpresa(empresaP);
+		ref.setConcepto(conceptoP);
 	}
 	
 	public void agregarExperiencia(String cargoP, String empresaP, String tipoContratoP, Date fechaInicioP, Date fechaFinP){
@@ -59,6 +100,54 @@ public class Empleado extends Persona{
 	public void eliminarExperiencia(int index){
 		experiencia.remove(index);
 	}
+	
+	public void editarExperiencia(int index, String empresaP, String cargoP, String tipoP, Date fechaInicioP, Date fechaFinP){
+		
+		Experiencia exp = experiencia.get(index);
+		
+		exp.setEmpresa(empresaP);
+		exp.setCargo(cargoP);
+		exp.setTipoContrato(tipoP);
+		exp.setFechaInicio(fechaInicioP);
+		exp.setFechaFin(fechaFinP);
+	}
+	
+	public void agregarHijo(String nombreP,String apellidosP,int telefonoP,int identificacionP, String sexoP,
+			String direccionP, String ciudadP, String departamentoP, String tipoDocumentoP, Date fechaNacimientoP)
+	{
+		Hijo nuevo = new Hijo(nombreP, apellidosP, telefonoP, identificacionP, sexoP,
+				direccionP, ciudadP, departamentoP, tipoDocumentoP, fechaNacimientoP);
+		hijos.add(nuevo);
+	}
+	
+	public void eliminarHijo(int index){
+		hijos.remove(index);
+	}
+	
+	public void agregarContrato(String cargoP,
+			int salarioFijoP, int horasP, String tipoP, String duracionP,
+			Date fechaInicioP, Date fechaFinP, int tipoLiquidacionP, boolean auxilioP)
+	{
+		Contrato contratoNuevo = new Contrato(cargoP, salarioFijoP, auxilioP,
+				tipoLiquidacionP, fechaInicioP, tipoP, fechaFinP, duracionP, horasP);
+		
+		contrato = contratoNuevo;
+	}
+	
+	public void editarHijo(int index, String nombreP, String apellidosP, String tipoP,
+			int identificacionP, String sexoP, Date fechaP, String direccionP){
+		
+		Hijo hij = hijos.get(index);
+		
+		hij.setNombres(nombreP);
+		hij.setApellidos(apellidosP);
+		hij.setTipoDocumento(tipoP);
+		hij.setIdentificacion(identificacionP);
+		hij.setSexo(sexoP);
+		hij.setFechaNacimiento(fechaP);
+		hij.setDireccion(direccionP);
+	}
+	
 	
 	protected void setContrato(String cargoP, int sueldoBasicoP, boolean auxilioTransporteP, int periodoLiquidacionP,
 			Date fechaInicioP, String tipoContratoP, Date fechaFinP, String tipoSalarioP, int horasSemana)
@@ -111,12 +200,12 @@ public class Empleado extends Persona{
 	}
 
 
-	public String getSolidaridad() {
+	public boolean getSolidaridad() {
 		return solidaridad;
 	}
 
 
-	protected void setSolidaridad(String solidaridad) {
+	protected void setSolidaridad(boolean solidaridad) {
 		this.solidaridad = solidaridad;
 	}
 
@@ -146,6 +235,23 @@ public class Empleado extends Persona{
 
 	protected void setExperiencia(ArrayList experiencia) {
 		this.experiencia = experiencia;
+	}
+	
+	
+	public String getCajaCompensacion(String cajaCompensacionP){
+		return cajaCompensacion;
+	}
+	
+	protected void setCajaCompensacion(String cajaCompensacionP){
+		this.cajaCompensacion = cajaCompensacionP;
+	}
+	
+	public ImageIcon getFoto() {
+		return foto;
+	}
+
+	protected void setFoto(ImageIcon foto) {
+		this.foto = foto;
 	}
 	
 

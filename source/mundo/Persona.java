@@ -1,8 +1,9 @@
 package mundo;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public abstract class Persona {
+public abstract class Persona implements Serializable{
 	
 
 	
@@ -17,11 +18,11 @@ public abstract class Persona {
 	
 	private String apellidos;
 	
-	private int telefono;
+	private double telefono;
 	
 	private String tipoDocumento;
 	
-	private int identificacion;
+	private double identificacion;
 	
 	private String sexo;
 	
@@ -29,7 +30,7 @@ public abstract class Persona {
 	
 	private String ciudad;
 	
-	private int celular;
+	private double celular;
 	
 	private Date fechaNacimiento;
 	
@@ -44,9 +45,9 @@ public abstract class Persona {
 	private String nacionalidad;
 	
 
-	public Persona(int identificacion, String tipoDocumento, String nombre, 
+	public Persona(double identificacion, String tipoDocumento, String nombre, 
 			String apellidos, String sexo, Date fechaNacimiento, String estadoCivil,
-			String correo, int edad, int telefono, int celularP, String direccion, String ciudad,
+			String correo, int edad, double telefono, double celularP, String direccion, String ciudad,
 			String departamento, String nacionalidad) 
 	{
 		this.identificacion = identificacion;
@@ -65,25 +66,11 @@ public abstract class Persona {
 		this.departamento = departamento;
 		this.nacionalidad = nacionalidad;
 	}
-	
-	public String getTipoDocumento() {
-		return tipoDocumento;
-	}
-
-
-	public void setTipoDocumento(String tipoDocumento) {
-		this.tipoDocumento = tipoDocumento;
-	}
 
 
 	public String getNombres() {
 		return nombres;
 	}
-
-	public void setNombres(String nombres) {
-		this.nombres = nombres;
-	}
-
 
 
 	public String getApellidos() {
@@ -91,35 +78,18 @@ public abstract class Persona {
 	}
 
 
-	public void setApellidos(String apellidos) {
-		this.apellidos = apellidos;
-	}
-
-
-	public int getTelefono() {
+	public double getTelefono() {
 		return telefono;
 	}
 
-	public void setTelefono(int telefono) {
-		this.telefono = telefono;
-	}
 
-	public int getCelular() {
-		return celular;
-	}
-	
-	public void setCelular(int celular) {
-		this.celular = celular;
+	public String getTipoDocumento() {
+		return tipoDocumento;
 	}
 
 
-	public int getIdentificacion() {
+	public double getIdentificacion() {
 		return identificacion;
-	}
-
-
-	public void setIdentificacion(int identificacion) {
-		this.identificacion = identificacion;
 	}
 
 
@@ -128,18 +98,8 @@ public abstract class Persona {
 	}
 
 
-	public void setSexo(String sexo) {
-		this.sexo = sexo;
-	}
-
-
 	public String getDireccion() {
 		return direccion;
-	}
-
-
-	public void setDireccion(String direccion) {
-		this.direccion = direccion;
 	}
 
 
@@ -148,55 +108,120 @@ public abstract class Persona {
 	}
 
 
-	public void setCiudad(String ciudad) {
-		this.ciudad = ciudad;
+	public double getCelular() {
+		return celular;
 	}
-	
+
+
 	public Date getFechaNacimiento() {
 		return fechaNacimiento;
 	}
 
-	public void setFechaNacimiento(Date fechaNacimiento) {
-		this.fechaNacimiento = fechaNacimiento;
-	}
 
 	public String getEstadoCivil() {
 		return estadoCivil;
 	}
 
-	public void setEstadoCivil(String estadoCivil) {
-		this.estadoCivil = estadoCivil;
-	}
 
 	public String getCorreo() {
 		return correo;
 	}
 
-	public void setCorreo(String correo) {
-		this.correo = correo;
-	}
 
 	public int getEdad() {
 		return edad;
 	}
 
-	public void setEdad(int edad) {
-		this.edad = edad;
-	}
-	
+
 	public String getDepartamento() {
 		return departamento;
 	}
 
-	public void setDepartamento(String departamento) {
-		this.departamento = departamento;
-	}
 
 	public String getNacionalidad() {
 		return nacionalidad;
 	}
 
-	public void setNacionalidad(String nacionalidad) {
+
+	protected void setNombres(String nombres) {
+		this.nombres = nombres;
+	}
+
+
+	protected void setApellidos(String apellidos) {
+		this.apellidos = apellidos;
+	}
+
+
+	protected void setTelefono(double telefono) {
+		this.telefono = telefono;
+	}
+
+
+	protected void setTipoDocumento(String tipoDocumento) {
+		this.tipoDocumento = tipoDocumento;
+	}
+
+
+	protected void setIdentificacion(double identificacion) {
+		this.identificacion = identificacion;
+	}
+
+
+	protected void setSexo(String sexo) {
+		this.sexo = sexo;
+	}
+
+
+	protected void setDireccion(String direccion) {
+		this.direccion = direccion;
+	}
+
+
+	protected void setCiudad(String ciudad) {
+		this.ciudad = ciudad;
+	}
+
+
+	protected void setCelular(double celular) {
+		this.celular = celular;
+	}
+
+
+	protected void setFechaNacimiento(Date fechaNacimiento) {
+		this.fechaNacimiento = fechaNacimiento;
+	}
+
+
+	protected void setEstadoCivil(String estadoCivil) {
+		this.estadoCivil = estadoCivil;
+	}
+
+
+	protected void setCorreo(String correo) {
+		this.correo = correo;
+	}
+
+
+	protected void setEdad(int edad) {
+		this.edad = edad;
+	}
+
+
+	protected void setDepartamento(String departamento) {
+		this.departamento = departamento;
+	}
+
+
+	protected void setNacionalidad(String nacionalidad) {
 		this.nacionalidad = nacionalidad;
 	}
+
+
+	@Override
+	public String toString() {
+		return nombres +" "+ apellidos;
+	}
+	
+	
 }

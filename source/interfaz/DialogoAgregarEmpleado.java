@@ -1,5 +1,7 @@
 package interfaz;
 
+import javax.imageio.ImageIO;
+
 import javax.swing.JDialog;
 
 
@@ -7,7 +9,11 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Image;
 
+import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
@@ -23,28 +29,37 @@ import java.awt.Color;
 import javax.swing.border.LineBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.UIManager;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.image.BufferedImage;
 
 import javax.swing.JTabbedPane;
 
+import mundo.Empresa;
 import mundo.Experiencia;
 import mundo.Hijo;
 import mundo.Persona;
-import mundo.ReferenciaPersonal;
+import mundo.Referencia;
 
 import java.awt.Component;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 
 import com.toedter.calendar.JDateChooser;
 
+import javax.swing.JCheckBox;
+
 //import com.toedter.calendar.JCalendar;
 //import com.toedter.calendar.JDateChooser;
 
+//TODO cambiar interfaz
 
 public class DialogoAgregarEmpleado extends JDialog implements ActionListener{
 	private JTextField nombreEmpleado;
@@ -63,28 +78,39 @@ public class DialogoAgregarEmpleado extends JDialog implements ActionListener{
 	private JTextField nombrePareja;
 	private JTextField apellidosPareja;
 	private JTextField cedulaPareja;
-	private JTable table;
+	private JTable tableHijos;
 	private JTable tableReferencias;
 	private JTable tableExperiencia;
 	private JTextField nombreReferencia;
 	private JTextField telefonoReferencia;
 	private JTextField empresaRefPersonal;
 	private JTextField conceptoRefPersonal;
-	private JTextField auxilioTransporte;
-	private InterfazNomina interfaz;
+	
+	private JDateChooser fechaNacimientoEmpleado;
+	private JDateChooser fechaInicioContrato;
+	private JDateChooser fechaFinContrato;
+	private JDateChooser fechaNacimientoHijo;
+	private JDateChooser fechaInicioExperiencia;
+	private JDateChooser fechafinExperiencia;
+	private JDateChooser fechaAfiliacionSS;
+	
 	private JComboBox sexoEmpleado;
 	private JComboBox estadoCivilEmpleado;
-	private JDateChooser fechaNacimientoEmpleado;
-	
+	private JComboBox tipoDocumentoEmpleado;
 	private JComboBox tipoContrato;
 	private JComboBox duracionContrato;
 	private JComboBox tipoContratoExperiencia;
-	
-	private JDateChooser fechaInicioContrato;
-	private JDateChooser fechaFinContrato;
-	
-	
-	private JDateChooser fechaNacimientoHijo;
+	private JComboBox tipoReferencia;
+	private JComboBox sexoReferencia;
+	private JComboBox sexoHijos;
+	private JComboBox tipoDocumentoHijos;
+	private JComboBox sexoPareja;
+	private JComboBox tipoLiquidacionEmpleado;
+	private JComboBox saludEmpleado;
+	private JComboBox pensionesEmpleado;
+	private JComboBox arlEmpleado;
+	private JComboBox cajaCompensacionEmpleado; 
+
 	private JTextField telefonoPareja;
 	private JTextField direccionPareja;
 	private JTextField ciudadPareja;
@@ -96,42 +122,64 @@ public class DialogoAgregarEmpleado extends JDialog implements ActionListener{
 	private JTextField documentoReferencia;
 	private JTextField empresaExperiencia;
 	private JTextField cargoExperiencia;
-	private JComboBox tipoReferencia;
-	private JComboBox sexoReferencia;
+	
+	private JButton btnAgregarHijo;
+	private JButton btnNuevoHijo;
+	private JButton btnEliminarHijo;
+	private JButton btnEditarHijo;
 	
 	private JButton btnAgregarReferencia;
 	private JButton btnNuevaReferencia;
 	private JButton btnEditarReferencia;
 	private JButton btnEliminarReferencia;
 	
-	
-	private DefaultTableModel modRP;
-	private DefaultTableModel modExp;
-	
-	
-	private ListSelectionListener listenerReferencias;
-	
-	private Control control;
 	private JButton btnAgregarExperiencia;
 	private JButton btnNuevaExperiencia;
 	private JButton btnEliminarExperiencia;
 	private JButton btnEditarExperiencia;
 	
-	private String[] tipoContratoOpciones = {"Laboral", "Prestación de Servicios", "Aprendizaje"};
-	private String[] tipoReferenciaOpciones = {ReferenciaPersonal.FAMILIAR, ReferenciaPersonal.LABORAL, ReferenciaPersonal.PERSONAL};
-	private JDateChooser fechaInicioExperiencia;
-	private JDateChooser fechafinExperiencia;
+	private JButton btnSubirFoto;
+	
+	private DefaultTableModel modRP;
+	private DefaultTableModel modExp;
+	
+	private ListSelectionListener listenerReferencias;
+
 	private JScrollPane scrollPane_2;
 	private JTextField departamentoReferencia;
 	private JTextField departamentoEmpleado;
 	private JTextField nacionalidadEmpleado;
+	private JTextField horasSemanales;
 	
 	
-	public DialogoAgregarEmpleado(Control controlP) {
+	private String[] tipoContratoOpciones = {"Laboral", "Prestación de Servicios", "Aprendizaje"};
+	private String[] tipoReferenciaOpciones = {Referencia.FAMILIAR, Referencia.LABORAL, Referencia.PERSONAL};
+	private String[] tipoSexo = {Persona.HOMBRE, Persona.MUJER};
+	private String[] tipoDocumento = {Persona.CEDULA,Persona.TARJETA};
+	private String[] tipoSalud = {"Nueva EPS", "Saludcoop","Salud Total","Cafesalud","Sanitas","Compensar","EPS Sura",
+								"Humanavivir","Comfenalco","Salud Colpatria","Coomeva","Famisanar","Cruz Blanca","Salud Vida"};
+	private String[] tipoPensiones = {"Proteccion","Porvenir","Colfondos"};
+	private String[] tipoARL = {"Sura","Colpatria","Colmena","Equidad","Positiva"};
+	private String[] tipoSolidaridad = {"Si","No"};
+	private String[] tipoCajaCompensacion = {"Cafam","Compensar","Colsubsidio","Comfenalco"};
+	private String[] tipoDuracionContrato = {"Término Indefinido", "Término Fijo"};
+	private String[] tipoPeriodoLiquidacion = {"15","30"};
+	private String[] tipoEstadoCivil = {"Soltero(a)","Casado(a)","Viudo(a)"};
+	
+	private Control control;
+	private InterfazNomina interfaz;
+	
+	private ListSelectionListener listenerTablas;
+	private JCheckBox checkSolidaridad;
+	private JCheckBox checkAuxilio;
+	
+	private JLabel lblFoto;
+	
+	private ImageIcon foto;
+	
+	public DialogoAgregarEmpleado(Control controlP, InterfazNomina interfazP) {
 		
 		super(null, java.awt.Dialog.ModalityType.TOOLKIT_MODAL);
-		
-		control = controlP;
 		
 		setTitle("Agregar Empleado");
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -168,7 +216,14 @@ public class DialogoAgregarEmpleado extends JDialog implements ActionListener{
 		fotoEmpleado.setBorder(new LineBorder(new Color(0, 0, 0)));
 		fotoEmpleado.setBackground(Color.WHITE);
 		fotoEmpleado.setBounds(68, 52, 130, 150);
+		
+		lblFoto = new JLabel("");
+		lblFoto.setSize(130, 150);
+		
+		fotoEmpleado.add(lblFoto);
 		panel_1.add(fotoEmpleado);
+		
+		
 		
 		JPanel panel_5 = new JPanel();
 		panel_5.setLayout(null);
@@ -218,10 +273,10 @@ public class DialogoAgregarEmpleado extends JDialog implements ActionListener{
 		panel_5.add(lblEstadoCivil);
 		
 		estadoCivilEmpleado = new JComboBox();
-		estadoCivilEmpleado.addItem("Soltero(a)");
-		estadoCivilEmpleado.addItem("Casado(a)");
-		estadoCivilEmpleado.addItem("Divorciado(a)");
 		estadoCivilEmpleado.setBounds(177, 36, 141, 20);
+		for (int i = 0; i < tipoEstadoCivil.length; i++){
+			estadoCivilEmpleado.addItem(tipoEstadoCivil[i]);
+		}
 		panel_5.add(estadoCivilEmpleado);
 		
 		JLabel lblFechaDeNacimiento = new JLabel("Fecha de Nacimiento:");
@@ -260,7 +315,9 @@ public class DialogoAgregarEmpleado extends JDialog implements ActionListener{
 		panel_5.add(nacionalidadEmpleado);
 		nacionalidadEmpleado.setColumns(10);
 		
-		JButton btnSubirFoto = new JButton("Agregar Foto");
+		btnSubirFoto = new JButton("Agregar Foto");
+		btnSubirFoto.setActionCommand("Subir Foto");
+		btnSubirFoto.addActionListener(this);
 		btnSubirFoto.setBounds(68, 239, 130, 23);
 		panel_1.add(btnSubirFoto);
 		
@@ -289,8 +346,11 @@ public class DialogoAgregarEmpleado extends JDialog implements ActionListener{
 		lblTipoDocumento_1.setBounds(27, 369, 95, 14);
 		panel_1.add(lblTipoDocumento_1);
 		
-		JComboBox tipoDocumentoEmpleado = new JComboBox();
+		tipoDocumentoEmpleado = new JComboBox();
 		tipoDocumentoEmpleado.setBounds(141, 366, 141, 20);
+		for (int i = 0; i < tipoDocumento.length; i++){
+			tipoDocumentoEmpleado.addItem(tipoDocumento[i]);
+		}
 		panel_1.add(tipoDocumentoEmpleado);
 		
 		JLabel lblNoDocumento = new JLabel("No. Documento:");
@@ -302,23 +362,19 @@ public class DialogoAgregarEmpleado extends JDialog implements ActionListener{
 		panel_1.add(cedulaEmpleado);
 		cedulaEmpleado.setColumns(10);
 		
-		JButton btnValidar = new JButton("Validar");
-		btnValidar.setBounds(263, 500, 89, 23);
-		btnValidar.setActionCommand("Validar");
-		btnValidar.addActionListener(this);
-		panel_1.add(btnValidar);
-		
 		JLabel lblSexo = new JLabel("Sexo:");
 		lblSexo.setBounds(27, 441, 135, 14);
 		panel_1.add(lblSexo);
 		
 		sexoEmpleado = new JComboBox();
 		sexoEmpleado.setBounds(141, 438, 141, 20);
+		for (int i = 0; i < tipoSexo.length; i++){
+			sexoEmpleado.addItem(tipoSexo[i]);
+		}
 		panel_1.add(sexoEmpleado);
-		sexoEmpleado.addItem("Hombre");
-		sexoEmpleado.addItem("Mujer");
 		
 		JPanel panel_3 = new JPanel();
+		panel_3.setEnabled(true);
 		panel_3.setBackground(Color.WHITE);
 		tabbedPane.addTab("Informaci\u00F3n Familiar", null, panel_3, null);
 		panel_3.setLayout(null);
@@ -364,11 +420,32 @@ public class DialogoAgregarEmpleado extends JDialog implements ActionListener{
 		lblSexo_2.setBounds(10, 199, 104, 14);
 		panel_6.add(lblSexo_2);
 		
-		JButton btnAgregarHijo = new JButton("Agregar Hijos");
+		btnAgregarHijo = new JButton("Agregar");
 		btnAgregarHijo.setActionCommand("Agregar Hijo");
 		btnAgregarHijo.addActionListener(this);
-		btnAgregarHijo.setBounds(426, 293, 202, 23);
+		btnAgregarHijo.setBounds(345, 253, 145, 23);
 		panel_6.add(btnAgregarHijo);
+		
+		btnNuevoHijo = new JButton("Nuevo");
+		btnNuevoHijo.setActionCommand("Nuevo Hijo");
+		btnNuevoHijo.addActionListener(this);
+		btnNuevoHijo.setBounds(505, 253, 145, 23);
+		btnNuevoHijo.setEnabled(false);
+		panel_6.add(btnNuevoHijo);
+		
+		btnEditarHijo = new JButton("Editar");
+		btnEditarHijo.setActionCommand("Editar Hijo");
+		btnEditarHijo.addActionListener(this);
+		btnEditarHijo.setBounds(345, 285, 145, 23);
+		btnEditarHijo.setEnabled(false);
+		panel_6.add(btnEditarHijo);
+		
+		btnEliminarHijo = new JButton("Eliminar");
+		btnEliminarHijo.setActionCommand("Eliminar Hijo");
+		btnEliminarHijo.addActionListener(this);
+		btnEliminarHijo.setBounds(505, 285, 145, 23);
+		btnEliminarHijo.setEnabled(false);
+		panel_6.add(btnEliminarHijo);
 		
 
 		Object[] columns = {" ","Nombre","Edad"};
@@ -382,27 +459,37 @@ public class DialogoAgregarEmpleado extends JDialog implements ActionListener{
 			}
 		};
 
-		table = new JTable(mod);
-		table.getColumnModel().getColumn(0).setPreferredWidth(30);
-		table.getTableHeader().setReorderingAllowed(false);
-		JScrollPane scrollPane = new JScrollPane(table);
-		scrollPane.setBounds(337, 11, 315, 253);
+		tableHijos = new JTable(mod);
+		tableHijos.getColumnModel().getColumn(0).setPreferredWidth(30);
+		tableHijos.getTableHeader().setReorderingAllowed(false);
+		
+		tableHijos.getSelectionModel().addListSelectionListener(listenerReferencias);
+		
+		JScrollPane scrollPane = new JScrollPane(tableHijos);
+		scrollPane.setBounds(337, 11, 315, 230);
 		panel_6.add(scrollPane);
 		
 		fechaNacimientoHijo = new JDateChooser();
 		fechaNacimientoHijo.setBounds(155, 244, 144, 20);
 		panel_6.add(fechaNacimientoHijo);
 		
-		JComboBox sexoHijos = new JComboBox();
+		sexoHijos = new JComboBox();
 		sexoHijos.setBounds(155, 196, 141, 20);
+		for (int i = 0; i < tipoSexo.length; i++){
+			sexoHijos.addItem(tipoSexo[i]);
+		}
 		panel_6.add(sexoHijos);
 		
 		JLabel label_11 = new JLabel("No. Documento:");
 		label_11.setBounds(10, 154, 104, 14);
 		panel_6.add(label_11);
 		
-		JComboBox tipoDocumentoHijos = new JComboBox();
+		tipoDocumentoHijos = new JComboBox();
 		tipoDocumentoHijos.setBounds(155, 110, 141, 20);
+		tipoDocumentoHijos.setBounds(155, 110, 141, 20);
+		for (int i = 0; i < tipoDocumento.length; i++){
+			tipoDocumentoHijos.addItem(tipoDocumento[i]);
+		}
 		panel_6.add(tipoDocumentoHijos);
 		
 		JLabel label_9 = new JLabel("Direcci\u00F3n");
@@ -461,8 +548,11 @@ public class DialogoAgregarEmpleado extends JDialog implements ActionListener{
 		telefonoPareja.setBounds(511, 65, 141, 20);
 		panel_10.add(telefonoPareja);
 		
-		JComboBox sexoPareja = new JComboBox();
+		sexoPareja = new JComboBox();
 		sexoPareja.setBounds(511, 109, 141, 20);
+		for (int i = 0; i < tipoSexo.length; i++){
+			sexoPareja.addItem(tipoSexo[i]);
+		}
 		panel_10.add(sexoPareja);
 		
 		JLabel lblDireccin = new JLabel("Direcci\u00F3n");
@@ -492,7 +582,7 @@ public class DialogoAgregarEmpleado extends JDialog implements ActionListener{
 		panel_7.setLayout(null);
 		panel_7.setBorder(new TitledBorder(null, "Informaci\u00F3n Laboral", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		panel_7.setBackground(Color.WHITE);
-		panel_7.setBounds(21, 11, 308, 473);
+		panel_7.setBounds(21, 11, 308, 492);
 		panel_2.add(panel_7);
 		
 		JLabel label_12 = new JLabel("Salario Fijo:");
@@ -517,6 +607,7 @@ public class DialogoAgregarEmpleado extends JDialog implements ActionListener{
 		salarioVariable.setColumns(10);
 		salarioVariable.setBounds(155, 107, 130, 20);
 		panel_7.add(salarioVariable);
+		salarioVariable.setEnabled(false);
 		
 		JLabel label_14 = new JLabel("Salario Variable: ");
 		label_14.setBounds(10, 110, 115, 14);
@@ -528,9 +619,9 @@ public class DialogoAgregarEmpleado extends JDialog implements ActionListener{
 		
 		tipoContrato = new JComboBox();
 		tipoContrato.setBounds(154, 201, 131, 20);
-		tipoContrato.addItem("Contrato Laboral");
-		tipoContrato.addItem("Prestación de Servicios");
-		tipoContrato.addItem("Contrato de Aprendizaje");
+		for (int i = 0; i < tipoContratoOpciones.length; i++){
+			tipoContrato.addItem(tipoContratoOpciones[i]);
+		}
 		panel_7.add(tipoContrato);
 		
 		JLabel label_17 = new JLabel("Fecha Inicio Contrato:");
@@ -547,18 +638,14 @@ public class DialogoAgregarEmpleado extends JDialog implements ActionListener{
 		
 		duracionContrato = new JComboBox();
 		duracionContrato.setBounds(154, 251, 131, 20);
-		tipoContrato.addItem("Término Indefinido");
-		duracionContrato.addItem("Término Fijo");
+		for (int i = 0; i < tipoDuracionContrato.length; i++){
+			duracionContrato.addItem(tipoDuracionContrato[i]);
+		}
 		panel_7.add(duracionContrato);
 		
 		JLabel lblAuxilioDeTransp = new JLabel("Auxilio de Transporte: ");
-		lblAuxilioDeTransp.setBounds(10, 156, 137, 14);
+		lblAuxilioDeTransp.setBounds(10, 446, 137, 14);
 		panel_7.add(lblAuxilioDeTransp);
-		
-		auxilioTransporte = new JTextField();
-		auxilioTransporte.setColumns(10);
-		auxilioTransporte.setBounds(155, 153, 130, 20);
-		panel_7.add(auxilioTransporte);
 		
 		fechaInicioContrato = new JDateChooser();
 		fechaInicioContrato.setBounds(154, 297, 131, 20);
@@ -572,9 +659,26 @@ public class DialogoAgregarEmpleado extends JDialog implements ActionListener{
 		lblTipoLiquidacion.setBounds(10, 401, 137, 14);
 		panel_7.add(lblTipoLiquidacion);
 		
-		JComboBox tipoLiquidacionEmpleado = new JComboBox();
+		tipoLiquidacionEmpleado = new JComboBox();
 		tipoLiquidacionEmpleado.setBounds(154, 398, 131, 20);
+		for (int i = 0; i < tipoPeriodoLiquidacion.length; i++){
+			tipoLiquidacionEmpleado.addItem(tipoPeriodoLiquidacion[i]);
+		}
 		panel_7.add(tipoLiquidacionEmpleado);
+		
+		checkAuxilio = new JCheckBox("   Si");
+		checkAuxilio.setBackground(Color.WHITE);
+		checkAuxilio.setBounds(154, 442, 97, 23);
+		panel_7.add(checkAuxilio);
+		
+		JLabel lblHorasSemanales = new JLabel("Horas Semanales:");
+		lblHorasSemanales.setBounds(10, 158, 137, 14);
+		panel_7.add(lblHorasSemanales);
+		
+		horasSemanales = new JTextField();
+		horasSemanales.setColumns(10);
+		horasSemanales.setBounds(154, 155, 130, 20);
+		panel_7.add(horasSemanales);
 		
 		JPanel panel_12 = new JPanel();
 		panel_12.setLayout(null);
@@ -595,41 +699,55 @@ public class DialogoAgregarEmpleado extends JDialog implements ActionListener{
 		lblArl_1.setBounds(10, 110, 115, 14);
 		panel_12.add(lblArl_1);
 		
-		JComboBox saludEmpleado = new JComboBox();
+		saludEmpleado = new JComboBox();
 		saludEmpleado.setBounds(154, 28, 131, 20);
+		for (int i = 0; i < tipoSalud.length; i++){
+			saludEmpleado.addItem(tipoSalud[i]);
+		}
 		panel_12.add(saludEmpleado);
 		
 		JLabel label_37 = new JLabel("Fecha Afiliaci\u00F3n a SS:");
-		label_37.setBounds(10, 257, 137, 14);
+		label_37.setBounds(10, 198, 137, 14);
 		panel_12.add(label_37);
 		
-		JComboBox pensionesEmpleado = new JComboBox();
+		pensionesEmpleado = new JComboBox();
 		pensionesEmpleado.setBounds(154, 67, 131, 20);
+		for (int i = 0; i < tipoPensiones.length; i++){
+			pensionesEmpleado.addItem(tipoPensiones[i]);
+		}
 		panel_12.add(pensionesEmpleado);
 		
-		JLabel lblSolidaridad = new JLabel("Solidaridad:");
-		lblSolidaridad.setBounds(10, 156, 137, 14);
-		panel_12.add(lblSolidaridad);
-		
-		JComboBox arlEmpleado = new JComboBox();
+		arlEmpleado = new JComboBox();
 		arlEmpleado.setBounds(154, 107, 131, 20);
+		for (int i = 0; i < tipoARL.length; i++){
+			arlEmpleado.addItem(tipoARL[i]);
+		}
 		panel_12.add(arlEmpleado);
 		
-		JComboBox solidaridadEmpleado = new JComboBox();
-		solidaridadEmpleado.setBounds(154, 153, 131, 20);
-		panel_12.add(solidaridadEmpleado);
-		
-		JDateChooser fechaAfiliacionSS = new JDateChooser();
-		fechaAfiliacionSS.setBounds(154, 251, 131, 20);
+		fechaAfiliacionSS = new JDateChooser();
+		fechaAfiliacionSS.setBounds(154, 198, 131, 20);
 		panel_12.add(fechaAfiliacionSS);
 		
 		JLabel lblCajaDeCompensacin = new JLabel("Caja de Compensaci\u00F3n");
-		lblCajaDeCompensacin.setBounds(10, 204, 137, 14);
+		lblCajaDeCompensacin.setBounds(10, 151, 137, 14);
 		panel_12.add(lblCajaDeCompensacin);
 		
-		JComboBox cajaCompensacionEmpleado = new JComboBox();
-		cajaCompensacionEmpleado.setBounds(154, 201, 131, 20);
+		cajaCompensacionEmpleado = new JComboBox();
+		cajaCompensacionEmpleado.setBounds(154, 148, 131, 20);
+		for (int i = 0; i < tipoCajaCompensacion.length; i++){
+			cajaCompensacionEmpleado.addItem(tipoCajaCompensacion[i]);
+		}
 		panel_12.add(cajaCompensacionEmpleado);
+		
+		JLabel lblSolidaridad = new JLabel("Solidaridad:");
+		lblSolidaridad.setBounds(10, 247, 137, 14);
+		panel_12.add(lblSolidaridad);
+		
+		checkSolidaridad = new JCheckBox("   Si");
+		checkSolidaridad.setBounds(154, 243, 97, 23);
+		panel_12.add(checkSolidaridad);
+		checkSolidaridad.setBackground(Color.WHITE);
+		checkSolidaridad.setEnabled(false);
 		
 		JPanel panel_11 = new JPanel();
 		panel_11.setBackground(Color.WHITE);
@@ -696,27 +814,29 @@ public class DialogoAgregarEmpleado extends JDialog implements ActionListener{
 		tableReferencias.getColumnModel().getColumn(0).setPreferredWidth(10);
 		tableReferencias.getTableHeader().setReorderingAllowed(false);
 		
-		listenerReferencias = new ListSelectionListener(){
+		listenerTablas = new ListSelectionListener(){
 			public void valueChanged(ListSelectionEvent event) {
 				//TODO
 					Object source = event.getSource();
 					
 					if (source.equals(tableReferencias.getSelectionModel())){
 						int posicion = tableReferencias.getSelectedRow();
-						ReferenciaPersonal ref = (ReferenciaPersonal) control.darListaReferecnias().get(posicion);
-						actualizarInformacionReferencia(ref);
+						actualizarInformacionReferencia(posicion);
 					}
 					else if (source.equals(tableExperiencia.getSelectionModel())){
 						int posicion = tableExperiencia.getSelectedRow();
-						Experiencia exp = (Experiencia) control.darListaExperiencia().get(posicion);
-						actualizarInformacionExperiencia(exp);
+						actualizarInformacionExperiencia(posicion);
+					}
+					else if (source.equals(tableHijos.getSelectionModel())){
+						int posicion = tableHijos.getSelectedRow();
+						actualizarInformacionHijo(posicion);
 					}
 					
 			}
 
 		};
 
-		tableReferencias.getSelectionModel().addListSelectionListener(listenerReferencias);
+		tableReferencias.getSelectionModel().addListSelectionListener(listenerTablas);
 		
 		scrollPane_2 = new JScrollPane(tableReferencias);
 		scrollPane_2.setBounds(366, 11, 286, 447);
@@ -777,8 +897,10 @@ public class DialogoAgregarEmpleado extends JDialog implements ActionListener{
 		
 		sexoReferencia = new JComboBox();
 		sexoReferencia.setBounds(154, 249, 179, 20);
-		sexoReferencia.addItem(Persona.HOMBRE);
-		sexoReferencia.addItem(Persona.MUJER);
+		sexoReferencia.setBounds(154, 249, 179, 20);
+		for (int i = 0; i < tipoSexo.length; i++){
+			sexoReferencia.addItem(tipoSexo[i]);
+		}
 		panel_8.add(sexoReferencia);
 		
 		JLabel lblDireccin_1 = new JLabel("Direcci\u00F3n:");
@@ -921,109 +1043,170 @@ public class DialogoAgregarEmpleado extends JDialog implements ActionListener{
 		btnNuevaExperiencia.setBounds(534, 340, 122, 23);
 		panel_4.add(btnNuevaExperiencia);
 		
-		control = new Control();
+		control = controlP;
+		interfaz = interfazP;
 		
-		tabbedPane.setEnabledAt(1, false);
-		tabbedPane.setEnabledAt(2, false);
-		tabbedPane.setEnabledAt(3, false);
-		tabbedPane.setEnabledAt(4, false);
+		control.crearNuevoEmpleado(-1, "", "", "", "", new Date(), 
+				"", "", -1, -1, -1, "", "", "", "");
+	
+		tabbedPane.setEnabledAt(1, true);
+		tabbedPane.setEnabledAt(2, true);
+		tabbedPane.setEnabledAt(3, true);
+		tabbedPane.setEnabledAt(4, true);
+			
 	}
 
 @Override
-	public void actionPerformed(ActionEvent e) {
+public void actionPerformed(ActionEvent e) {
 	String command = e.getActionCommand();
 	System.out.println(command);
-		
-		if(command.equals("Cancelar"))
-		{
-			this.dispose();
-		}
-		else if (command.equals("Aceptar")){
-	//		agregarEmpleado();
-		}
-		else if (command.equals("Agregar Hijo")){
-	//		agregarHijo();
-		}
-		else if (command.equals("Agregar Referencia")){
-			agregarReferencia();
-		}
-		else if (command.equals("Editar Referencia")){
-			editarReferencia();
-		}
-		else if (command.equals("Eliminar Referencia")){
-			eliminarReferencia();
-			btnNuevaReferencia.setEnabled(false);
-			btnEditarReferencia.setEnabled(false);
-			btnEliminarReferencia.setEnabled(false);
-			btnAgregarReferencia.setEnabled(true);
-		}
-		else if (command.equals("Nueva Referencia")){
-			
-			tableReferencias.getSelectionModel().removeListSelectionListener(listenerReferencias);
-			tableReferencias.clearSelection();
-			tableReferencias.getSelectionModel().addListSelectionListener(listenerReferencias);
-			
-			
-			limpiarCamposReferencias();
-			btnNuevaReferencia.setEnabled(false);
-			btnEditarReferencia.setEnabled(false);
-			btnEliminarReferencia.setEnabled(false);
-			btnAgregarReferencia.setEnabled(true);
-		
-		}
-		else if (command.equals("Agregar Experiencia")){
-			agregarExperiencia();
-		}
-		else if (command.equals("Editar Experiencia")){
-			editarExperiencia();
-		}
-		else if (command.equals("Eliminar Experiencia")){
-			eliminarExperiencia();
-			btnNuevaExperiencia.setEnabled(false);
-			btnEditarExperiencia.setEnabled(false);
-			btnEliminarExperiencia.setEnabled(false);
-			btnAgregarExperiencia.setEnabled(true);
-		}
-		else if (command.equals("Nueva Experiencia")){
-			
-			tableExperiencia.getSelectionModel().removeListSelectionListener(listenerReferencias);
-			tableExperiencia.clearSelection();
-			tableExperiencia.getSelectionModel().addListSelectionListener(listenerReferencias);
-			
-			limpiarCamposExperiencia();
-			btnNuevaExperiencia.setEnabled(false);
-			btnEditarExperiencia.setEnabled(false);
-			btnEliminarExperiencia.setEnabled(false);
-			btnAgregarExperiencia.setEnabled(true);
-		}
-		else if(command.equals("Validar"))
-		{
-			int identificacion = Integer.parseInt(cedulaEmpleado.getText());
-			String tipoDocumento ;
-			String nombre; 
-			String apellidos;
-			String sexo;
-			Date fechaNacimiento;
-			String estadoCivil;
-			String correo;
-			int edad;
-			int telefono;
-			int celularP;
-			String direccion;
-			String ciudad;
-			String departamento;
-			String nacionalidad;
-			
-	//		control.crearNuevoEmpleado(identificacion, tipoDocumento, nombre, 
-	//				apellidos, sexo, fechaNacimiento, estadoCivil, correo, 
-	//				edad, telefono, celularP, direccion, ciudad, departamento, nacionalidad);
-		
-		}
+	
+	if(command.equals("Cancelar"))
+	{
+		this.dispose();
 	}
+	else if (command.equals("Aceptar")){
+		agregarEmpleado();
+	}
+	else if (command.equals("Agregar Referencia")){
+		agregarReferencia();
+	}
+	else if (command.equals("Editar Referencia")){
+		editarReferencia();
+	}
+	else if (command.equals("Eliminar Referencia")){
+		eliminarReferencia();
+		btnNuevaReferencia.setEnabled(false);
+		btnEditarReferencia.setEnabled(false);
+		btnEliminarReferencia.setEnabled(false);
+		btnAgregarReferencia.setEnabled(true);
+	}
+	else if (command.equals("Nueva Referencia")){
+		
+		tableReferencias.getSelectionModel().removeListSelectionListener(listenerTablas);
+		tableReferencias.clearSelection();
+		tableReferencias.getSelectionModel().addListSelectionListener(listenerTablas);
+		
+		
+		limpiarCamposReferencias();
+		btnNuevaReferencia.setEnabled(false);
+		btnEditarReferencia.setEnabled(false);
+		btnEliminarReferencia.setEnabled(false);
+		btnAgregarReferencia.setEnabled(true);
+	
+	}
+	else if (command.equals("Agregar Experiencia")){
+		agregarExperiencia();
+	}
+	else if (command.equals("Editar Experiencia")){
+		editarExperiencia();
+	}
+	else if (command.equals("Eliminar Experiencia")){
+		eliminarExperiencia();
+		btnNuevaExperiencia.setEnabled(false);
+		btnEditarExperiencia.setEnabled(false);
+		btnEliminarExperiencia.setEnabled(false);
+		btnAgregarExperiencia.setEnabled(true);
+	}
+	else if (command.equals("Nueva Experiencia")){
+		
+		tableExperiencia.getSelectionModel().removeListSelectionListener(listenerTablas);
+		tableExperiencia.clearSelection();
+		tableExperiencia.getSelectionModel().addListSelectionListener(listenerTablas);
+		
+		limpiarCamposExperiencia();
+		btnNuevaExperiencia.setEnabled(false);
+		btnEditarExperiencia.setEnabled(false);
+		btnEliminarExperiencia.setEnabled(false);
+		btnAgregarExperiencia.setEnabled(true);
+	}
+	else if (command.equals("Agregar Hijo")){
+		agregarHijos();
+		System.out.println("command");
+	}
+	else if (command.equals("Editar Hijo")){
+		editarHijo();
+	}
+	else if (command.equals("Eliminar Hijo")){
+		eliminarHijo();
+		btnNuevoHijo.setEnabled(false);
+		btnEditarHijo.setEnabled(false);
+		btnEliminarHijo.setEnabled(false);
+		btnAgregarHijo.setEnabled(true);
+	}
+	else if (command.equals("Nuevo Hijo")){
+		
+		tableHijos.getSelectionModel().removeListSelectionListener(listenerTablas);
+		tableHijos.clearSelection();
+		tableHijos.getSelectionModel().addListSelectionListener(listenerTablas);
+		
+		limpiarCamposHijos();
+		btnNuevoHijo.setEnabled(false);
+		btnEditarHijo.setEnabled(false);
+		btnEliminarHijo.setEnabled(false);
+		btnAgregarHijo.setEnabled(true);
+	}
+	else if (command.equals("Subir Foto")){
+		subirFotoEmpleado();
+	}
+}
 	
 
-	public void agregarReferencia() 
-	{
+public void agregarReferencia() {
+	
+	String tipoP = tipoReferencia.getSelectedItem().toString();
+	String nombresP = nombreReferencia.getText();
+	String apellidosP = apellidosReferencia.getText();
+	String documentoP0 = documentoReferencia.getText();
+	String telefonoP0 = telefonoReferencia.getText();
+	String sexoP = sexoReferencia.getSelectedItem().toString();
+	String direccionP = direccionReferencia.getText();
+	String ciudadP = ciudadReferencia.getText();
+	String departamentoP = departamentoReferencia.getText();
+	
+	String empresaP = empresaRefPersonal.getText();
+	String conceptoP = conceptoRefPersonal.getText();
+	
+	if (verificarCamposReferencias()){
+		
+		int telefonoP = Integer.parseInt(telefonoP0);
+		int documentoP = Integer.parseInt(documentoP0);
+		
+		control.agregarReferenciaEmpleadoNuevo(nombresP, apellidosP, 
+				telefonoP, documentoP, sexoP, direccionP, ciudadP, 
+				departamentoP, tipoP, empresaP, conceptoP);
+		actualizarTablaReferecnias();
+		limpiarCamposReferencias();
+	}
+			
+}
+
+public void eliminarReferencia(){
+	
+	int posicion = tableReferencias.getSelectedRow();
+	DefaultTableModel dm = (DefaultTableModel) tableReferencias.getModel();
+	int confirm = JOptionPane.showConfirmDialog(this, "¿Desea eliminar la referencia seleccionada?","Warning",JOptionPane.YES_NO_OPTION);
+	
+	if (confirm == JOptionPane.YES_NO_OPTION){
+		control.eliminarReferenciaEmpleadoNuevo(posicion);
+		tableReferencias.getSelectionModel().removeListSelectionListener(listenerTablas);
+		modRP.removeRow(posicion);
+		tableReferencias.getSelectionModel().addListSelectionListener(listenerTablas);
+	}
+	
+	if(control.darListaReferecniasEmpleadoNuevo().isEmpty()){
+		limpiarCamposReferencias();
+	}
+	else{
+		actualizarInformacionReferencia(0);
+	}
+}
+
+public void editarReferencia(){
+	int confirm = JOptionPane.showConfirmDialog(this, "¿Desea guardar los cambios realizados?","Warning",JOptionPane.YES_NO_OPTION);
+	if (confirm == JOptionPane.YES_NO_OPTION){
+		
+		int posicion = tableReferencias.getSelectedRow();
 		
 		String tipoP = tipoReferencia.getSelectedItem().toString();
 		String nombresP = nombreReferencia.getText();
@@ -1033,305 +1216,749 @@ public class DialogoAgregarEmpleado extends JDialog implements ActionListener{
 		String sexoP = sexoReferencia.getSelectedItem().toString();
 		String direccionP = direccionReferencia.getText();
 		String ciudadP = ciudadReferencia.getText();
-		String departamentoP = departamentoReferencia.getText();
-		
 		String empresaP = empresaRefPersonal.getText();
 		String conceptoP = conceptoRefPersonal.getText();
 		
 		if (verificarCamposReferencias()){
 			
+			control.editarReferenciaEmpleadoNuevo(posicion, tipoP,
+					nombresP, apellidosP,Integer.parseInt(documentoP0),
+					Integer.parseInt(telefonoP0),sexoP,direccionP,
+					ciudadP,empresaP,conceptoP);
+			
+			actualizarTablaReferecnias();
+		}
+	}		
+}
+
+public void actualizarInformacionReferencia(int index) {
+	
+	ArrayList<Referencia> lista = control.darListaReferecniasEmpleadoNuevo();
+	Referencia ref = lista.get(index);
+
+	nombreReferencia.setText(ref.getNombres());
+	apellidosReferencia.setText(ref.getApellidos());
+	documentoReferencia.setText(String.valueOf(ref.getIdentificacion()));
+	telefonoReferencia.setText(String.valueOf(ref.getTelefono()));
+	direccionReferencia.setText(ref.getDireccion());
+	ciudadReferencia.setText(ref.getCiudad());
+	
+	empresaRefPersonal.setText(ref.getEmpresa());
+	conceptoRefPersonal.setText(ref.getConcepto());
+	
+	boolean listo = false;
+	for (int i = 0; i<tipoReferenciaOpciones.length && !listo; i++){
+		if (tipoReferenciaOpciones[i].equalsIgnoreCase(ref.getTipo())){
+			listo = true;
+			tipoReferencia.setSelectedIndex(i);
+		}	
+	}
+	
+	for (int i = 0; i < tipoSexo.length; i++){
+		if (tipoSexo[i].equalsIgnoreCase(ref.getSexo())){
+			sexoReferencia.setSelectedIndex(i);
+		}	
+	}
+	
+	btnNuevaReferencia.setEnabled(true);
+	btnEditarReferencia.setEnabled(true);
+	btnEliminarReferencia.setEnabled(true);
+	btnAgregarReferencia.setEnabled(false);
+	
+}
+
+
+public void limpiarCamposReferencias(){
+	
+	nombreReferencia.setText("");
+	apellidosReferencia.setText("");
+	documentoReferencia.setText(null);
+	telefonoReferencia.setText(null);
+	direccionReferencia.setText("");
+	ciudadReferencia.setText("");
+	
+	empresaRefPersonal.setText("");
+	conceptoRefPersonal.setText("");
+	
+}
+
+public void actualizarTablaReferecnias(){
+	
+	tableReferencias.getSelectionModel().removeListSelectionListener(listenerTablas);
+	
+	DefaultTableModel model = (DefaultTableModel) tableReferencias.getModel();
+	model.setRowCount(0);
+	
+	ArrayList listaReferencias = control.darListaReferecniasEmpleadoNuevo();
+	
+	for (int i = 0;  i<listaReferencias.size(); i++){
+
+		Referencia actual = (Referencia) listaReferencias.get(i);
+		model.addRow(new Object[]{i+1,actual.getNombres() + "" + actual.getApellidos(), actual.getTipo()});
+	}	
+	
+	tableReferencias.getSelectionModel().addListSelectionListener(listenerTablas);
+}
+
+public boolean verificarCamposReferencias(){
+	
+	String tipoP = tipoReferencia.getSelectedItem().toString();
+	String nombresP = nombreReferencia.getText();
+	String apellidosP = apellidosReferencia.getText();
+	String documentoP0 = documentoReferencia.getText();
+	String telefonoP0 = telefonoReferencia.getText();
+	String sexoP = sexoReferencia.getSelectedItem().toString();
+	String direccionP = direccionReferencia.getText();
+	String ciudadP = ciudadReferencia.getText();
+	
+	String empresaP = empresaRefPersonal.getText();
+	String conceptoP = conceptoRefPersonal.getText();
+	
+	boolean resultado = false;
+	if (!nombresP.equalsIgnoreCase("") && !apellidosP.equalsIgnoreCase("") &&
+			!documentoP0.equalsIgnoreCase("") && !telefonoP0.equalsIgnoreCase("")){
+		
+		try{
+			
 			int telefonoP = Integer.parseInt(telefonoP0);
 			int documentoP = Integer.parseInt(documentoP0);
 			
-			control.agregarReferenciaEmpleadoNuevo(nombresP, apellidosP, telefonoP, documentoP, sexoP, direccionP, ciudadP, departamentoP, tipoP, empresaP, conceptoP);
-			actualizarTablaReferecnias();
-			limpiarCamposReferencias();
-		}
+			if (empresaP.equalsIgnoreCase("") || conceptoP.equalsIgnoreCase("") ||
+					!direccionP.equalsIgnoreCase("") || !ciudadP.equalsIgnoreCase("")){
 				
-	}
-
-	public void eliminarReferencia(){
-		
-		int posicion = tableReferencias.getSelectedRow();
-		DefaultTableModel dm = (DefaultTableModel) tableReferencias.getModel();
-		int confirm = JOptionPane.showConfirmDialog(this, "¿Desea eliminar la referencia seleccionada?","Warning",JOptionPane.YES_NO_OPTION);
-		
-		if (confirm == JOptionPane.YES_NO_OPTION){
-			control.eliminarReferenciaEmpleadoNuevo(posicion);
-			tableReferencias.getSelectionModel().removeListSelectionListener(listenerReferencias);
-			modRP.removeRow(posicion);
-			tableReferencias.getSelectionModel().addListSelectionListener(listenerReferencias);
-		}
-		
-		if(control.darListaReferecnias().isEmpty()){
-			limpiarCamposReferencias();
-		}
-		else{
-			ReferenciaPersonal nuevoMostrado = (ReferenciaPersonal) control.darListaReferecnias().get(0);
-			actualizarInformacionReferencia(nuevoMostrado);
-		}
-	}
-	
-	public void editarReferencia(){
-		int confirm = JOptionPane.showConfirmDialog(this, "¿Desea guardar los cambios realizados?","Warning",JOptionPane.YES_NO_OPTION);
-		if (confirm == JOptionPane.YES_NO_OPTION){
-			
-			int posicion = tableReferencias.getSelectedRow();
-			ReferenciaPersonal ref = (ReferenciaPersonal) control.darListaReferecnias().get(posicion);
-			
-			String tipoP = tipoReferencia.getSelectedItem().toString();
-			String nombresP = nombreReferencia.getText();
-			String apellidosP = apellidosReferencia.getText();
-			String documentoP0 = documentoReferencia.getText();
-			String telefonoP0 = telefonoReferencia.getText();
-			String sexoP = sexoReferencia.getSelectedItem().toString();
-			String direccionP = direccionReferencia.getText();
-			String ciudadP = ciudadReferencia.getText();
-			String empresaP = empresaRefPersonal.getText();
-			String conceptoP = conceptoRefPersonal.getText();
-			
-			ref.setTipo(tipoP);
-			ref.setNombres(nombresP);
-			ref.setApellidos(apellidosP);
-			ref.setIdentificacion(Integer.parseInt(documentoP0));
-			ref.setTelefono(Integer.parseInt(telefonoP0));
-			ref.setSexo(sexoP);
-			ref.setDireccion(direccionP);
-			ref.setCiudad(ciudadP);
-			ref.setEmpresa(empresaP);
-			ref.setConcepto(conceptoP);
-			
-		}		
-	}
-	
-	public void actualizarInformacionReferencia(ReferenciaPersonal ref) {
-
-		nombreReferencia.setText(ref.getNombres());
-		apellidosReferencia.setText(ref.getApellidos());
-		documentoReferencia.setText(String.valueOf(ref.getIdentificacion()));
-		telefonoReferencia.setText(String.valueOf(ref.getTelefono()));
-		direccionReferencia.setText(ref.getDireccion());
-		ciudadReferencia.setText(ref.getCiudad());
-		
-		empresaRefPersonal.setText(ref.getEmpresa());
-		conceptoRefPersonal.setText(ref.getConcepto());
-		
-		boolean listo = false;
-		for (int i = 0; i<tipoReferenciaOpciones.length && !listo; i++){
-			if (tipoReferenciaOpciones[i].equalsIgnoreCase(ref.getTipo())){
-				listo = true;
-				tipoReferencia.setSelectedIndex(i);
-			}	
-		}
-		
-		if(ref.getSexo().equals(Persona.HOMBRE)){
-			sexoReferencia.setSelectedIndex(0);
-		} 
-		else 
-		{
-			sexoReferencia.setSelectedIndex(1);
-		}
-		
-		btnNuevaReferencia.setEnabled(true);
-		btnEditarReferencia.setEnabled(true);
-		btnEliminarReferencia.setEnabled(true);
-		btnAgregarReferencia.setEnabled(false);
-		
-	}
-	
-	
-	public void limpiarCamposReferencias(){
-		
-		nombreReferencia.setText("");
-		apellidosReferencia.setText("");
-		documentoReferencia.setText(null);
-		telefonoReferencia.setText(null);
-		direccionReferencia.setText("");
-		ciudadReferencia.setText("");
-		
-		empresaRefPersonal.setText("");
-		conceptoRefPersonal.setText("");
-		
-	}
-	
-	public void actualizarTablaReferecnias(){
-		
-		tableReferencias.getSelectionModel().removeListSelectionListener(listenerReferencias);
-		
-		DefaultTableModel model = (DefaultTableModel) tableReferencias.getModel();
-		model.setRowCount(0);
-		ArrayList listaReferencias = control.darListaReferecnias();
-		
-		for (int i = 0;  i<listaReferencias.size(); i++){
-	
-			ReferenciaPersonal actual = (ReferenciaPersonal) listaReferencias.get(i);
-			model.addRow(new Object[]{i+1,actual.getNombres() + "" + actual.getApellidos(), actual.getTipo()});
-		}	
-		
-		tableReferencias.getSelectionModel().addListSelectionListener(listenerReferencias);
-	}
-	
-	public boolean verificarCamposReferencias(){
-		
-		String tipoP = tipoReferencia.getSelectedItem().toString();
-		String nombresP = nombreReferencia.getText();
-		String apellidosP = apellidosReferencia.getText();
-		String documentoP0 = documentoReferencia.getText();
-		String telefonoP0 = telefonoReferencia.getText();
-		String sexoP = sexoReferencia.getSelectedItem().toString();
-		String direccionP = direccionReferencia.getText();
-		String ciudadP = ciudadReferencia.getText();
-		
-		String empresaP = empresaRefPersonal.getText();
-		String conceptoP = conceptoRefPersonal.getText();
-		
-		boolean resultado = false;
-		if (!nombresP.equalsIgnoreCase("") && !apellidosP.equalsIgnoreCase("") &&
-				!documentoP0.equalsIgnoreCase("") && !telefonoP0.equalsIgnoreCase("")){
-			
-			try{
+				int rta = JOptionPane.showConfirmDialog(this, "Hay campos sin llenar, ¿Desea continuar?", "Advertencia", JOptionPane.YES_NO_OPTION);
 				
-				int telefonoP = Integer.parseInt(telefonoP0);
-				int documentoP = Integer.parseInt(documentoP0);
-				
-				if (empresaP.equalsIgnoreCase("") || conceptoP.equalsIgnoreCase("") ||
-						!direccionP.equalsIgnoreCase("") || !ciudadP.equalsIgnoreCase("")){
-					
-					int rta = JOptionPane.showConfirmDialog(this, "Hay campos sin llenar, ¿Desea continuar?", "Advertencia", JOptionPane.YES_NO_OPTION);
-					
-					if (rta == JOptionPane.YES_OPTION){
-						
-						resultado = true;
-					}
-				}
-				else{
+				if (rta == JOptionPane.YES_OPTION){
 					
 					resultado = true;
-					
 				}
 			}
-			catch (Exception e){
-				JOptionPane.showMessageDialog(this, "Debe ingresar un valor numérico en los campos Telefono y No. Documento", "Error", JOptionPane.ERROR_MESSAGE);
+			else{
+				
+				resultado = true;
+				
 			}
-			
 		}
-		else{
-			JOptionPane.showMessageDialog(this, "Hay campos vacíos que se deben llenar", "Error", JOptionPane.INFORMATION_MESSAGE);
+		catch (Exception e){
+			JOptionPane.showMessageDialog(this, "Debe ingresar un valor numérico en los campos Telefono y No. Documento", "Error", JOptionPane.ERROR_MESSAGE);
 		}
 		
-		return resultado;
+	}
+	else{
+		JOptionPane.showMessageDialog(this, "Hay campos vacíos que se deben llenar", "Error", JOptionPane.INFORMATION_MESSAGE);
 	}
 	
-	public void agregarExperiencia(){
-		
-		String empresaP = empresaExperiencia.getText();
-		String cargoP = cargoExperiencia.getText();
-		String tipoP = tipoContrato.getSelectedItem().toString();
-		Date fechaInicioP = fechaInicioExperiencia.getDate();
-		Date fechaFinP  = fechafinExperiencia.getDate();
-		
-		if (!empresaP.equalsIgnoreCase("") && !cargoP.equalsIgnoreCase("")){
-			
-			control.agregarExperienciaEmpleadoNuevo(cargoP, empresaP, tipoP, fechaInicioP, fechaFinP);
-			actualizarTablaExperiencia();
-			limpiarCamposExperiencia();
-		}
-		
-		else{
-			JOptionPane.showMessageDialog(this, "Hay campos vacíos que se deben llenar", "Error", JOptionPane.INFORMATION_MESSAGE);
-		}
-	}
-	
-	public void editarExperiencia(){
-		int confirm = JOptionPane.showConfirmDialog(this, "¿Desea guardar los cambios realizados?","Warning",JOptionPane.YES_NO_OPTION);
-		if (confirm == JOptionPane.YES_NO_OPTION){
-			
-			int posicion = tableExperiencia.getSelectedRow();
-			Experiencia exp = (Experiencia) control.darListaExperiencia().get(posicion);
-			
-			String empresaP = empresaExperiencia.getText();
-			String cargoP = cargoExperiencia.getText();
-			String tipoP = tipoContrato.getSelectedItem().toString();
-			Date fechaInicioP = fechaInicioExperiencia.getDate();
-			Date fechaFinP  = fechafinExperiencia.getDate();
-			
-			exp.setEmpresa(empresaP);
-			exp.setCargo(cargoP);
-			exp.setTipoContrato(tipoP);
-			exp.setFechaInicio(fechaInicioP);
-			exp.setFechaFin(fechaFinP);
-		}
-	}
+	return resultado;
+}
 
-	public void eliminarExperiencia(){
+public void agregarExperiencia(){
+	
+	String empresaP = empresaExperiencia.getText();
+	String cargoP = cargoExperiencia.getText();
+	String tipoP = tipoContratoExperiencia.getSelectedItem().toString();
+
+	Date fechaInicioP = fechaInicioExperiencia.getDate();
+	Date fechaFinP  = fechafinExperiencia.getDate();
+	
+	if (verificarCamposExperiencia()){
+		
+		control.agregarExperienciaEmpleadoNuevo(cargoP, empresaP, tipoP, fechaInicioP, fechaFinP);
+		actualizarTablaExperiencia();
+		limpiarCamposExperiencia();
+	}
+	
+}
+
+public boolean verificarCamposExperiencia(){
+	
+	String empresaP = empresaExperiencia.getText();
+	String cargoP = cargoExperiencia.getText();
+
+	boolean res = false;
+	
+	if (!empresaP.equalsIgnoreCase("") && !cargoP.equalsIgnoreCase("")){
+		
+		res = true;
+	}
+	
+	else{
+		JOptionPane.showMessageDialog(this, "Hay campos vacíos que se deben llenar", "Error", JOptionPane.INFORMATION_MESSAGE);
+	}
+	return res;
+}
+
+public void editarExperiencia(){
+	int confirm = JOptionPane.showConfirmDialog(this, "¿Desea guardar los cambios realizados?","Warning",JOptionPane.YES_NO_OPTION);
+	if (confirm == JOptionPane.YES_NO_OPTION){
 		
 		int posicion = tableExperiencia.getSelectedRow();
 		
-		DefaultTableModel dm = (DefaultTableModel) tableExperiencia.getModel();
-		int confirm = JOptionPane.showConfirmDialog(this, "¿Desea eliminar la experiencia seleccionada?","Warning",JOptionPane.YES_NO_OPTION);
+		String empresaP = empresaExperiencia.getText();
+		String cargoP = cargoExperiencia.getText();
+		String tipoP = tipoContratoExperiencia.getSelectedItem().toString();
+		Date fechaInicioP = fechaInicioExperiencia.getDate();
+		Date fechaFinP  = fechafinExperiencia.getDate();
 		
-		if (confirm == JOptionPane.YES_NO_OPTION){
-			control.eliminarExperienciaEmpleadoNuevo(posicion);
-			tableExperiencia.getSelectionModel().removeListSelectionListener(listenerReferencias);
-			modExp.removeRow(posicion);
-			tableExperiencia.getSelectionModel().addListSelectionListener(listenerReferencias);
+		if (verificarCamposExperiencia()){
+			
+			control.editarExperienciaEmpleadoNuevo(posicion, empresaP, cargoP, tipoP, fechaInicioP, fechaFinP);
+			
+			actualizarTablaExperiencia();
 		}
+	}
+}
+
+public void eliminarExperiencia(){
+	
+	int posicion = tableExperiencia.getSelectedRow();
+	
+	DefaultTableModel dm = (DefaultTableModel) tableExperiencia.getModel();
+	int confirm = JOptionPane.showConfirmDialog(this, "¿Desea eliminar la experiencia seleccionada?","Warning",JOptionPane.YES_NO_OPTION);
+	
+	if (confirm == JOptionPane.YES_NO_OPTION){
+		control.eliminarExperienciaEmpleadoNuevo(posicion);
+		tableExperiencia.getSelectionModel().removeListSelectionListener(listenerTablas);
+		modExp.removeRow(posicion);
+		tableExperiencia.getSelectionModel().addListSelectionListener(listenerTablas);
+	}
+	
+	if(control.darListaExperienciaEmpleadoNuevo().isEmpty()){
+		limpiarCamposExperiencia();
+	}
+	else{
+		actualizarInformacionExperiencia(0);
+	}
+}
+
+public void limpiarCamposExperiencia(){
+	
+	empresaExperiencia.setText("");
+	cargoExperiencia.setText("");
+	tipoContrato.setSelectedIndex(0);
+	fechaInicioExperiencia.setDate(new Date());
+	fechafinExperiencia.setDate(new Date());
+}
+
+public void actualizarInformacionExperiencia(int posicion){
+	
+	ArrayList<Experiencia> lista = control.darListaExperienciaEmpleadoNuevo();
+	Experiencia e = lista.get(posicion);
+	
+	empresaExperiencia.setText(e.getEmpresa());
+	cargoExperiencia.setText(e.getCargo());
+	
+	
+	boolean listo = false;
+	
+	for (int i = 0; i < tipoContratoOpciones.length; i++){
+		if (tipoContratoOpciones[i].equalsIgnoreCase(e.getTipoContrato())){
+			System.out.println(tipoContratoOpciones[i]);
+			tipoContratoExperiencia.setSelectedIndex(i);
+		}	
+	}
+	
+	fechaInicioExperiencia.setDate(e.getFechaInicio());
+	fechafinExperiencia.setDate(e.getFechaFin());
+	
+	btnNuevaExperiencia.setEnabled(true);
+	btnEditarExperiencia.setEnabled(true);
+	btnEliminarExperiencia.setEnabled(true);
+	btnAgregarExperiencia.setEnabled(false);
+	
+};
+
+public void actualizarTablaExperiencia(){
+	
+	tableExperiencia.getSelectionModel().removeListSelectionListener(listenerTablas);
+	
+	DefaultTableModel model = (DefaultTableModel) tableExperiencia.getModel();
+	model.setRowCount(0);
+	
+	ArrayList listaExperiencia = control.darListaExperienciaEmpleadoNuevo();
+	
+	for (int i = 0;  i< listaExperiencia.size(); i++){
+
+		Experiencia actual = (Experiencia) listaExperiencia.get(i);
+		model.addRow(new Object[]{i+1,actual.getEmpresa(), actual.getCargo(), actual.getFechaInicio(), actual.getFechaFin()});
+	}	
+	
+	tableExperiencia.getSelectionModel().addListSelectionListener(listenerTablas);
+}
+
+public void agregarHijos(){
+
+	
+	String nombreP = nombreHijo.getText();
+	String apellidosP = apellidosHijo.getText();
+	String tipoP = tipoDocumentoHijos.getSelectedItem().toString();
+	String sexoP = sexoHijos.getSelectedItem().toString();
+	Date fechaP = fechaNacimientoHijo.getDate();
+	String direccionP = direccionHijos.getText();
+	
+	String documentoP0 = cedulaHijo.getText();
+	int identificacionP = 0;
+	
+	int confirmacion = verificarCamposHijo();
+	System.out.println(""+confirmacion);
+	
+	if (confirmacion > 0){
 		
-		if(control.darListaExperiencia().isEmpty()){
-			limpiarCamposExperiencia();
+		if (confirmacion == 1){
+			identificacionP = 0;
+		}
+		else if (confirmacion == 2){
+			identificacionP = Integer.parseInt(documentoP0);
+		}
+		control.agregarHijoEmpleadoNuevo(nombreP, apellidosP, 0, identificacionP, sexoP, direccionP, "", "", tipoP, fechaP);
+		actualizarTablaHijos();
+		limpiarCamposHijos();
+	}
+	
+}
+	
+public int verificarCamposHijo(){
+	
+	String nombreP = nombreHijo.getText();
+	String apellidosP = apellidosHijo.getText();
+	String tipoP = tipoDocumentoHijos.getSelectedItem().toString();
+	String sexoP = sexoHijos.getSelectedItem().toString();
+	Date fechaP = fechaNacimientoHijo.getDate();
+	String direccionP = direccionHijos.getText();
+	
+	String documentoP0 = cedulaHijo.getText();
+	
+	int res = 0;
+	
+	if (!nombreP.equalsIgnoreCase("") && !apellidosP.equalsIgnoreCase("")){
+		
+		if (documentoP0.equalsIgnoreCase("") || direccionP.equalsIgnoreCase("")){
+			
+			int rta = JOptionPane.showConfirmDialog(this, "Hay campos sin llenar, ¿Desea continuar?", "Advertencia", JOptionPane.YES_NO_OPTION);
+			
+			if (rta == JOptionPane.YES_OPTION){
+				if (documentoP0.equalsIgnoreCase("")){
+					res = 1;
+				}
+				else{
+					res = 2;
+				}
+			}
 		}
 		else{
-			Experiencia nuevoMostrado = (Experiencia) control.darListaExperiencia().get(0);
-			actualizarInformacionExperiencia(nuevoMostrado);
+			
+			try{
+				int documentoP = Integer.parseInt(documentoP0);
+				res = 2;
+				
+			}
+			catch (Exception e){
+				JOptionPane.showMessageDialog(this, "Debe ingresar un valor numérico en el campo número de documento", "Error", JOptionPane.ERROR_MESSAGE);
+			}
+		
+		}
+	}
+	else{
+		JOptionPane.showMessageDialog(this, "Hay campos vacíos que se deben llenar", "Error", JOptionPane.INFORMATION_MESSAGE);
+	}
+	
+	return res;
+}	
+
+public void editarHijo(){
+	
+	int confirm = JOptionPane.showConfirmDialog(this, "¿Desea guardar los cambios realizados?","Warning",JOptionPane.YES_NO_OPTION);
+	if (confirm == JOptionPane.YES_NO_OPTION){
+		
+		int posicion = tableHijos.getSelectedRow();
+		
+		String nombreP = nombreHijo.getText();
+		String apellidosP = apellidosHijo.getText();
+		String tipoP = tipoDocumentoHijos.getSelectedItem().toString();
+		String sexoP = sexoHijos.getSelectedItem().toString();
+		Date fechaP = fechaNacimientoHijo.getDate();
+		String direccionP = direccionHijos.getText();
+		
+		String documentoP0 = cedulaHijo.getText();
+		
+		int confirmacion = verificarCamposHijo();
+		int identificacionP = 0;
+		
+		if (confirmacion > 0){
+			
+			if (confirmacion == 1){
+				identificacionP = 0;
+			}
+			else if (confirmacion == 2){
+				identificacionP = Integer.parseInt(documentoP0);
+			}
+			
+			control.editarHijoEmpleadoNuevo(posicion, nombreP, apellidosP, tipoP, identificacionP, sexoP, fechaP, direccionP);
+			actualizarTablaHijos();
+		}
+		
+	}
+}
+
+public void eliminarHijo(){
+	
+	int posicion = tableHijos.getSelectedRow();
+	
+	DefaultTableModel dm = (DefaultTableModel) tableHijos.getModel();
+	int confirm = JOptionPane.showConfirmDialog(this, "¿Desea eliminar el hijo seleccionado?","Warning",JOptionPane.YES_NO_OPTION);
+	
+	if (confirm == JOptionPane.YES_NO_OPTION){
+		control.eliminarHijoEmpleadoNuevo(posicion);
+		tableHijos.getSelectionModel().removeListSelectionListener(listenerTablas);
+		dm.removeRow(posicion);
+		tableHijos.getSelectionModel().addListSelectionListener(listenerTablas);
+	}
+	
+	if(control.darListaHijosEmpleadoNuevo().isEmpty()){
+		limpiarCamposHijos();
+	}
+	else{
+		actualizarInformacionHijo(0);
+	}
+}
+
+public void limpiarCamposHijos(){
+	
+	nombreHijo.setText("");
+	apellidosHijo.setText("");
+	tipoDocumentoHijos.setSelectedIndex(0);
+	cedulaHijo.setText("");
+	sexoHijos.setSelectedIndex(0);
+	fechaNacimientoHijo.setDate(new Date());
+	direccionHijos.setText("");
+}
+
+public void actualizarInformacionHijo(int posicion){
+	
+	ArrayList<Hijo> lista = control.darListaHijosEmpleadoNuevo();
+	Hijo hij = lista.get(posicion);
+	
+	nombreHijo.setText(hij.getNombres());
+	apellidosHijo.setText(hij.getApellidos());
+
+	for (int i = 0; i < tipoDocumento.length; i++){
+		if (tipoDocumento[i].equalsIgnoreCase(hij.getTipoDocumento())){
+			tipoDocumentoHijos.setSelectedIndex(i);
+		}	
+	}
+	
+	cedulaHijo.setText(String.valueOf(hij.getIdentificacion()));
+	
+	for (int i = 0; i < tipoSexo.length; i++){
+		if (tipoSexo[i].equalsIgnoreCase(hij.getSexo())){
+			sexoHijos.setSelectedIndex(i);
+		}	
+	}
+	
+	fechaNacimientoHijo.setDate(hij.getFechaNacimiento());
+	direccionHijos.setText(hij.getDireccion());
+	
+	btnNuevoHijo.setEnabled(true);
+	btnEditarHijo.setEnabled(true);
+	btnEliminarHijo.setEnabled(true);
+	btnAgregarHijo.setEnabled(false);
+	
+};
+
+public void actualizarTablaHijos(){
+	
+	tableHijos.getSelectionModel().removeListSelectionListener(listenerTablas);
+	
+	DefaultTableModel model = (DefaultTableModel) tableHijos.getModel();
+	model.setRowCount(0);
+	ArrayList listaHijos = control.darListaHijosEmpleadoNuevo();
+	
+	for (int i = 0;  i< listaHijos.size(); i++){
+
+		Hijo actual = (Hijo) listaHijos.get(i);
+		Date fechaActual = new Date();
+		int edad = fechaActual.getYear() - actual.getFechaNacimiento().getYear(); 
+		
+		model.addRow(new Object[]{i+1,actual.getNombres(), ""+edad});
+	}	
+	
+	tableHijos.getSelectionModel().addListSelectionListener(listenerTablas);
+}
+
+public void agregarEmpleado(){
+	int res0 = agregarInfoConyugue();
+	if (res0 > 0)	{
+		int res = agregarInfoLaboral();
+		if (res == 1 || res == 2){
+			int res2 = agregarInfoEmpleado();
+			if (res2 == 1 || res2 == 2){
+				
+				control.agregarEmpleado();
+				interfaz.actualizarListaEmpleados();
+				this.dispose();
+			}
 		}
 	}
 	
-	public void limpiarCamposExperiencia(){
+}
+
+public int agregarInfoConyugue(){
+	int res = 0;
+	String nombreP = nombrePareja.getText();
+	String apellidosP = apellidosPareja.getText();
+	String documentoP0 = cedulaPareja.getText();
+	String telefonoP0 = telefonoPareja.getText();
+	
+	res = verificarCamposConyugue();
+	if (res == 2){
 		
-		empresaExperiencia.setText("");
-		cargoExperiencia.setText("");
-		tipoContrato.setSelectedIndex(0);
-		fechaInicioExperiencia.setDate(new Date());
-		fechafinExperiencia.setDate(new Date());
+		double documentoP = Double.parseDouble(documentoP0);
+		double telefonoP = Double.parseDouble(telefonoP0);
+		
+		String sexoP = sexoPareja.getSelectedItem().toString();
+		String direccionP = direccionPareja.getText();
+		String ciudadP = ciudadPareja.getText();
+		
+		control.agregarConyugueEmpleadoNuevo(nombreP, apellidosP, documentoP, telefonoP, null, sexoP, direccionP, ciudadP);
 	}
 	
-	public void actualizarInformacionExperiencia(Experiencia exp){
+	return res;
+}
+
+public int agregarInfoLaboral(){
+	
+	String cargoP = cargoEmpleado.getText();
+	String salarioFijoP0 = salarioFijo.getText();
+	String horasP0 = horasSemanales.getText();
+	String periodoLiquidacionP0 = tipoLiquidacionEmpleado.getSelectedItem().toString();
+	boolean auxilioP = checkAuxilio.isSelected();
+	
+	int res = validarCamposLaborales();
+	
+	if (res > 0){
 		
-		empresaExperiencia.setText(exp.getEmpresa());
-		cargoExperiencia.setText(exp.getCargo());
+		int salarioFijoP = Integer.parseInt(salarioFijoP0);
+		int horasP = Integer.parseInt(horasP0);
+		int periodoLiquidacionP = Integer.parseInt(periodoLiquidacionP0);
 		
-		boolean listo = false;
-		for (int i = 0; i<tipoContratoOpciones.length && !listo; i++){
-			if (tipoContratoOpciones[i].equalsIgnoreCase(exp.getTipoContrato())){
-				listo = true;
-				tipoContrato.setSelectedIndex(i);
+		control.agregarInfoLaboralEmpleadoNuevo(cargoP, salarioFijoP,horasP,tipoContrato.getSelectedItem().toString(),
+				duracionContrato.getSelectedItem().toString(),fechaInicioContrato.getDate(),fechaFinContrato.getDate(),
+				periodoLiquidacionP,saludEmpleado.getSelectedItem().toString(),
+				pensionesEmpleado.getSelectedItem().toString(),arlEmpleado.getSelectedItem().toString(),
+				false ,cajaCompensacionEmpleado.getSelectedItem().toString(),
+				fechaAfiliacionSS.getDate(),auxilioP);
+
+	}
+	
+	return res;
+	
+}
+
+public int agregarInfoEmpleado(){
+	int res = verificarCamposEmpleado();
+	
+	String nombreP = nombreEmpleado.getText();
+	String apellidosP = apellidosEmpleado.getText();
+	String tipoP = tipoDocumentoEmpleado.getSelectedItem().toString();
+	String sexoP = sexoEmpleado.getSelectedItem().toString();
+	String estadoCivilP = estadoCivilEmpleado.getSelectedItem().toString();
+	Date fechaP = fechaNacimientoEmpleado.getDate();
+	String documentoP0 = cedulaEmpleado.getText();
+	String direccionP = direccionEmpleado.getText();
+	String ciudadP = ciudadEmpleado.getText();
+	String correoP = correoEmpleado.getText();
+	
+	String telefonoP0 = telefonoEmpleado.getText();
+	String celularP0 = celularEmpleado.getText();
+	
+	if (res > 0){
+		
+		int documentoP = Integer.parseInt(documentoP0);	
+		int telefonoP = Integer.parseInt(telefonoP0);	
+		int celularP = Integer.parseInt(celularP0);
+		
+		control.agregarInfoPersonalEmpleadoNuevo(nombreP,apellidosP,tipoP,documentoP,
+				sexoP, estadoCivilP, fechaP, direccionP, ciudadP, telefonoP, celularP, foto);
+	}
+	
+	return res;
+}
+
+public int validarCamposLaborales(){
+
+	int res = 0;
+	
+	String cargoP = cargoEmpleado.getText();
+	String salarioFijoP0 = salarioFijo.getText();
+	String horasP0 = horasSemanales.getText();
+	String periodoLiquidacionP0 = tipoLiquidacionEmpleado.getSelectedItem().toString();
+	
+	if (!cargoP.equalsIgnoreCase("") && !salarioFijoP0.equalsIgnoreCase("") &&!horasP0.equalsIgnoreCase("")){
+		
+		try{
+			double salarioFijoP = Double.parseDouble(salarioFijoP0);	
+				try{
+					double periodoLiquidacionP = Integer.parseInt(periodoLiquidacionP0);
+					
+					try{
+						int horasP = Integer.parseInt(horasP0);
+						res = 2;
+					}
+					catch (Exception e){
+						JOptionPane.showMessageDialog(this, "Debe ingresar un valor numérico válido en el campo de horas semanales", "Error", JOptionPane.ERROR_MESSAGE);
+					}
+				}
+				catch (Exception e){
+					JOptionPane.showMessageDialog(this, "Debe ingresar un valor numérico válido en el campo de Periodo de Liquidación", "Error", JOptionPane.ERROR_MESSAGE);
+				}
+								
+		}
+		catch (Exception e){
+			JOptionPane.showMessageDialog(this, "Debe ingresar un valor numérico válido en el campo de salario fijo", "Error", JOptionPane.ERROR_MESSAGE);
+		}			
+	}
+	else{
+		JOptionPane.showMessageDialog(this, "Hay campos vacíos que se deben llenar en la Información Laboral", "Error", JOptionPane.INFORMATION_MESSAGE);
+	}
+	
+	return res;
+}
+
+public int verificarCamposConyugue(){
+	int res = 1;
+	
+	String nombreP = nombrePareja.getText();
+	String apellidosP = apellidosPareja.getText();
+	String documentoP0 = cedulaPareja.getText();
+	String telefonoP0 = telefonoPareja.getText();
+	
+	if (!nombreP.equals("") || !apellidosP.equals("") || !documentoP0.equals("") || !telefonoP0.equals("")){
+		
+		if (!nombreP.equals("") && !apellidosP.equals("") && !documentoP0.equals("") && !telefonoP0.equals("")){
+			try{
+				double telefonoP = Double.parseDouble(telefonoP0);	
+				
+				try {
+					double documentoP = Double.parseDouble(documentoP0);
+					res = 2;
+				}
+				catch (Exception e){
+					JOptionPane.showMessageDialog(this, "Debe ingresar valores numéricos válidos en el campo de número del documento de identidad del Cónyugue", "Error", JOptionPane.ERROR_MESSAGE);
+				}
+				
+			}
+			catch (Exception e){
+				JOptionPane.showMessageDialog(this, "Debe ingresar valores numéricos válidos en el campo de número telefónico del Cónyugue", "Error", JOptionPane.ERROR_MESSAGE);
 			}	
 		}
+		else
+		{
+			JOptionPane.showMessageDialog(this, "Debe llenar los campos de nombres, apellidos, telefono y número de documento del Cónyugue", "Error", JOptionPane.ERROR_MESSAGE);
+		}
 		
-		fechaInicioExperiencia.setDate(exp.getFechaInicio());
-		fechafinExperiencia.setDate(exp.getFechaFin());
-		
-		btnNuevaExperiencia.setEnabled(true);
-		btnEditarExperiencia.setEnabled(true);
-		btnEliminarExperiencia.setEnabled(true);
-		btnAgregarExperiencia.setEnabled(false);
-		
-	};
-	
-	public void actualizarTablaExperiencia(){
-		
-		tableExperiencia.getSelectionModel().removeListSelectionListener(listenerReferencias);
-		
-		DefaultTableModel model = (DefaultTableModel) tableExperiencia.getModel();
-		model.setRowCount(0);
-		ArrayList listaExperiencia = control.darListaExperiencia();
-		
-		for (int i = 0;  i< listaExperiencia.size(); i++){
-	
-			Experiencia actual = (Experiencia) listaExperiencia.get(i);
-			model.addRow(new Object[]{i+1,actual.getEmpresa(), actual.getCargo(), actual.getFechaInicio(), actual.getFechaFin()});
-		}	
-		
-		tableExperiencia.getSelectionModel().addListSelectionListener(listenerReferencias);
 	}
+	
+	
+	return res;
+}
+
+public int verificarCamposEmpleado(){
+	
+	int res = 0;
+	
+	String nombreP = nombreEmpleado.getText();
+	String apellidosP = apellidosEmpleado.getText();
+	String documentoP0 = cedulaEmpleado.getText();
+	String direccionP = direccionEmpleado.getText();
+	String ciudadP = ciudadEmpleado.getText();
+	String correoP = correoEmpleado.getText();
+	
+	String telefonoP0 = telefonoEmpleado.getText();
+	String celularP0 = celularEmpleado.getText();
+	
+	if (!nombreP.equalsIgnoreCase("") && !apellidosP.equalsIgnoreCase("")
+			&& !documentoP0.equalsIgnoreCase("") && !direccionP.equalsIgnoreCase("") 
+			&& !ciudadP.equalsIgnoreCase("") && !telefonoP0.equalsIgnoreCase("") 
+			&& !celularP0.equalsIgnoreCase("")){
+		
+		try{
+			int documentoP = Integer.parseInt(documentoP0);	
+				
+				try{
+					int telefonoP = Integer.parseInt(telefonoP0);	
+					int celularP = Integer.parseInt(celularP0);
+					
+					if (correoP.equalsIgnoreCase("")){
+						
+						int rta = JOptionPane.showConfirmDialog(this, "Hay campos sin llenar en la Información del Empleado, ¿Desea continuar?", "Advertencia", JOptionPane.YES_NO_OPTION);
+						
+						if (rta == JOptionPane.YES_OPTION){
+							
+							res = 1;
+						}
+					}
+					
+					res = 2;
+				}
+				catch (Exception e){
+					JOptionPane.showMessageDialog(this, "Debe ingresar valores numéricos válidos en los campos de número telefónico y celular del Empleado", "Error", JOptionPane.ERROR_MESSAGE);
+				}				
+			
+		}
+		catch (Exception e){
+			JOptionPane.showMessageDialog(this, "Debe ingresar un valor numérico válido en el campo de documento de identidad del Empleado", "Error", JOptionPane.ERROR_MESSAGE);
+		}			
+	}
+	else{
+		JOptionPane.showMessageDialog(this, "Hay campos vacíos que se deben llenar en la Información del Empleado", "Error", JOptionPane.INFORMATION_MESSAGE);
+	}
+	
+	return res;
+}
+
+public void subirFotoEmpleado(){
+	JFileChooser fc = new JFileChooser ();
+	fc.setDialogTitle ("Cargar Foto Empleado");
+	fc.setApproveButtonText("Abrir");
+	
+	FileFilter filter = new FileNameExtensionFilter("JPG File", "jpg");
+	fc.setFileFilter(filter);
+	
+	fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+	
+	File rutaFotos = new File(Empresa.RUTA_ARCHIVO_FOTOS);
+	fc.setCurrentDirectory(rutaFotos);
+
+	File archivoGen = null;
+	int resultado = fc.showOpenDialog(this);
+	if (resultado == JFileChooser.APPROVE_OPTION)
+	{
+		archivoGen = fc.getSelectedFile();
+		
+		BufferedImage img;
+		try {
+			img = ImageIO.read(archivoGen);
+			
+			ImageIcon icono0  =new ImageIcon(img); // ADDED
+			
+			lblFoto.setSize(130, 150);
+			
+			ImageIcon icon = new ImageIcon(icono0.getImage().getScaledInstance(lblFoto.getWidth(), lblFoto.getHeight(), Image.SCALE_DEFAULT));
+			
+	        lblFoto.setIcon(icon); // ADDED
+
+	        Dimension imageSize = new Dimension(130,150); // ADDED
+	        lblFoto.setPreferredSize(imageSize); // ADDED
+
+	        lblFoto.revalidate(); // ADDED
+	        lblFoto.repaint();
+	        
+	        foto = icono0;
+	        
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}  
+	}
+}
+
 }

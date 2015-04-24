@@ -3,9 +3,24 @@ package mundo;
 import java.util.ArrayList;
 import java.util.Date;
 
+import javax.swing.ImageIcon;
+
 public interface IEmpresa {
+	
+	public static final String RUTA_ARCHIVO_PERSISTENCIA = "./data/Persistencia/";
 		
-	public void agregarEmpleado() throws Exception;
+	public void agregarEmpleado();
+	
+	public void agregarInfoLaboralEmpleado(Empleado empleadoP, String cargoP,
+			int salarioFijoP, int horasP, String tipoP, String duracionP,
+			Date fechaInicioP, Date fechaFinP, int tipoLiquidacionP, String saludP,
+			String pensionesP, String arlP, boolean solidaridadP, String cajaCompensacionP,
+			Date fechaAfiliacionP, boolean auxilioP);
+	
+	public void agregarInfoPersonalEmpleado(Empleado empleadoP, String nombreP,String apellidosP,
+			String tipoP, int documentoP, String sexoP, String estadoCivilP, 
+			Date fechaP, String direccionP, String ciudadP, int telefonoP,int celularP,
+			ImageIcon fotoP);
 	
 	public void darEmpleado() throws Exception;
 	
@@ -24,14 +39,39 @@ public interface IEmpresa {
 	
 	public void agregarExperienciaEmpleado(Empleado empleadoP, String cargoP, String empresaP, String tipoContratoP, Date fechaInicioP, Date fechaFinP);
 	
+	public void agregarHijos(Empleado empleadoP, String nombreP,String apellidosP,int telefonoP,int identificacionP, String sexoP, String direccionP, String ciudadP, String departamentoP, String tipoDocumentoP, Date fechaNacimientoP);
+	
+	public void agregarConyugueEmpleado(Empleado empleadoP, String nombresParejaP, String apellidosParejaP, double cedulaParejaP,
+			double telefonoParejaP, Date fechaNacimientoParejaP, String sexoParejaP,
+			String direccionParejaP, String ciudadParejaP);
+	
 	public void eliminarReferenciaEmpleado(Empleado empleadoP, int index);
 	
 	public void eliminarExperienciaEmpleado(Empleado empleadoP, int index);
+	
+	public void eliminarHijoEmpleado(Empleado empleadoP, int index);
+	
+	public void editarReferenciaEmpleado(Empleado empleadoP, int posicion,
+			String tipoP, String nombresP, String apellidosP, int documentoP,
+			int telefonoP, String sexoP, String direccionP, String ciudadP,
+			String empresaP, String conceptoP);
+	
+	public void editarExperienciaEmpleado(Empleado empleadoP, int index, String empresaP, 
+			String cargoP, String tipoP, Date fechaInicioP, Date fechaFinP);
+	
+	public void editarHijoEmpleado(Empleado empleadoP, int index, String nombreP, String apellidosP, String tipoP,
+			int identificacionP, String sexoP, Date fechaP, String direccionP);
 	
 	public ArrayList darListaReferecniasEmpleado(Empleado empleadoP);
 	
 	public ArrayList darListaExperienciaEmpleado(Empleado empleadoP);
 	
 	public Empleado getEmpleadoNuevo();
+	
+	public ArrayList getEmpleados();
+	
+    public void cargarEstado( String pRutaNombre ) throws PersistenciaException;
+	
+	public void guardarEstado( String pRutaNombre) throws PersistenciaException;
 	
 }

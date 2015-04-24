@@ -1,8 +1,9 @@
 package mundo;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class ReferenciaPersonal extends Persona{
+public class Referencia extends Persona implements Serializable{
 	
 	
 	private String tipo;
@@ -12,8 +13,8 @@ public class ReferenciaPersonal extends Persona{
 	public final static String LABORAL = "Laboral";
 	public final static String FAMILIAR = "Familiar";
 	
-	public ReferenciaPersonal(String nombre, String apellidos, int telefono,
-			int identificacion, String sexo, String direccion, String ciudad, String departamento,
+	public Referencia(String nombre, String apellidos, double telefono,
+			double identificacion, String sexo, String direccion, String ciudad, String departamento,
 			String tipoP, String empresaP, String conceptoP) 
 	{		
 		super(identificacion, Persona.CEDULA, nombre, apellidos, sexo, null, "", "", -1, 
@@ -30,7 +31,7 @@ public class ReferenciaPersonal extends Persona{
 	}
 
 
-	public void setTipo(String tipo) {
+	protected void setTipo(String tipo) {
 		this.tipo = tipo;
 	}
 
@@ -40,7 +41,7 @@ public class ReferenciaPersonal extends Persona{
 	}
 
 
-	public void setEmpresa(String empresa) {
+	protected void setEmpresa(String empresa) {
 		this.empresa = empresa;
 	}
 
@@ -50,7 +51,7 @@ public class ReferenciaPersonal extends Persona{
 	}
 
 
-	public void setConcepto(String concepto) {
+	protected void setConcepto(String concepto) {
 		this.concepto = concepto;
 	}
 	
