@@ -218,9 +218,8 @@ public class DialogoAgregarEmpleado extends JDialog implements ActionListener{
 		fotoEmpleado.setBounds(68, 52, 130, 150);
 		
 		lblFoto = new JLabel("");
-		lblFoto.setSize(130, 150);
-		
-		fotoEmpleado.add(lblFoto);
+		lblFoto.setBounds(68, 52, 130, 150);
+		panel_1.add(lblFoto);
 		panel_1.add(fotoEmpleado);
 		
 		
@@ -1940,7 +1939,7 @@ public void subirFotoEmpleado(){
 			
 			ImageIcon icono0  =new ImageIcon(img); // ADDED
 			
-			lblFoto.setSize(130, 150);
+			lblFoto.setBounds(68, 52, 130, 150);
 			
 			ImageIcon icon = new ImageIcon(icono0.getImage().getScaledInstance(lblFoto.getWidth(), lblFoto.getHeight(), Image.SCALE_DEFAULT));
 			

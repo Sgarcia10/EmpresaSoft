@@ -106,11 +106,10 @@ public class InterfazNomina extends JFrame implements ActionListener{
 		JPanel fotoEmpleado = new JPanel();
 		fotoEmpleado.setBorder(new LineBorder(new Color(0, 0, 0)));
 		fotoEmpleado.setBackground(Color.WHITE);
-		fotoEmpleado.setBounds(10, 24, 138, 172);
+		fotoEmpleado.setBounds(10, 24, 138, 160);
 		
 		lblFoto = new JLabel("");
-		lblFoto.setSize(138, 172);
-		fotoEmpleado.add(lblFoto);
+		panel_1.add(lblFoto);
 		panel_1.add(fotoEmpleado);
 		
 		nombresEmpleado = new JTextField();
@@ -455,7 +454,7 @@ public class InterfazNomina extends JFrame implements ActionListener{
 		
 		if (!(e.getFoto() == null) ){
 			
-			lblFoto.setSize(138, 172);
+			lblFoto.setBounds(10, 24, 138, 160);
 			ImageIcon icono0 = e.getFoto();
 			ImageIcon icon = new ImageIcon(icono0.getImage().getScaledInstance(lblFoto.getWidth(), lblFoto.getHeight(), Image.SCALE_DEFAULT));
 			
