@@ -19,6 +19,7 @@ import javax.swing.JComboBox;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
+import javax.swing.ListSelectionModel;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -39,6 +40,8 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import javax.swing.border.LineBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import com.toedter.calendar.JMonthChooser;
 import com.toedter.calendar.JYearChooser;
@@ -202,11 +205,25 @@ public class InterfazNomina extends JFrame implements ActionListener{
 		panel_3.setLayout(null);
 		
 		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBackground(Color.WHITE);
 		scrollPane.setBounds(10, 52, 201, 401);
 		panel_3.add(scrollPane);
 		
 		listaEmpleados = new JList();
-		scrollPane.setRowHeaderView(listaEmpleados);
+		listaEmpleados.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		listaEmpleados.setBackground(Color.WHITE);
+		listaEmpleados.addListSelectionListener(new ListSelectionListener() {
+
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				if( listaEmpleados.getSelectedValue() != null){
+					int pos = listaEmpleados.getSelectedIndex();
+					actualizarResumenDatosEmpleadoSeleccionado(pos);
+				}
+				
+			}
+		});	
+		scrollPane.setViewportView(listaEmpleados);
 		
 		JLabel lblBuscar = new JLabel("Buscar");
 		lblBuscar.setBounds(10, 30, 46, 14);
