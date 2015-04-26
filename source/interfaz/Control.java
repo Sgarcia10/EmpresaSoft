@@ -48,8 +48,8 @@ public class Control {
 		empresa.agregarConyugueEmpleado(e, nombresParejaP, apellidosParejaP, cedulaParejaP, telefonoParejaP, fechaNacimientoParejaP, sexoParejaP, direccionParejaP, ciudadParejaP);
 	}
 	
-	public void agregarReferenciaEmpleadoNuevo(String nombresP, String apellidosP, int telefonoP, 
-			int documentoP, String sexoP, String direccionP, String ciudadP, String departamentoP, String tipoP, 
+	public void agregarReferenciaEmpleadoNuevo(String nombresP, String apellidosP, double telefonoP, 
+			double documentoP, String sexoP, String direccionP, String ciudadP, String departamentoP, String tipoP, 
 			String empresaP, String conceptoP){
 		
 		Empleado e = empresa.getEmpleadoNuevo();
@@ -62,7 +62,7 @@ public class Control {
 		empresa.agregarExperienciaEmpleado(e, cargoP, empresaP, tipoContratoP, fechaInicioP, fechaFinP);
 	}
 	
-	public void agregarHijoEmpleadoNuevo(String nombreP,String apellidosP,int telefonoP,int identificacionP, String sexoP,
+	public void agregarHijoEmpleadoNuevo(String nombreP,String apellidosP,double telefonoP,double identificacionP, String sexoP,
 			String direccionP, String ciudadP, String departamentoP, String tipoDocumentoP, Date fechaNacimientoP)
 	{
 		
@@ -384,8 +384,8 @@ public class Control {
 	}
 	
 	public void agregarInfoPersonalEmpleadoNuevo(String nombreP,String apellidosP,
-			String tipoP, int documentoP, String sexoP, String estadoCivilP, 
-			Date fechaP, String direccionP, String ciudadP, int telefonoP,int celularP,
+			String tipoP, double documentoP, String sexoP, String estadoCivilP, 
+			Date fechaP, String direccionP, String ciudadP, double telefonoP,double celularP,
 			ImageIcon fotoP)
 	{
 		Empleado e = empresa.getEmpleadoNuevo();

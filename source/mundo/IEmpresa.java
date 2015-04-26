@@ -18,8 +18,8 @@ public interface IEmpresa {
 			Date fechaAfiliacionP, boolean auxilioP);
 	
 	public void agregarInfoPersonalEmpleado(Empleado empleadoP, String nombreP,String apellidosP,
-			String tipoP, int documentoP, String sexoP, String estadoCivilP, 
-			Date fechaP, String direccionP, String ciudadP, int telefonoP,int celularP,
+			String tipoP, double documentoP, String sexoP, String estadoCivilP, 
+			Date fechaP, String direccionP, String ciudadP, double telefonoP,double celularP,
 			ImageIcon fotoP);
 	
 	public void darEmpleado() throws Exception;
@@ -33,13 +33,13 @@ public interface IEmpresa {
 			String correo, int edad, int telefono, int celularP, String direccion, String ciudad,
 			String departamento, String nacionalidad);
 	
-	public void agregarReferenciaEmpleado(Empleado empleadoP, String nombresP, String apellidosP, int telefonoP, 
-			int documentoP, String sexoP, String direccionP, String ciudadP, String departamentoP, String tipoP, 
+	public void agregarReferenciaEmpleado(Empleado empleadoP, String nombresP, String apellidosP, double telefonoP, 
+			double documentoP, String sexoP, String direccionP, String ciudadP, String departamentoP, String tipoP, 
 			String empresaP, String conceptoP);
 	
 	public void agregarExperienciaEmpleado(Empleado empleadoP, String cargoP, String empresaP, String tipoContratoP, Date fechaInicioP, Date fechaFinP);
 	
-	public void agregarHijos(Empleado empleadoP, String nombreP,String apellidosP,int telefonoP,int identificacionP, String sexoP, String direccionP, String ciudadP, String departamentoP, String tipoDocumentoP, Date fechaNacimientoP);
+	public void agregarHijos(Empleado empleadoP, String nombreP,String apellidosP,double telefonoP,double identificacionP, String sexoP, String direccionP, String ciudadP, String departamentoP, String tipoDocumentoP, Date fechaNacimientoP);
 	
 	public void agregarConyugueEmpleado(Empleado empleadoP, String nombresParejaP, String apellidosParejaP, double cedulaParejaP,
 			double telefonoParejaP, Date fechaNacimientoParejaP, String sexoParejaP,

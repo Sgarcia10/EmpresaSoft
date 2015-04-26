@@ -36,9 +36,9 @@ private ArrayList<Hijo> hijos;
 	private Conyuge conyugue;
 		
 	
-	public Empleado(int identificacion, String tipoDocumento, String nombre, 
+	public Empleado(double identificacion, String tipoDocumento, String nombre, 
 			String apellidos, String sexo, Date fechaNacimiento, String estadoCivil,
-			String correo, int edad, int telefono, int celularP, String direccion, String ciudad,
+			String correo, int edad, double telefono, double celularP, String direccion, String ciudad,
 			String departamento, String nacionalidad) 
 	{
 		super(identificacion, tipoDocumento, nombre, apellidos, sexo, fechaNacimiento,
@@ -59,8 +59,8 @@ private ArrayList<Hijo> hijos;
 		conyugue = new Conyuge(nombresParejaP, apellidosParejaP, cedulaParejaP, telefonoParejaP, fechaNacimientoParejaP, sexoParejaP, direccionParejaP, ciudadParejaP);
 	}
 	
-	public void agregarReferencia(String nombre, String apellidos, int telefono,
-			int identificacion, String sexo, String direccion, String ciudad, String departamento,
+	public void agregarReferencia(String nombre, String apellidos, double telefono,
+			double identificacion, String sexo, String direccion, String ciudad, String departamento,
 			String tipoP, String empresaP, String conceptoP) {
 		
 		Referencia nueva = new Referencia(nombre, apellidos, telefono,
@@ -112,7 +112,7 @@ private ArrayList<Hijo> hijos;
 		exp.setFechaFin(fechaFinP);
 	}
 	
-	public void agregarHijo(String nombreP,String apellidosP,int telefonoP,int identificacionP, String sexoP,
+	public void agregarHijo(String nombreP,String apellidosP,double telefonoP,double identificacionP, String sexoP,
 			String direccionP, String ciudadP, String departamentoP, String tipoDocumentoP, Date fechaNacimientoP)
 	{
 		Hijo nuevo = new Hijo(nombreP, apellidosP, telefonoP, identificacionP, sexoP,

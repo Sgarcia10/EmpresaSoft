@@ -185,6 +185,13 @@ public class DialogoAgregarEmpleado extends JDialog implements ActionListener{
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setBounds(0, 0, 717, 668);
 		
+		//Definir color de fondo para campos obligatorios
+		
+		float h = Color.RGBtoHSB(255, 255, 224, null)[0];
+		float s = Color.RGBtoHSB(255, 255, 224, null)[1];
+		float b = Color.RGBtoHSB(255, 255, 224, null)[2];
+		//
+		
 		JPanel panel = new JPanel();
 		panel.setBackground(Color.WHITE);
 		getContentPane().add(panel, BorderLayout.CENTER);
@@ -232,16 +239,19 @@ public class DialogoAgregarEmpleado extends JDialog implements ActionListener{
 		panel_1.add(panel_5);
 		
 		direccionEmpleado = new JTextField();
+		direccionEmpleado.setBackground(Color.getHSBColor(h, s, b));
 		direccionEmpleado.setColumns(10);
 		direccionEmpleado.setBounds(177, 114, 141, 20);
 		panel_5.add(direccionEmpleado);
 		
 		telefonoEmpleado = new JTextField();
+		telefonoEmpleado.setBackground(Color.getHSBColor(h, s, b));
 		telefonoEmpleado.setColumns(10);
 		telefonoEmpleado.setBounds(177, 240, 141, 20);
 		panel_5.add(telefonoEmpleado);
 		
 		celularEmpleado = new JTextField();
+		celularEmpleado.setBackground(Color.getHSBColor(h, s, b));
 		celularEmpleado.setColumns(10);
 		celularEmpleado.setBounds(177, 283, 141, 20);
 		panel_5.add(celularEmpleado);
@@ -292,6 +302,7 @@ public class DialogoAgregarEmpleado extends JDialog implements ActionListener{
 		panel_5.add(lblCiudad_1);
 		
 		ciudadEmpleado = new JTextField();
+		ciudadEmpleado.setBackground(Color.getHSBColor(h, s, b));
 		ciudadEmpleado.setColumns(10);
 		ciudadEmpleado.setBounds(177, 155, 141, 20);
 		panel_5.add(ciudadEmpleado);
@@ -328,6 +339,7 @@ public class DialogoAgregarEmpleado extends JDialog implements ActionListener{
 		panel_1.add(label);
 		
 		nombreEmpleado = new JTextField();
+		nombreEmpleado.setBackground(Color.getHSBColor(h, s, b));
 		nombreEmpleado.setBounds(141, 295, 141, 20);
 		panel_1.add(nombreEmpleado);
 		nombreEmpleado.setColumns(10);
@@ -337,6 +349,7 @@ public class DialogoAgregarEmpleado extends JDialog implements ActionListener{
 		panel_1.add(label_1);
 		
 		apellidosEmpleado = new JTextField();
+		apellidosEmpleado.setBackground(Color.getHSBColor(h, s, b));
 		apellidosEmpleado.setBounds(141, 332, 141, 20);
 		panel_1.add(apellidosEmpleado);
 		apellidosEmpleado.setColumns(10);
@@ -357,6 +370,7 @@ public class DialogoAgregarEmpleado extends JDialog implements ActionListener{
 		panel_1.add(lblNoDocumento);
 		
 		cedulaEmpleado = new JTextField();
+		cedulaEmpleado.setBackground(Color.getHSBColor(h, s, b));
 		cedulaEmpleado.setBounds(141, 402, 141, 20);
 		panel_1.add(cedulaEmpleado);
 		cedulaEmpleado.setColumns(10);
@@ -593,12 +607,14 @@ public class DialogoAgregarEmpleado extends JDialog implements ActionListener{
 		panel_7.add(label_13);
 		
 		cargoEmpleado = new JTextField();
+		cargoEmpleado.setBackground(Color.getHSBColor(h, s, b));
 		cargoEmpleado.setColumns(10);
 		cargoEmpleado.setBounds(154, 28, 131, 20);
 		panel_7.add(cargoEmpleado);
 		
 		salarioFijo = new JTextField();
 		salarioFijo.setColumns(10);
+		salarioFijo.setBackground(Color.getHSBColor(h, s, b));
 		salarioFijo.setBounds(154, 67, 131, 20);
 		panel_7.add(salarioFijo);
 		
@@ -675,6 +691,7 @@ public class DialogoAgregarEmpleado extends JDialog implements ActionListener{
 		panel_7.add(lblHorasSemanales);
 		
 		horasSemanales = new JTextField();
+		horasSemanales.setBackground(Color.getHSBColor(h, s, b));
 		horasSemanales.setColumns(10);
 		horasSemanales.setBounds(154, 155, 130, 20);
 		panel_7.add(horasSemanales);
@@ -1168,8 +1185,8 @@ public void agregarReferencia() {
 	
 	if (verificarCamposReferencias()){
 		
-		int telefonoP = Integer.parseInt(telefonoP0);
-		int documentoP = Integer.parseInt(documentoP0);
+		double telefonoP = Integer.parseInt(telefonoP0);
+		double documentoP = Integer.parseInt(documentoP0);
 		
 		control.agregarReferenciaEmpleadoNuevo(nombresP, apellidosP, 
 				telefonoP, documentoP, sexoP, direccionP, ciudadP, 
@@ -1224,6 +1241,13 @@ public void editarReferencia(){
 					nombresP, apellidosP,Integer.parseInt(documentoP0),
 					Integer.parseInt(telefonoP0),sexoP,direccionP,
 					ciudadP,empresaP,conceptoP);
+			
+			btnNuevaReferencia.setEnabled(false);
+			btnEditarReferencia.setEnabled(false);
+			btnEliminarReferencia.setEnabled(false);
+			btnAgregarReferencia.setEnabled(true);
+			
+			limpiarCamposHijos();
 			
 			actualizarTablaReferecnias();
 		}
@@ -1319,8 +1343,8 @@ public boolean verificarCamposReferencias(){
 		
 		try{
 			
-			int telefonoP = Integer.parseInt(telefonoP0);
-			int documentoP = Integer.parseInt(documentoP0);
+			double telefonoP = Double.parseDouble(telefonoP0);
+			double documentoP = Double.parseDouble(documentoP0);
 			
 			if (empresaP.equalsIgnoreCase("") || conceptoP.equalsIgnoreCase("") ||
 					!direccionP.equalsIgnoreCase("") || !ciudadP.equalsIgnoreCase("")){
@@ -1402,6 +1426,12 @@ public void editarExperiencia(){
 			
 			control.editarExperienciaEmpleadoNuevo(posicion, empresaP, cargoP, tipoP, fechaInicioP, fechaFinP);
 			
+			btnNuevaExperiencia.setEnabled(false);
+			btnEditarExperiencia.setEnabled(false);
+			btnEliminarExperiencia.setEnabled(false);
+			btnAgregarExperiencia.setEnabled(true);
+			
+			limpiarCamposExperiencia();
 			actualizarTablaExperiencia();
 		}
 	}
@@ -1495,7 +1525,7 @@ public void agregarHijos(){
 	String direccionP = direccionHijos.getText();
 	
 	String documentoP0 = cedulaHijo.getText();
-	int identificacionP = 0;
+	double identificacionP = 0;
 	
 	int confirmacion = verificarCamposHijo();
 	System.out.println(""+confirmacion);
@@ -1546,7 +1576,7 @@ public int verificarCamposHijo(){
 		else{
 			
 			try{
-				int documentoP = Integer.parseInt(documentoP0);
+				double documentoP = Double.parseDouble(documentoP0);
 				res = 2;
 				
 			}
@@ -1592,6 +1622,14 @@ public void editarHijo(){
 			}
 			
 			control.editarHijoEmpleadoNuevo(posicion, nombreP, apellidosP, tipoP, identificacionP, sexoP, fechaP, direccionP);
+			
+			btnNuevoHijo.setEnabled(false);
+			btnEditarHijo.setEnabled(false);
+			btnEliminarHijo.setEnabled(false);
+			btnAgregarHijo.setEnabled(true);
+			
+			limpiarCamposHijos();
+			
 			actualizarTablaHijos();
 		}
 		
@@ -1771,9 +1809,9 @@ public int agregarInfoEmpleado(){
 	
 	if (res > 0){
 		
-		int documentoP = Integer.parseInt(documentoP0);	
-		int telefonoP = Integer.parseInt(telefonoP0);	
-		int celularP = Integer.parseInt(celularP0);
+		Double documentoP = Double.parseDouble(documentoP0);	
+		Double telefonoP = Double.parseDouble(telefonoP0);	
+		Double celularP = Double.parseDouble(celularP0);
 		
 		control.agregarInfoPersonalEmpleadoNuevo(nombreP,apellidosP,tipoP,documentoP,
 				sexoP, estadoCivilP, fechaP, direccionP, ciudadP, telefonoP, celularP, foto);
@@ -1880,11 +1918,11 @@ public int verificarCamposEmpleado(){
 			&& !celularP0.equalsIgnoreCase("")){
 		
 		try{
-			int documentoP = Integer.parseInt(documentoP0);	
+			double documentoP = Double.parseDouble(documentoP0);	
 				
 				try{
-					int telefonoP = Integer.parseInt(telefonoP0);	
-					int celularP = Integer.parseInt(celularP0);
+					double telefonoP = Double.parseDouble(telefonoP0);	
+					double celularP = Double.parseDouble(celularP0);
 					
 					if (correoP.equalsIgnoreCase("")){
 						

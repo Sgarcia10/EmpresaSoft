@@ -36,6 +36,7 @@ import javax.swing.KeyStroke;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.InputEvent;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -74,7 +75,16 @@ public class InterfazNomina extends JFrame implements ActionListener{
 	
 	private JLabel lblFoto;
 	
+	private DecimalFormat formatoNumeros;
+	private DecimalFormat formatoDinero;
+	
 	public InterfazNomina() {
+		
+	//Definir formato números largos
+		formatoNumeros = new DecimalFormat("#############");
+		formatoDinero = new DecimalFormat("###,###,###,###.00");
+		
+	//
 
 		setTitle("Liquidación de Nómina");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -442,15 +452,16 @@ public class InterfazNomina extends JFrame implements ActionListener{
 		Empleado e = (Empleado) control.darListaEmpleados().get(posicionP);
 		Contrato c = e.getContrato();
 		
+		
 		nombresEmpleado.setText(e.getNombres());
 		apellidosEmpleado.setText(e.getApellidos());
-		cedulaEmpleado.setText(String.valueOf(e.getIdentificacion()));
+		cedulaEmpleado.setText(String.valueOf(formatoNumeros.format(e.getIdentificacion())));
 		direccionEmpleado.setText(e.getDireccion());
-		telefenoFijoEmpleado.setText(String.valueOf(e.getTelefono()));
+		telefenoFijoEmpleado.setText(String.valueOf(formatoNumeros.format(e.getTelefono())));
 		cargoEmpleado.setText(c.getCargo());
 
-		salarioTotalEmpleado.setText(String.valueOf(c.getSueldoTotal()));
-		telefonoCelularEmpleado.setText(String.valueOf(e.getCelular()));
+		salarioTotalEmpleado.setText(String.valueOf(formatoDinero.format(c.getSueldoTotal())));
+		telefonoCelularEmpleado.setText(String.valueOf(formatoNumeros.format(e.getCelular())));
 		
 		if (!(e.getFoto() == null) ){
 			

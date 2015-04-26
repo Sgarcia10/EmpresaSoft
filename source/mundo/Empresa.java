@@ -60,9 +60,9 @@ public class Empresa implements IEmpresa {
 	}
 	
 	public void agregarInfoPersonalEmpleado(Empleado empleadoP,
-			String nombreP, String apellidosP, String tipoP, int documentoP,
+			String nombreP, String apellidosP, String tipoP, double documentoP,
 			String sexoP, String estadoCivilP, Date fechaP, String direccionP,
-			String ciudadP, int telefonoP, int celularP, ImageIcon fotoP) {
+			String ciudadP, double telefonoP, double celularP, ImageIcon fotoP) {
 
 		empleadoP.setNombres(nombreP);
 		empleadoP.setApellidos(apellidosP);
@@ -101,8 +101,8 @@ public class Empresa implements IEmpresa {
 		return empleadoNuevo;
 	}
 	
-	public void agregarReferenciaEmpleado(Empleado empleadoP, String nombresP, String apellidosP, int telefonoP, 
-			int documentoP, String sexoP, String direccionP, String ciudadP, String departamentoP, String tipoP, 
+	public void agregarReferenciaEmpleado(Empleado empleadoP, String nombresP, String apellidosP, double telefonoP, 
+			double documentoP, String sexoP, String direccionP, String ciudadP, String departamentoP, String tipoP, 
 			String empresaP, String conceptoP){
 		
 		empleadoP.agregarReferencia(nombresP, apellidosP, telefonoP, documentoP, sexoP, direccionP, ciudadP, departamentoP, tipoP, empresaP, conceptoP);
@@ -112,7 +112,7 @@ public class Empresa implements IEmpresa {
 		empleadoP.agregarExperiencia(cargoP, empresaP, tipoContratoP, fechaInicioP, fechaFinP);
 	}
 	
-	public void agregarHijos(Empleado empleadoP, String nombreP,String apellidosP,int telefonoP,int identificacionP, String sexoP, String direccionP, String ciudadP, String departamentoP, String tipoDocumentoP, Date fechaNacimientoP)
+	public void agregarHijos(Empleado empleadoP, String nombreP,String apellidosP,double telefonoP,double identificacionP, String sexoP, String direccionP, String ciudadP, String departamentoP, String tipoDocumentoP, Date fechaNacimientoP)
 	{
 		
 		empleadoP.agregarHijo(nombreP, apellidosP, telefonoP, identificacionP, sexoP, direccionP, ciudadP, departamentoP, tipoDocumentoP, fechaNacimientoP);
