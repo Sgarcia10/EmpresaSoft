@@ -43,7 +43,7 @@ public class Empresa implements IEmpresa {
 	}
 	
 	public void agregarInfoLaboralEmpleado(Empleado empleadoP, String cargoP,
-			int salarioFijoP, int horasP, String tipoP, String duracionP,
+			double salarioFijoP, int horasP, String tipoP, String duracionP,
 			Date fechaInicioP, Date fechaFinP, int tipoLiquidacionP, String saludP,
 			String pensionesP, String arlP, boolean solidaridadP, String cajaCompensacionP,
 			Date fechaAfiliacionP, boolean auxilioP) {
@@ -122,6 +122,7 @@ public class Empresa implements IEmpresa {
 			double telefonoParejaP, Date fechaNacimientoParejaP, String sexoParejaP,
 			String direccionParejaP, String ciudadParejaP){
 		
+		System.out.println("agregar conyugue");
 		empleadoP.agregarConyugue(nombresParejaP, apellidosParejaP, cedulaParejaP, telefonoParejaP, fechaNacimientoParejaP, sexoParejaP, direccionParejaP, ciudadParejaP);
 	}
 	
@@ -138,7 +139,7 @@ public class Empresa implements IEmpresa {
 	}
 	
 	public void editarReferenciaEmpleado(Empleado empleadoP, int posicion, String tipoP,
-			String nombresP, String apellidosP, int documentoP, int telefonoP,
+			String nombresP, String apellidosP, double documentoP, double telefonoP,
 			String sexoP, String direccionP, String ciudadP, String empresaP,
 			String conceptoP) {
 
@@ -154,7 +155,7 @@ public class Empresa implements IEmpresa {
 	}
 	
 	public void editarHijoEmpleado(Empleado empleadoP, int index, String nombreP, String apellidosP, String tipoP,
-			int identificacionP, String sexoP, Date fechaP, String direccionP){
+			double identificacionP, String sexoP, Date fechaP, String direccionP){
 		
 		empleadoP.editarHijo(index, nombreP, apellidosP, tipoP, identificacionP, sexoP, fechaP, direccionP);
 	}

@@ -74,7 +74,7 @@ private ArrayList<Hijo> hijos;
 	}
 	
 	public void editarReferencia(int posicion, String tipoP, String nombresP,
-			String apellidosP, int documentoP, int telefonoP, String sexoP,
+			String apellidosP, double documentoP, double telefonoP, String sexoP,
 			String direccionP, String ciudadP, String empresaP, String conceptoP) {
 		
 		// TODO Auto-generated method stub
@@ -125,7 +125,7 @@ private ArrayList<Hijo> hijos;
 	}
 	
 	public void agregarContrato(String cargoP,
-			int salarioFijoP, int horasP, String tipoP, String duracionP,
+			double salarioFijoP, int horasP, String tipoP, String duracionP,
 			Date fechaInicioP, Date fechaFinP, int tipoLiquidacionP, boolean auxilioP)
 	{
 		Contrato contratoNuevo = new Contrato(cargoP, salarioFijoP, auxilioP,
@@ -135,7 +135,7 @@ private ArrayList<Hijo> hijos;
 	}
 	
 	public void editarHijo(int index, String nombreP, String apellidosP, String tipoP,
-			int identificacionP, String sexoP, Date fechaP, String direccionP){
+			double identificacionP, String sexoP, Date fechaP, String direccionP){
 		
 		Hijo hij = hijos.get(index);
 		
@@ -146,6 +146,10 @@ private ArrayList<Hijo> hijos;
 		hij.setSexo(sexoP);
 		hij.setFechaNacimiento(fechaP);
 		hij.setDireccion(direccionP);
+	}
+	
+	public double calcularSueldoVariable(){
+		return contrato.getSueldoBasico();
 	}
 	
 	
@@ -168,6 +172,15 @@ private ArrayList<Hijo> hijos;
 
 	protected void setHijos(ArrayList hijos) {
 		this.hijos = hijos;
+	}
+	
+	public Conyuge getConyugue() {
+		return conyugue;
+	}
+
+
+	protected void setConyugue(Conyuge conyugueP) {
+		conyugue = conyugueP;
 	}
 
 	public String getSalud() {
@@ -238,7 +251,7 @@ private ArrayList<Hijo> hijos;
 	}
 	
 	
-	public String getCajaCompensacion(String cajaCompensacionP){
+	public String getCajaCompensacion(){
 		return cajaCompensacion;
 	}
 	

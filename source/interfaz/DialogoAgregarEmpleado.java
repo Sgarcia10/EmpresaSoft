@@ -1,7 +1,6 @@
 package interfaz;
 
 import javax.imageio.ImageIO;
-
 import javax.swing.JDialog;
 
 
@@ -40,6 +39,7 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JTabbedPane;
 
+import mundo.Empleado;
 import mundo.Empresa;
 import mundo.Experiencia;
 import mundo.Hijo;
@@ -49,7 +49,9 @@ import mundo.Referencia;
 import java.awt.Component;
 import java.io.File;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 
 import com.toedter.calendar.JDateChooser;
@@ -176,10 +178,16 @@ public class DialogoAgregarEmpleado extends JDialog implements ActionListener{
 	private JLabel lblFoto;
 	
 	private ImageIcon foto;
+	private DecimalFormat formatoNumeros;
 	
-	public DialogoAgregarEmpleado(Control controlP, InterfazNomina interfazP) {
+	private ValidarCampos validar;
+	
+	public DialogoAgregarEmpleado(Control controlP, InterfazNomina interfazP, int posicion) {
 		
 		super(null, java.awt.Dialog.ModalityType.TOOLKIT_MODAL);
+		
+		formatoNumeros = new DecimalFormat("#############");
+		validar = new ValidarCampos(this);
 		
 		setTitle("Agregar Empleado");
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -1070,6 +1078,61 @@ public class DialogoAgregarEmpleado extends JDialog implements ActionListener{
 		tabbedPane.setEnabledAt(3, true);
 		tabbedPane.setEnabledAt(4, true);
 			
+		if (posicion > -1){
+			Empleado e = interfaz.getListaEmpleados().get(posicion);
+			
+			nombreEmpleado.setText(e.getNombres()); 
+			apellidosEmpleado.setText(e.getApellidos());
+			cedulaEmpleado.setText(String.valueOf(e.getIdentificacion()));
+			direccionEmpleado.setText(e.getDireccion());
+			telefonoEmpleado.setText(String.valueOf(e.getTelefono()));
+			celularEmpleado.setText(String.valueOf(e.getCelular()));
+			correoEmpleado.setText(e.getCorreo());
+			cargoEmpleado.setText(e.getContrato().getCargo());
+			salarioFijo.setText(String.valueOf(e.getContrato().getSueldoBasico()));
+			salarioVariable.setText(String.valueOf(e.calcularSueldoVariable()));
+			
+			nombrePareja.setText(e.getConyugue().getNombres());
+			apellidosPareja.setText(e.getConyugue().getApellidos());
+			cedulaPareja.setText(String.valueOf(e.getConyugue().getIdentificacion()));
+			
+			fechaNacimientoEmpleado.setDate(e.getFechaNacimiento());
+			fechaInicioContrato.setDate(e.getContrato().getFechaInicio());
+			fechaFinContrato.setDate(e.getContrato().getFechaFin());
+			fechaAfiliacionSS.setDate(e.getFechaAfiliacionSS());
+			
+			sexoEmpleado.setSelectedItem(e.getSexo());
+			estadoCivilEmpleado.setSelectedItem(e.getEstadoCivil());
+			tipoDocumentoEmpleado.setSelectedItem(e.getTipoDocumento());
+			tipoContrato.setSelectedItem(e.getContrato().getTipoContrato());
+			duracionContrato.setSelectedItem(e.getContrato().getTipoSalario());
+			
+			sexoPareja.setSelectedItem(e.getConyugue().getSexo());
+			tipoLiquidacionEmpleado.setSelectedItem(e.getContrato().getPeriodoLiquidacion());
+			saludEmpleado.setSelectedItem(e.getSalud());
+			pensionesEmpleado.setSelectedItem(e.getPensiones());
+			arlEmpleado.setSelectedItem(e.getArl());
+			cajaCompensacionEmpleado.setSelectedItem(e.getCajaCompensacion());
+
+			telefonoPareja.setText(String.valueOf(e.getConyugue().getTelefono()));
+			direccionPareja.setText(e.getConyugue().getDireccion());
+			ciudadPareja.setText(e.getConyugue().getCiudad());
+			ciudadEmpleado.setText(e.getCiudad());
+			
+			departamentoEmpleado.setText(e.getDepartamento());
+			nacionalidadEmpleado.setText(e.getNacionalidad());
+			horasSemanales.setText(String.valueOf(e.getContrato().getHorasSemana()));
+			
+			checkSolidaridad.setSelected(e.getSolidaridad());
+			checkAuxilio.setSelected(e.getContrato().isAuxilioTransporte());
+			
+			setCamposEditables(false);
+			actualizarTablaExperiencia();
+			actualizarTablaHijos();
+			actualizarTablaReferecnias();
+			
+		}
+		
 	}
 
 @Override
@@ -1183,7 +1246,7 @@ public void agregarReferencia() {
 	String empresaP = empresaRefPersonal.getText();
 	String conceptoP = conceptoRefPersonal.getText();
 	
-	if (verificarCamposReferencias()){
+	if (verificarCamposReferencias() > 0){
 		
 		double telefonoP = Integer.parseInt(telefonoP0);
 		double documentoP = Integer.parseInt(documentoP0);
@@ -1197,182 +1260,7 @@ public void agregarReferencia() {
 			
 }
 
-public void eliminarReferencia(){
-	
-	int posicion = tableReferencias.getSelectedRow();
-	DefaultTableModel dm = (DefaultTableModel) tableReferencias.getModel();
-	int confirm = JOptionPane.showConfirmDialog(this, "¿Desea eliminar la referencia seleccionada?","Warning",JOptionPane.YES_NO_OPTION);
-	
-	if (confirm == JOptionPane.YES_NO_OPTION){
-		control.eliminarReferenciaEmpleadoNuevo(posicion);
-		tableReferencias.getSelectionModel().removeListSelectionListener(listenerTablas);
-		modRP.removeRow(posicion);
-		tableReferencias.getSelectionModel().addListSelectionListener(listenerTablas);
-	}
-	
-	if(control.darListaReferecniasEmpleadoNuevo().isEmpty()){
-		limpiarCamposReferencias();
-	}
-	else{
-		actualizarInformacionReferencia(0);
-	}
-}
 
-public void editarReferencia(){
-	int confirm = JOptionPane.showConfirmDialog(this, "¿Desea guardar los cambios realizados?","Warning",JOptionPane.YES_NO_OPTION);
-	if (confirm == JOptionPane.YES_NO_OPTION){
-		
-		int posicion = tableReferencias.getSelectedRow();
-		
-		String tipoP = tipoReferencia.getSelectedItem().toString();
-		String nombresP = nombreReferencia.getText();
-		String apellidosP = apellidosReferencia.getText();
-		String documentoP0 = documentoReferencia.getText();
-		String telefonoP0 = telefonoReferencia.getText();
-		String sexoP = sexoReferencia.getSelectedItem().toString();
-		String direccionP = direccionReferencia.getText();
-		String ciudadP = ciudadReferencia.getText();
-		String empresaP = empresaRefPersonal.getText();
-		String conceptoP = conceptoRefPersonal.getText();
-		
-		if (verificarCamposReferencias()){
-			
-			control.editarReferenciaEmpleadoNuevo(posicion, tipoP,
-					nombresP, apellidosP,Integer.parseInt(documentoP0),
-					Integer.parseInt(telefonoP0),sexoP,direccionP,
-					ciudadP,empresaP,conceptoP);
-			
-			btnNuevaReferencia.setEnabled(false);
-			btnEditarReferencia.setEnabled(false);
-			btnEliminarReferencia.setEnabled(false);
-			btnAgregarReferencia.setEnabled(true);
-			
-			limpiarCamposHijos();
-			
-			actualizarTablaReferecnias();
-		}
-	}		
-}
-
-public void actualizarInformacionReferencia(int index) {
-	
-	ArrayList<Referencia> lista = control.darListaReferecniasEmpleadoNuevo();
-	Referencia ref = lista.get(index);
-
-	nombreReferencia.setText(ref.getNombres());
-	apellidosReferencia.setText(ref.getApellidos());
-	documentoReferencia.setText(String.valueOf(ref.getIdentificacion()));
-	telefonoReferencia.setText(String.valueOf(ref.getTelefono()));
-	direccionReferencia.setText(ref.getDireccion());
-	ciudadReferencia.setText(ref.getCiudad());
-	
-	empresaRefPersonal.setText(ref.getEmpresa());
-	conceptoRefPersonal.setText(ref.getConcepto());
-	
-	boolean listo = false;
-	for (int i = 0; i<tipoReferenciaOpciones.length && !listo; i++){
-		if (tipoReferenciaOpciones[i].equalsIgnoreCase(ref.getTipo())){
-			listo = true;
-			tipoReferencia.setSelectedIndex(i);
-		}	
-	}
-	
-	for (int i = 0; i < tipoSexo.length; i++){
-		if (tipoSexo[i].equalsIgnoreCase(ref.getSexo())){
-			sexoReferencia.setSelectedIndex(i);
-		}	
-	}
-	
-	btnNuevaReferencia.setEnabled(true);
-	btnEditarReferencia.setEnabled(true);
-	btnEliminarReferencia.setEnabled(true);
-	btnAgregarReferencia.setEnabled(false);
-	
-}
-
-
-public void limpiarCamposReferencias(){
-	
-	nombreReferencia.setText("");
-	apellidosReferencia.setText("");
-	documentoReferencia.setText(null);
-	telefonoReferencia.setText(null);
-	direccionReferencia.setText("");
-	ciudadReferencia.setText("");
-	
-	empresaRefPersonal.setText("");
-	conceptoRefPersonal.setText("");
-	
-}
-
-public void actualizarTablaReferecnias(){
-	
-	tableReferencias.getSelectionModel().removeListSelectionListener(listenerTablas);
-	
-	DefaultTableModel model = (DefaultTableModel) tableReferencias.getModel();
-	model.setRowCount(0);
-	
-	ArrayList listaReferencias = control.darListaReferecniasEmpleadoNuevo();
-	
-	for (int i = 0;  i<listaReferencias.size(); i++){
-
-		Referencia actual = (Referencia) listaReferencias.get(i);
-		model.addRow(new Object[]{i+1,actual.getNombres() + "" + actual.getApellidos(), actual.getTipo()});
-	}	
-	
-	tableReferencias.getSelectionModel().addListSelectionListener(listenerTablas);
-}
-
-public boolean verificarCamposReferencias(){
-	
-	String tipoP = tipoReferencia.getSelectedItem().toString();
-	String nombresP = nombreReferencia.getText();
-	String apellidosP = apellidosReferencia.getText();
-	String documentoP0 = documentoReferencia.getText();
-	String telefonoP0 = telefonoReferencia.getText();
-	String sexoP = sexoReferencia.getSelectedItem().toString();
-	String direccionP = direccionReferencia.getText();
-	String ciudadP = ciudadReferencia.getText();
-	
-	String empresaP = empresaRefPersonal.getText();
-	String conceptoP = conceptoRefPersonal.getText();
-	
-	boolean resultado = false;
-	if (!nombresP.equalsIgnoreCase("") && !apellidosP.equalsIgnoreCase("") &&
-			!documentoP0.equalsIgnoreCase("") && !telefonoP0.equalsIgnoreCase("")){
-		
-		try{
-			
-			double telefonoP = Double.parseDouble(telefonoP0);
-			double documentoP = Double.parseDouble(documentoP0);
-			
-			if (empresaP.equalsIgnoreCase("") || conceptoP.equalsIgnoreCase("") ||
-					!direccionP.equalsIgnoreCase("") || !ciudadP.equalsIgnoreCase("")){
-				
-				int rta = JOptionPane.showConfirmDialog(this, "Hay campos sin llenar, ¿Desea continuar?", "Advertencia", JOptionPane.YES_NO_OPTION);
-				
-				if (rta == JOptionPane.YES_OPTION){
-					
-					resultado = true;
-				}
-			}
-			else{
-				
-				resultado = true;
-				
-			}
-		}
-		catch (Exception e){
-			JOptionPane.showMessageDialog(this, "Debe ingresar un valor numérico en los campos Telefono y No. Documento", "Error", JOptionPane.ERROR_MESSAGE);
-		}
-		
-	}
-	else{
-		JOptionPane.showMessageDialog(this, "Hay campos vacíos que se deben llenar", "Error", JOptionPane.INFORMATION_MESSAGE);
-	}
-	
-	return resultado;
-}
 
 public void agregarExperiencia(){
 	
@@ -1383,135 +1271,13 @@ public void agregarExperiencia(){
 	Date fechaInicioP = fechaInicioExperiencia.getDate();
 	Date fechaFinP  = fechafinExperiencia.getDate();
 	
-	if (verificarCamposExperiencia()){
+	if (verificarCamposExperiencia() > 0){
 		
 		control.agregarExperienciaEmpleadoNuevo(cargoP, empresaP, tipoP, fechaInicioP, fechaFinP);
 		actualizarTablaExperiencia();
 		limpiarCamposExperiencia();
 	}
 	
-}
-
-public boolean verificarCamposExperiencia(){
-	
-	String empresaP = empresaExperiencia.getText();
-	String cargoP = cargoExperiencia.getText();
-
-	boolean res = false;
-	
-	if (!empresaP.equalsIgnoreCase("") && !cargoP.equalsIgnoreCase("")){
-		
-		res = true;
-	}
-	
-	else{
-		JOptionPane.showMessageDialog(this, "Hay campos vacíos que se deben llenar", "Error", JOptionPane.INFORMATION_MESSAGE);
-	}
-	return res;
-}
-
-public void editarExperiencia(){
-	int confirm = JOptionPane.showConfirmDialog(this, "¿Desea guardar los cambios realizados?","Warning",JOptionPane.YES_NO_OPTION);
-	if (confirm == JOptionPane.YES_NO_OPTION){
-		
-		int posicion = tableExperiencia.getSelectedRow();
-		
-		String empresaP = empresaExperiencia.getText();
-		String cargoP = cargoExperiencia.getText();
-		String tipoP = tipoContratoExperiencia.getSelectedItem().toString();
-		Date fechaInicioP = fechaInicioExperiencia.getDate();
-		Date fechaFinP  = fechafinExperiencia.getDate();
-		
-		if (verificarCamposExperiencia()){
-			
-			control.editarExperienciaEmpleadoNuevo(posicion, empresaP, cargoP, tipoP, fechaInicioP, fechaFinP);
-			
-			btnNuevaExperiencia.setEnabled(false);
-			btnEditarExperiencia.setEnabled(false);
-			btnEliminarExperiencia.setEnabled(false);
-			btnAgregarExperiencia.setEnabled(true);
-			
-			limpiarCamposExperiencia();
-			actualizarTablaExperiencia();
-		}
-	}
-}
-
-public void eliminarExperiencia(){
-	
-	int posicion = tableExperiencia.getSelectedRow();
-	
-	DefaultTableModel dm = (DefaultTableModel) tableExperiencia.getModel();
-	int confirm = JOptionPane.showConfirmDialog(this, "¿Desea eliminar la experiencia seleccionada?","Warning",JOptionPane.YES_NO_OPTION);
-	
-	if (confirm == JOptionPane.YES_NO_OPTION){
-		control.eliminarExperienciaEmpleadoNuevo(posicion);
-		tableExperiencia.getSelectionModel().removeListSelectionListener(listenerTablas);
-		modExp.removeRow(posicion);
-		tableExperiencia.getSelectionModel().addListSelectionListener(listenerTablas);
-	}
-	
-	if(control.darListaExperienciaEmpleadoNuevo().isEmpty()){
-		limpiarCamposExperiencia();
-	}
-	else{
-		actualizarInformacionExperiencia(0);
-	}
-}
-
-public void limpiarCamposExperiencia(){
-	
-	empresaExperiencia.setText("");
-	cargoExperiencia.setText("");
-	tipoContrato.setSelectedIndex(0);
-	fechaInicioExperiencia.setDate(new Date());
-	fechafinExperiencia.setDate(new Date());
-}
-
-public void actualizarInformacionExperiencia(int posicion){
-	
-	ArrayList<Experiencia> lista = control.darListaExperienciaEmpleadoNuevo();
-	Experiencia e = lista.get(posicion);
-	
-	empresaExperiencia.setText(e.getEmpresa());
-	cargoExperiencia.setText(e.getCargo());
-	
-	
-	boolean listo = false;
-	
-	for (int i = 0; i < tipoContratoOpciones.length; i++){
-		if (tipoContratoOpciones[i].equalsIgnoreCase(e.getTipoContrato())){
-			System.out.println(tipoContratoOpciones[i]);
-			tipoContratoExperiencia.setSelectedIndex(i);
-		}	
-	}
-	
-	fechaInicioExperiencia.setDate(e.getFechaInicio());
-	fechafinExperiencia.setDate(e.getFechaFin());
-	
-	btnNuevaExperiencia.setEnabled(true);
-	btnEditarExperiencia.setEnabled(true);
-	btnEliminarExperiencia.setEnabled(true);
-	btnAgregarExperiencia.setEnabled(false);
-	
-};
-
-public void actualizarTablaExperiencia(){
-	
-	tableExperiencia.getSelectionModel().removeListSelectionListener(listenerTablas);
-	
-	DefaultTableModel model = (DefaultTableModel) tableExperiencia.getModel();
-	model.setRowCount(0);
-	
-	ArrayList listaExperiencia = control.darListaExperienciaEmpleadoNuevo();
-	
-	for (int i = 0;  i< listaExperiencia.size(); i++){
-
-		Experiencia actual = (Experiencia) listaExperiencia.get(i);
-		model.addRow(new Object[]{i+1,actual.getEmpresa(), actual.getCargo(), actual.getFechaInicio(), actual.getFechaFin()});
-	}	
-	
-	tableExperiencia.getSelectionModel().addListSelectionListener(listenerTablas);
 }
 
 public void agregarHijos(){
@@ -1544,7 +1310,723 @@ public void agregarHijos(){
 	}
 	
 }
+
+public void agregarEmpleado(){
+
+	int res0 = agregarInfoConyugue();
+	if (res0 > 0)	{
+		
+		int res = agregarInfoLaboral();
+
+		if (res == 1 || res == 2){
+			
+			int res2 = agregarInfoEmpleado();
+			
+			if (res2 == 1 || res2 == 2){
+				
+				control.agregarEmpleado();
+				interfaz.actualizarListaEmpleados();
+				this.dispose();
+			}
+		}
+	}
 	
+}
+
+public void editarReferencia(){
+	int confirm = JOptionPane.showConfirmDialog(this, "¿Desea guardar los cambios realizados?","Warning",JOptionPane.YES_NO_OPTION);
+	if (confirm == JOptionPane.YES_NO_OPTION){
+		
+		int posicion = tableReferencias.getSelectedRow();
+		
+		String tipoP = tipoReferencia.getSelectedItem().toString();
+		String nombresP = nombreReferencia.getText();
+		String apellidosP = apellidosReferencia.getText();
+		String documentoP0 = documentoReferencia.getText();
+		String telefonoP0 = telefonoReferencia.getText();
+		String sexoP = sexoReferencia.getSelectedItem().toString();
+		String direccionP = direccionReferencia.getText();
+		String ciudadP = ciudadReferencia.getText();
+		String empresaP = empresaRefPersonal.getText();
+		String conceptoP = conceptoRefPersonal.getText();
+		
+		if (verificarCamposReferencias() > 0){
+			
+			System.out.println("verificacion correcta");
+			
+			control.editarReferenciaEmpleadoNuevo(posicion, tipoP,
+					nombresP, apellidosP,Double.parseDouble(documentoP0),
+					Integer.parseInt(telefonoP0),sexoP,direccionP,
+					ciudadP,empresaP,conceptoP);
+			
+			btnNuevaReferencia.setEnabled(false);
+			btnEditarReferencia.setEnabled(false);
+			btnEliminarReferencia.setEnabled(false);
+			btnAgregarReferencia.setEnabled(true);
+			
+			limpiarCamposHijos();
+			
+			actualizarTablaReferecnias();
+		}
+	}		
+}
+
+public void editarExperiencia(){
+	int confirm = JOptionPane.showConfirmDialog(this, "¿Desea guardar los cambios realizados?","Warning",JOptionPane.YES_NO_OPTION);
+	if (confirm == JOptionPane.YES_NO_OPTION){
+		
+		int posicion = tableExperiencia.getSelectedRow();
+		
+		String empresaP = empresaExperiencia.getText();
+		String cargoP = cargoExperiencia.getText();
+		String tipoP = tipoContratoExperiencia.getSelectedItem().toString();
+		Date fechaInicioP = fechaInicioExperiencia.getDate();
+		Date fechaFinP  = fechafinExperiencia.getDate();
+		
+		if (verificarCamposExperiencia() > 0){
+			
+			control.editarExperienciaEmpleadoNuevo(posicion, empresaP, cargoP, tipoP, fechaInicioP, fechaFinP);
+			
+			btnNuevaExperiencia.setEnabled(false);
+			btnEditarExperiencia.setEnabled(false);
+			btnEliminarExperiencia.setEnabled(false);
+			btnAgregarExperiencia.setEnabled(true);
+			
+			limpiarCamposExperiencia();
+			actualizarTablaExperiencia();
+		}
+	}
+}
+
+public void editarHijo(){
+	
+	int confirm = JOptionPane.showConfirmDialog(this, "¿Desea guardar los cambios realizados?","Warning",JOptionPane.YES_NO_OPTION);
+	if (confirm == JOptionPane.YES_NO_OPTION){
+		
+		int posicion = tableHijos.getSelectedRow();
+		
+		String nombreP = nombreHijo.getText();
+		String apellidosP = apellidosHijo.getText();
+		String tipoP = tipoDocumentoHijos.getSelectedItem().toString();
+		String sexoP = sexoHijos.getSelectedItem().toString();
+		Date fechaP = fechaNacimientoHijo.getDate();
+		String direccionP = direccionHijos.getText();
+		
+		String documentoP0 = cedulaHijo.getText();
+		
+		int confirmacion = verificarCamposHijo();
+		double identificacionP = 0;
+		
+		if (confirmacion > 0){
+			
+			if (confirmacion == 1){
+				identificacionP = 0;
+			}
+			else if (confirmacion == 2){
+				identificacionP = Double.parseDouble(documentoP0);
+			}
+			
+			control.editarHijoEmpleadoNuevo(posicion, nombreP, apellidosP, tipoP, identificacionP, sexoP, fechaP, direccionP);
+			
+			btnNuevoHijo.setEnabled(false);
+			btnEditarHijo.setEnabled(false);
+			btnEliminarHijo.setEnabled(false);
+			btnAgregarHijo.setEnabled(true);
+			
+			limpiarCamposHijos();
+			
+			actualizarTablaHijos();
+		}
+		
+	}
+}
+
+public void eliminarReferencia(){
+	
+	int posicion = tableReferencias.getSelectedRow();
+	DefaultTableModel dm = (DefaultTableModel) tableReferencias.getModel();
+	int confirm = JOptionPane.showConfirmDialog(this, "¿Desea eliminar la referencia seleccionada?","Warning",JOptionPane.YES_NO_OPTION);
+	
+	if (confirm == JOptionPane.YES_NO_OPTION){
+		control.eliminarReferenciaEmpleadoNuevo(posicion);
+		tableReferencias.getSelectionModel().removeListSelectionListener(listenerTablas);
+		modRP.removeRow(posicion);
+		tableReferencias.getSelectionModel().addListSelectionListener(listenerTablas);
+	}
+	
+	if(control.darListaReferecniasEmpleadoNuevo().isEmpty()){
+		limpiarCamposReferencias();
+	}
+	else{
+		actualizarInformacionReferencia(0);
+	}
+}
+
+public void eliminarExperiencia(){
+	
+	int posicion = tableExperiencia.getSelectedRow();
+	
+	DefaultTableModel dm = (DefaultTableModel) tableExperiencia.getModel();
+	int confirm = JOptionPane.showConfirmDialog(this, "¿Desea eliminar la experiencia seleccionada?","Warning",JOptionPane.YES_NO_OPTION);
+	
+	if (confirm == JOptionPane.YES_NO_OPTION){
+		control.eliminarExperienciaEmpleadoNuevo(posicion);
+		tableExperiencia.getSelectionModel().removeListSelectionListener(listenerTablas);
+		modExp.removeRow(posicion);
+		tableExperiencia.getSelectionModel().addListSelectionListener(listenerTablas);
+	}
+	
+	if(control.darListaExperienciaEmpleadoNuevo().isEmpty()){
+		limpiarCamposExperiencia();
+	}
+	else{
+		actualizarInformacionExperiencia(0);
+	}
+}
+
+public void eliminarHijo(){
+	
+	int posicion = tableHijos.getSelectedRow();
+	
+	DefaultTableModel dm = (DefaultTableModel) tableHijos.getModel();
+	int confirm = JOptionPane.showConfirmDialog(this, "¿Desea eliminar el hijo seleccionado?","Warning",JOptionPane.YES_NO_OPTION);
+	
+	if (confirm == JOptionPane.YES_NO_OPTION){
+		control.eliminarHijoEmpleadoNuevo(posicion);
+		tableHijos.getSelectionModel().removeListSelectionListener(listenerTablas);
+		dm.removeRow(posicion);
+		tableHijos.getSelectionModel().addListSelectionListener(listenerTablas);
+	}
+	
+	if(control.darListaHijosEmpleadoNuevo().isEmpty()){
+		limpiarCamposHijos();
+	}
+	else{
+		actualizarInformacionHijo(0);
+	}
+}
+
+public void actualizarInformacionReferencia(int index) {
+	
+	ArrayList<Referencia> lista = control.darListaReferecniasEmpleadoNuevo();
+	Referencia ref = lista.get(index);
+
+	nombreReferencia.setText(ref.getNombres());
+	apellidosReferencia.setText(ref.getApellidos());
+	documentoReferencia.setText(String.valueOf(formatoNumeros.format(ref.getIdentificacion())));
+	telefonoReferencia.setText(String.valueOf(formatoNumeros.format(ref.getTelefono())));
+	direccionReferencia.setText(ref.getDireccion());
+	ciudadReferencia.setText(ref.getCiudad());
+	
+	empresaRefPersonal.setText(ref.getEmpresa());
+	conceptoRefPersonal.setText(ref.getConcepto());
+	
+	boolean listo = false;
+	for (int i = 0; i<tipoReferenciaOpciones.length && !listo; i++){
+		if (tipoReferenciaOpciones[i].equalsIgnoreCase(ref.getTipo())){
+			listo = true;
+			tipoReferencia.setSelectedIndex(i);
+		}	
+	}
+	
+	for (int i = 0; i < tipoSexo.length; i++){
+		if (tipoSexo[i].equalsIgnoreCase(ref.getSexo())){
+			sexoReferencia.setSelectedIndex(i);
+		}	
+	}
+	
+	btnNuevaReferencia.setEnabled(true);
+	btnEditarReferencia.setEnabled(true);
+	btnEliminarReferencia.setEnabled(true);
+	btnAgregarReferencia.setEnabled(false);
+	
+}
+
+
+public void actualizarInformacionExperiencia(int posicion){
+	
+	ArrayList<Experiencia> lista = control.darListaExperienciaEmpleadoNuevo();
+	Experiencia e = lista.get(posicion);
+	
+	empresaExperiencia.setText(e.getEmpresa());
+	cargoExperiencia.setText(e.getCargo());
+	
+	
+	boolean listo = false;
+	
+	for (int i = 0; i < tipoContratoOpciones.length; i++){
+		if (tipoContratoOpciones[i].equalsIgnoreCase(e.getTipoContrato())){
+			System.out.println(tipoContratoOpciones[i]);
+			tipoContratoExperiencia.setSelectedIndex(i);
+		}	
+	}
+	
+	fechaInicioExperiencia.setDate(e.getFechaInicio());
+	fechafinExperiencia.setDate(e.getFechaFin());
+	
+	btnNuevaExperiencia.setEnabled(true);
+	btnEditarExperiencia.setEnabled(true);
+	btnEliminarExperiencia.setEnabled(true);
+	btnAgregarExperiencia.setEnabled(false);
+	
+}
+
+public void actualizarInformacionHijo(int posicion){
+	
+	ArrayList<Hijo> lista = control.darListaHijosEmpleadoNuevo();
+	Hijo hij = lista.get(posicion);
+	
+	nombreHijo.setText(hij.getNombres());
+	apellidosHijo.setText(hij.getApellidos());
+
+	for (int i = 0; i < tipoDocumento.length; i++){
+		if (tipoDocumento[i].equalsIgnoreCase(hij.getTipoDocumento())){
+			tipoDocumentoHijos.setSelectedIndex(i);
+		}	
+	}
+	
+	cedulaHijo.setText(String.valueOf(formatoNumeros.format(hij.getIdentificacion())));
+	
+	for (int i = 0; i < tipoSexo.length; i++){
+		if (tipoSexo[i].equalsIgnoreCase(hij.getSexo())){
+			sexoHijos.setSelectedIndex(i);
+		}	
+	}
+	
+	fechaNacimientoHijo.setDate(hij.getFechaNacimiento());
+	direccionHijos.setText(hij.getDireccion());
+	
+	btnNuevoHijo.setEnabled(true);
+	btnEditarHijo.setEnabled(true);
+	btnEliminarHijo.setEnabled(true);
+	btnAgregarHijo.setEnabled(false);
+	
+}
+
+public void actualizarTablaReferecnias(){
+	
+	tableReferencias.getSelectionModel().removeListSelectionListener(listenerTablas);
+	
+	DefaultTableModel model = (DefaultTableModel) tableReferencias.getModel();
+	model.setRowCount(0);
+	
+	ArrayList listaReferencias = control.darListaReferecniasEmpleadoNuevo();
+	
+	for (int i = 0;  i<listaReferencias.size(); i++){
+
+		Referencia actual = (Referencia) listaReferencias.get(i);
+		model.addRow(new Object[]{i+1,actual.getNombres() + "" + actual.getApellidos(), actual.getTipo()});
+	}	
+	
+	tableReferencias.getSelectionModel().addListSelectionListener(listenerTablas);
+}
+
+
+public void actualizarTablaExperiencia(){
+	
+	tableExperiencia.getSelectionModel().removeListSelectionListener(listenerTablas);
+	
+	DefaultTableModel model = (DefaultTableModel) tableExperiencia.getModel();
+	model.setRowCount(0);
+	
+	ArrayList listaExperiencia = control.darListaExperienciaEmpleadoNuevo();
+	
+	for (int i = 0;  i< listaExperiencia.size(); i++){
+
+		Experiencia actual = (Experiencia) listaExperiencia.get(i);
+		model.addRow(new Object[]{i+1,actual.getEmpresa(), actual.getCargo(), actual.getFechaInicio(), actual.getFechaFin()});
+	}	
+	
+	tableExperiencia.getSelectionModel().addListSelectionListener(listenerTablas);
+}
+
+public void actualizarTablaHijos(){
+	
+	tableHijos.getSelectionModel().removeListSelectionListener(listenerTablas);
+	
+	DefaultTableModel model = (DefaultTableModel) tableHijos.getModel();
+	model.setRowCount(0);
+	ArrayList listaHijos = control.darListaHijosEmpleadoNuevo();
+	
+	for (int i = 0;  i< listaHijos.size(); i++){
+
+		Hijo actual = (Hijo) listaHijos.get(i);
+		Date fechaActual = new Date();
+		int edad = fechaActual.getYear() - actual.getFechaNacimiento().getYear(); 
+		
+		model.addRow(new Object[]{i+1,actual.getNombres(), ""+edad});
+	}	
+	
+	tableHijos.getSelectionModel().addListSelectionListener(listenerTablas);
+}
+
+public void limpiarCamposReferencias(){
+	
+	nombreReferencia.setText("");
+	apellidosReferencia.setText("");
+	documentoReferencia.setText(null);
+	telefonoReferencia.setText(null);
+	direccionReferencia.setText("");
+	ciudadReferencia.setText("");
+	
+	empresaRefPersonal.setText("");
+	conceptoRefPersonal.setText("");
+	
+}
+
+public void limpiarCamposExperiencia(){
+	
+	empresaExperiencia.setText("");
+	cargoExperiencia.setText("");
+	tipoContrato.setSelectedIndex(0);
+	fechaInicioExperiencia.setDate(new Date());
+	fechafinExperiencia.setDate(new Date());
+}
+
+public void limpiarCamposHijos(){
+	
+	nombreHijo.setText("");
+	apellidosHijo.setText("");
+	tipoDocumentoHijos.setSelectedIndex(0);
+	cedulaHijo.setText("");
+	sexoHijos.setSelectedIndex(0);
+	fechaNacimientoHijo.setDate(new Date());
+	direccionHijos.setText("");
+}
+
+public int agregarInfoConyugue(){
+	int res = 0;
+	
+	String nombreP = nombrePareja.getText();
+	String apellidosP = apellidosPareja.getText();
+	String documentoP0 = cedulaPareja.getText();
+	String telefonoP0 = telefonoPareja.getText();
+	
+	res = verificarCamposConyugue();
+	
+	String sexoP = sexoPareja.getSelectedItem().toString();
+	String direccionP = direccionPareja.getText();
+	String ciudadP = ciudadPareja.getText();
+	
+	double documentoP = 0;
+	double telefonoP = 0;
+	
+	if (res == 2){
+		
+		documentoP = Double.parseDouble(documentoP0);
+		telefonoP = Double.parseDouble(telefonoP0);		
+	}
+
+	control.agregarConyugueEmpleadoNuevo(nombreP, apellidosP, documentoP, telefonoP, null, sexoP, direccionP, ciudadP);
+	
+	return res;
+}
+
+public int agregarInfoLaboral(){
+	
+	String cargoP = cargoEmpleado.getText();
+	String salarioFijoP0 = salarioFijo.getText();
+	String horasP0 = horasSemanales.getText();
+	String periodoLiquidacionP0 = tipoLiquidacionEmpleado.getSelectedItem().toString();
+	boolean auxilioP = checkAuxilio.isSelected();
+	
+	int res = verificarCamposLaborales();
+	
+	if (res > 0){
+		
+		double salarioFijoP = Double.parseDouble(salarioFijoP0);
+		int horasP = Integer.parseInt(horasP0);
+		int periodoLiquidacionP = Integer.parseInt(periodoLiquidacionP0);
+		
+		control.agregarInfoLaboralEmpleadoNuevo(cargoP, salarioFijoP,horasP,tipoContrato.getSelectedItem().toString(),
+				duracionContrato.getSelectedItem().toString(),fechaInicioContrato.getDate(),fechaFinContrato.getDate(),
+				periodoLiquidacionP,saludEmpleado.getSelectedItem().toString(),
+				pensionesEmpleado.getSelectedItem().toString(),arlEmpleado.getSelectedItem().toString(),
+				false ,cajaCompensacionEmpleado.getSelectedItem().toString(),
+				fechaAfiliacionSS.getDate(),auxilioP);
+
+	}
+	
+	return res;
+	
+}
+
+public int agregarInfoEmpleado(){
+	
+	int res = verificarCamposEmpleado();
+	
+	String nombreP = nombreEmpleado.getText();
+	String apellidosP = apellidosEmpleado.getText();
+	String tipoP = tipoDocumentoEmpleado.getSelectedItem().toString();
+	String sexoP = sexoEmpleado.getSelectedItem().toString();
+	String estadoCivilP = estadoCivilEmpleado.getSelectedItem().toString();
+	Date fechaP = fechaNacimientoEmpleado.getDate();
+	String documentoP0 = cedulaEmpleado.getText();
+	String direccionP = direccionEmpleado.getText();
+	String ciudadP = ciudadEmpleado.getText();
+	String correoP = correoEmpleado.getText();
+	
+	String telefonoP0 = telefonoEmpleado.getText();
+	String celularP0 = celularEmpleado.getText();
+	
+	if (res > 0){
+		
+		Double documentoP = Double.parseDouble(documentoP0);	
+		Double telefonoP = Double.parseDouble(telefonoP0);	
+		Double celularP = Double.parseDouble(celularP0);
+		
+		control.agregarInfoPersonalEmpleadoNuevo(nombreP,apellidosP,tipoP,documentoP,
+				sexoP, estadoCivilP, fechaP, direccionP, ciudadP, telefonoP, celularP, foto);
+	}
+	
+	return res;
+}
+
+public int verificarCamposLaborales(){
+
+	int res = 0;
+	
+	String cargoP = cargoEmpleado.getText();
+	String salarioFijoP0 = salarioFijo.getText();
+	String horasP0 = horasSemanales.getText();
+	String periodoLiquidacionP0 = tipoLiquidacionEmpleado.getSelectedItem().toString();
+	
+	ArrayList<String> tipo = new ArrayList<String> (Arrays.asList("string","double","int","string"));
+	ArrayList<String> valor = new ArrayList<String> (Arrays.asList(cargoP, salarioFijoP0, horasP0, periodoLiquidacionP0));
+	ArrayList<Integer> prioridad = new ArrayList<Integer> (Arrays.asList(1,1,1,0));
+	ArrayList<String> nombre = new ArrayList<String> (Arrays.asList("Cargo Empleado", "Salario Fijo", "Horas Semanales", "Período Liquidación","Información Laboral"));
+	
+	res = validar.validar(tipo, valor, prioridad, nombre);
+	
+//	if (!cargoP.equalsIgnoreCase("") && !salarioFijoP0.equalsIgnoreCase("") &&!horasP0.equalsIgnoreCase("")){
+//		
+//		try{
+//			double salarioFijoP = Double.parseDouble(salarioFijoP0);	
+//				try{
+//					double periodoLiquidacionP = Integer.parseInt(periodoLiquidacionP0);
+//					
+//					try{
+//						int horasP = Integer.parseInt(horasP0);
+//						res = 2;
+//					}
+//					catch (Exception e){
+//						JOptionPane.showMessageDialog(this, "Debe ingresar un valor numérico válido en el campo de horas semanales", "Error", JOptionPane.ERROR_MESSAGE);
+//					}
+//				}
+//				catch (Exception e){
+//					JOptionPane.showMessageDialog(this, "Debe ingresar un valor numérico válido en el campo de Periodo de Liquidación", "Error", JOptionPane.ERROR_MESSAGE);
+//				}
+//								
+//		}
+//		catch (Exception e){
+//			JOptionPane.showMessageDialog(this, "Debe ingresar un valor numérico válido en el campo de salario fijo", "Error", JOptionPane.ERROR_MESSAGE);
+//		}			
+//	}
+//	else{
+//		JOptionPane.showMessageDialog(this, "Hay campos vacíos que se deben llenar en la Información Laboral", "Error", JOptionPane.INFORMATION_MESSAGE);
+//	}
+	
+	return res;
+}
+
+public int verificarCamposConyugue(){
+	int res = 1;
+	
+	String nombreP = nombrePareja.getText();
+	String apellidosP = apellidosPareja.getText();
+	String documentoP0 = cedulaPareja.getText();
+	String telefonoP0 = telefonoPareja.getText();
+	
+	ArrayList<String> tipo = new ArrayList<String> (Arrays.asList("string","string","double","double"));
+	ArrayList<String> valor = new ArrayList<String> (Arrays.asList(nombreP, apellidosP, documentoP0, telefonoP0));
+	ArrayList<Integer> prioridad = new ArrayList<Integer> (Arrays.asList(3,3,3,3));
+	ArrayList<String> nombre = new ArrayList<String> (Arrays.asList("Nombre Pareja", "Apellido Pareja", "Documento Pareja", "Telefono Pareja","Información Familiar"));
+	
+	res = validar.validar(tipo, valor, prioridad, nombre);
+	
+//	if (!nombreP.equals("") || !apellidosP.equals("") || !documentoP0.equals("") || !telefonoP0.equals("")){
+//		
+//		if (!nombreP.equals("") && !apellidosP.equals("") && !documentoP0.equals("") && !telefonoP0.equals("")){
+//			try{
+//				double telefonoP = Double.parseDouble(telefonoP0);	
+//				
+//				try {
+//					double documentoP = Double.parseDouble(documentoP0);
+//					res = 2;
+//				}
+//				catch (Exception e){
+//					JOptionPane.showMessageDialog(this, "Debe ingresar valores numéricos válidos en el campo de número del documento de identidad del Cónyugue", "Error", JOptionPane.ERROR_MESSAGE);
+//				}
+//				
+//			}
+//			catch (Exception e){
+//				JOptionPane.showMessageDialog(this, "Debe ingresar valores numéricos válidos en el campo de número telefónico del Cónyugue", "Error", JOptionPane.ERROR_MESSAGE);
+//			}	
+//		}
+//		else
+//		{
+//			JOptionPane.showMessageDialog(this, "Debe llenar los campos de nombres, apellidos, telefono y número de documento del Cónyugue", "Error", JOptionPane.ERROR_MESSAGE);
+//		}
+//		
+//	}
+//	
+//	
+ 	return res;
+}
+
+public int verificarCamposEmpleado(){
+	
+	int res = 0;
+	
+	String nombreP = nombreEmpleado.getText();
+	String apellidosP = apellidosEmpleado.getText();
+	String documentoP0 = cedulaEmpleado.getText();
+	String direccionP = direccionEmpleado.getText();
+	String ciudadP = ciudadEmpleado.getText();
+	String correoP = correoEmpleado.getText();
+	
+	String telefonoP0 = telefonoEmpleado.getText();
+	String celularP0 = celularEmpleado.getText();
+	
+	
+	ArrayList<String> tipo = new ArrayList<String> (Arrays.asList("string","string","double","string","string","string","double","double"));
+	ArrayList<String> valor = new ArrayList<String> (Arrays.asList(nombreP, apellidosP, documentoP0, direccionP, ciudadP, correoP, telefonoP0, celularP0));
+	ArrayList<Integer> prioridad = new ArrayList<Integer> (Arrays.asList(1,1,1,1,1,0,1,1));
+	ArrayList<String> nombre = new ArrayList<String> (Arrays.asList("Nombre Empleado", "Apellido Empleado", "Documento Empleado",
+																	"Direccion Empleado","Ciudad Empleado", "Correo Empleado",
+																	"Telefono Empleado", "Celular Empleado", "Información Empleado"));
+	
+	res = validar.validar(tipo, valor, prioridad, nombre);
+	
+//	if (!nombreP.equalsIgnoreCase("") && !apellidosP.equalsIgnoreCase("")
+//			&& !documentoP0.equalsIgnoreCase("") && !direccionP.equalsIgnoreCase("") 
+//			&& !ciudadP.equalsIgnoreCase("") && !telefonoP0.equalsIgnoreCase("") 
+//			&& !celularP0.equalsIgnoreCase("")){
+//		
+//		try{
+//			double documentoP = Double.parseDouble(documentoP0);	
+//				
+//				try{
+//					double telefonoP = Double.parseDouble(telefonoP0);	
+//					double celularP = Double.parseDouble(celularP0);
+//					
+//					if (correoP.equalsIgnoreCase("")){
+//						
+//						int rta = JOptionPane.showConfirmDialog(this, "Hay campos sin llenar en la Información del Empleado, ¿Desea continuar?", "Advertencia", JOptionPane.YES_NO_OPTION);
+//						
+//						if (rta == JOptionPane.YES_OPTION){
+//							
+//							res = 1;
+//						}
+//					}
+//					
+//					res = 2;
+//				}
+//				catch (Exception e){
+//					JOptionPane.showMessageDialog(this, "Debe ingresar valores numéricos válidos en los campos de número telefónico y celular del Empleado", "Error", JOptionPane.ERROR_MESSAGE);
+//				}				
+//			
+//		}
+//		catch (Exception e){
+//			JOptionPane.showMessageDialog(this, "Debe ingresar un valor numérico válido en el campo de documento de identidad del Empleado", "Error", JOptionPane.ERROR_MESSAGE);
+//		}			
+//	}
+//	else{
+//		JOptionPane.showMessageDialog(this, "Hay campos vacíos que se deben llenar en la Información del Empleado", "Error", JOptionPane.INFORMATION_MESSAGE);
+//	}
+	
+	return res;
+}
+
+
+public int verificarCamposReferencias(){
+	
+	String tipoP = tipoReferencia.getSelectedItem().toString();
+	String nombresP = nombreReferencia.getText();
+	String apellidosP = apellidosReferencia.getText();
+	String documentoP0 = documentoReferencia.getText();
+	String telefonoP0 = telefonoReferencia.getText();
+	String sexoP = sexoReferencia.getSelectedItem().toString();
+	String direccionP = direccionReferencia.getText();
+	String ciudadP = ciudadReferencia.getText();
+	
+	String empresaP = empresaRefPersonal.getText();
+	String conceptoP = conceptoRefPersonal.getText();
+	
+	int res = 0;
+	
+	ArrayList<String> tipo = new ArrayList<String> (Arrays.asList("string","string","double","double","string","string","string","string"));
+	ArrayList<String> valor = new ArrayList<String> (Arrays.asList(nombresP, apellidosP, documentoP0, telefonoP0, direccionP, ciudadP, empresaP, conceptoP));
+	ArrayList<Integer> prioridad = new ArrayList<Integer> (Arrays.asList(1,1,1,1,0,0,0,0));
+	ArrayList<String> nombre = new ArrayList<String> (Arrays.asList("Nombre Referencia", "Apellido Referencia", "Documento Referencia",
+																	"Telefono Referencia","Dirección Referencia", "Ciudad Referencia",
+																	"Empresa Referencia", "Concepto Referencia", "Información Referencia"));
+	
+	res = validar.validar(tipo, valor, prioridad, nombre);
+	
+//	if (!nombresP.equalsIgnoreCase("") && !apellidosP.equalsIgnoreCase("") &&
+//			!documentoP0.equalsIgnoreCase("") && !telefonoP0.equalsIgnoreCase("")){
+//		
+//		try{
+//			
+//			double telefonoP = Double.parseDouble(telefonoP0);
+//			double documentoP = Double.parseDouble(documentoP0);
+//			
+//			if (empresaP.equalsIgnoreCase("") || conceptoP.equalsIgnoreCase("") ||
+//					!direccionP.equalsIgnoreCase("") || !ciudadP.equalsIgnoreCase("")){
+//				
+//				int rta = JOptionPane.showConfirmDialog(this, "Hay campos sin llenar, ¿Desea continuar?", "Advertencia", JOptionPane.YES_NO_OPTION);
+//				
+//				if (rta == JOptionPane.YES_OPTION){
+//					
+//					resultado = true;
+//				}
+//			}
+//			else{
+//				
+//				resultado = true;
+//				
+//			}
+//		}
+//		catch (Exception e){
+//			JOptionPane.showMessageDialog(this, "Debe ingresar un valor numérico en los campos Telefono y No. Documento", "Error", JOptionPane.ERROR_MESSAGE);
+//		}
+//		
+//	}
+//	else{
+//		JOptionPane.showMessageDialog(this, "Hay campos vacíos que se deben llenar", "Error", JOptionPane.INFORMATION_MESSAGE);
+//	}
+	
+	return res;
+}
+
+
+public int verificarCamposExperiencia(){
+	
+	String empresaP = empresaExperiencia.getText();
+	String cargoP = cargoExperiencia.getText();
+
+	int res = 0;
+	
+	
+	ArrayList<String> tipo = new ArrayList<String> (Arrays.asList("string","string"));
+	ArrayList<String> valor = new ArrayList<String> (Arrays.asList(empresaP, cargoP));
+	ArrayList<Integer> prioridad = new ArrayList<Integer> (Arrays.asList(1,1));
+	ArrayList<String> nombre = new ArrayList<String> (Arrays.asList("Empresa Experiencia", "Cargo Experiencia", "Información Experiencia"));
+	
+	res = validar.validar(tipo, valor, prioridad, nombre);
+	
+//	if (!empresaP.equalsIgnoreCase("") && !cargoP.equalsIgnoreCase("")){
+//		
+//		res = true;
+//	}
+//	
+//	else{
+//		JOptionPane.showMessageDialog(this, "Hay campos vacíos que se deben llenar", "Error", JOptionPane.INFORMATION_MESSAGE);
+//	}
+	return res;
+}
+
 public int verificarCamposHijo(){
 	
 	String nombreP = nombreHijo.getText();
@@ -1588,365 +2070,6 @@ public int verificarCamposHijo(){
 	}
 	else{
 		JOptionPane.showMessageDialog(this, "Hay campos vacíos que se deben llenar", "Error", JOptionPane.INFORMATION_MESSAGE);
-	}
-	
-	return res;
-}	
-
-public void editarHijo(){
-	
-	int confirm = JOptionPane.showConfirmDialog(this, "¿Desea guardar los cambios realizados?","Warning",JOptionPane.YES_NO_OPTION);
-	if (confirm == JOptionPane.YES_NO_OPTION){
-		
-		int posicion = tableHijos.getSelectedRow();
-		
-		String nombreP = nombreHijo.getText();
-		String apellidosP = apellidosHijo.getText();
-		String tipoP = tipoDocumentoHijos.getSelectedItem().toString();
-		String sexoP = sexoHijos.getSelectedItem().toString();
-		Date fechaP = fechaNacimientoHijo.getDate();
-		String direccionP = direccionHijos.getText();
-		
-		String documentoP0 = cedulaHijo.getText();
-		
-		int confirmacion = verificarCamposHijo();
-		int identificacionP = 0;
-		
-		if (confirmacion > 0){
-			
-			if (confirmacion == 1){
-				identificacionP = 0;
-			}
-			else if (confirmacion == 2){
-				identificacionP = Integer.parseInt(documentoP0);
-			}
-			
-			control.editarHijoEmpleadoNuevo(posicion, nombreP, apellidosP, tipoP, identificacionP, sexoP, fechaP, direccionP);
-			
-			btnNuevoHijo.setEnabled(false);
-			btnEditarHijo.setEnabled(false);
-			btnEliminarHijo.setEnabled(false);
-			btnAgregarHijo.setEnabled(true);
-			
-			limpiarCamposHijos();
-			
-			actualizarTablaHijos();
-		}
-		
-	}
-}
-
-public void eliminarHijo(){
-	
-	int posicion = tableHijos.getSelectedRow();
-	
-	DefaultTableModel dm = (DefaultTableModel) tableHijos.getModel();
-	int confirm = JOptionPane.showConfirmDialog(this, "¿Desea eliminar el hijo seleccionado?","Warning",JOptionPane.YES_NO_OPTION);
-	
-	if (confirm == JOptionPane.YES_NO_OPTION){
-		control.eliminarHijoEmpleadoNuevo(posicion);
-		tableHijos.getSelectionModel().removeListSelectionListener(listenerTablas);
-		dm.removeRow(posicion);
-		tableHijos.getSelectionModel().addListSelectionListener(listenerTablas);
-	}
-	
-	if(control.darListaHijosEmpleadoNuevo().isEmpty()){
-		limpiarCamposHijos();
-	}
-	else{
-		actualizarInformacionHijo(0);
-	}
-}
-
-public void limpiarCamposHijos(){
-	
-	nombreHijo.setText("");
-	apellidosHijo.setText("");
-	tipoDocumentoHijos.setSelectedIndex(0);
-	cedulaHijo.setText("");
-	sexoHijos.setSelectedIndex(0);
-	fechaNacimientoHijo.setDate(new Date());
-	direccionHijos.setText("");
-}
-
-public void actualizarInformacionHijo(int posicion){
-	
-	ArrayList<Hijo> lista = control.darListaHijosEmpleadoNuevo();
-	Hijo hij = lista.get(posicion);
-	
-	nombreHijo.setText(hij.getNombres());
-	apellidosHijo.setText(hij.getApellidos());
-
-	for (int i = 0; i < tipoDocumento.length; i++){
-		if (tipoDocumento[i].equalsIgnoreCase(hij.getTipoDocumento())){
-			tipoDocumentoHijos.setSelectedIndex(i);
-		}	
-	}
-	
-	cedulaHijo.setText(String.valueOf(hij.getIdentificacion()));
-	
-	for (int i = 0; i < tipoSexo.length; i++){
-		if (tipoSexo[i].equalsIgnoreCase(hij.getSexo())){
-			sexoHijos.setSelectedIndex(i);
-		}	
-	}
-	
-	fechaNacimientoHijo.setDate(hij.getFechaNacimiento());
-	direccionHijos.setText(hij.getDireccion());
-	
-	btnNuevoHijo.setEnabled(true);
-	btnEditarHijo.setEnabled(true);
-	btnEliminarHijo.setEnabled(true);
-	btnAgregarHijo.setEnabled(false);
-	
-};
-
-public void actualizarTablaHijos(){
-	
-	tableHijos.getSelectionModel().removeListSelectionListener(listenerTablas);
-	
-	DefaultTableModel model = (DefaultTableModel) tableHijos.getModel();
-	model.setRowCount(0);
-	ArrayList listaHijos = control.darListaHijosEmpleadoNuevo();
-	
-	for (int i = 0;  i< listaHijos.size(); i++){
-
-		Hijo actual = (Hijo) listaHijos.get(i);
-		Date fechaActual = new Date();
-		int edad = fechaActual.getYear() - actual.getFechaNacimiento().getYear(); 
-		
-		model.addRow(new Object[]{i+1,actual.getNombres(), ""+edad});
-	}	
-	
-	tableHijos.getSelectionModel().addListSelectionListener(listenerTablas);
-}
-
-public void agregarEmpleado(){
-	int res0 = agregarInfoConyugue();
-	if (res0 > 0)	{
-		int res = agregarInfoLaboral();
-		if (res == 1 || res == 2){
-			int res2 = agregarInfoEmpleado();
-			if (res2 == 1 || res2 == 2){
-				
-				control.agregarEmpleado();
-				interfaz.actualizarListaEmpleados();
-				this.dispose();
-			}
-		}
-	}
-	
-}
-
-public int agregarInfoConyugue(){
-	int res = 0;
-	String nombreP = nombrePareja.getText();
-	String apellidosP = apellidosPareja.getText();
-	String documentoP0 = cedulaPareja.getText();
-	String telefonoP0 = telefonoPareja.getText();
-	
-	res = verificarCamposConyugue();
-	if (res == 2){
-		
-		double documentoP = Double.parseDouble(documentoP0);
-		double telefonoP = Double.parseDouble(telefonoP0);
-		
-		String sexoP = sexoPareja.getSelectedItem().toString();
-		String direccionP = direccionPareja.getText();
-		String ciudadP = ciudadPareja.getText();
-		
-		control.agregarConyugueEmpleadoNuevo(nombreP, apellidosP, documentoP, telefonoP, null, sexoP, direccionP, ciudadP);
-	}
-	
-	return res;
-}
-
-public int agregarInfoLaboral(){
-	
-	String cargoP = cargoEmpleado.getText();
-	String salarioFijoP0 = salarioFijo.getText();
-	String horasP0 = horasSemanales.getText();
-	String periodoLiquidacionP0 = tipoLiquidacionEmpleado.getSelectedItem().toString();
-	boolean auxilioP = checkAuxilio.isSelected();
-	
-	int res = validarCamposLaborales();
-	
-	if (res > 0){
-		
-		int salarioFijoP = Integer.parseInt(salarioFijoP0);
-		int horasP = Integer.parseInt(horasP0);
-		int periodoLiquidacionP = Integer.parseInt(periodoLiquidacionP0);
-		
-		control.agregarInfoLaboralEmpleadoNuevo(cargoP, salarioFijoP,horasP,tipoContrato.getSelectedItem().toString(),
-				duracionContrato.getSelectedItem().toString(),fechaInicioContrato.getDate(),fechaFinContrato.getDate(),
-				periodoLiquidacionP,saludEmpleado.getSelectedItem().toString(),
-				pensionesEmpleado.getSelectedItem().toString(),arlEmpleado.getSelectedItem().toString(),
-				false ,cajaCompensacionEmpleado.getSelectedItem().toString(),
-				fechaAfiliacionSS.getDate(),auxilioP);
-
-	}
-	
-	return res;
-	
-}
-
-public int agregarInfoEmpleado(){
-	int res = verificarCamposEmpleado();
-	
-	String nombreP = nombreEmpleado.getText();
-	String apellidosP = apellidosEmpleado.getText();
-	String tipoP = tipoDocumentoEmpleado.getSelectedItem().toString();
-	String sexoP = sexoEmpleado.getSelectedItem().toString();
-	String estadoCivilP = estadoCivilEmpleado.getSelectedItem().toString();
-	Date fechaP = fechaNacimientoEmpleado.getDate();
-	String documentoP0 = cedulaEmpleado.getText();
-	String direccionP = direccionEmpleado.getText();
-	String ciudadP = ciudadEmpleado.getText();
-	String correoP = correoEmpleado.getText();
-	
-	String telefonoP0 = telefonoEmpleado.getText();
-	String celularP0 = celularEmpleado.getText();
-	
-	if (res > 0){
-		
-		Double documentoP = Double.parseDouble(documentoP0);	
-		Double telefonoP = Double.parseDouble(telefonoP0);	
-		Double celularP = Double.parseDouble(celularP0);
-		
-		control.agregarInfoPersonalEmpleadoNuevo(nombreP,apellidosP,tipoP,documentoP,
-				sexoP, estadoCivilP, fechaP, direccionP, ciudadP, telefonoP, celularP, foto);
-	}
-	
-	return res;
-}
-
-public int validarCamposLaborales(){
-
-	int res = 0;
-	
-	String cargoP = cargoEmpleado.getText();
-	String salarioFijoP0 = salarioFijo.getText();
-	String horasP0 = horasSemanales.getText();
-	String periodoLiquidacionP0 = tipoLiquidacionEmpleado.getSelectedItem().toString();
-	
-	if (!cargoP.equalsIgnoreCase("") && !salarioFijoP0.equalsIgnoreCase("") &&!horasP0.equalsIgnoreCase("")){
-		
-		try{
-			double salarioFijoP = Double.parseDouble(salarioFijoP0);	
-				try{
-					double periodoLiquidacionP = Integer.parseInt(periodoLiquidacionP0);
-					
-					try{
-						int horasP = Integer.parseInt(horasP0);
-						res = 2;
-					}
-					catch (Exception e){
-						JOptionPane.showMessageDialog(this, "Debe ingresar un valor numérico válido en el campo de horas semanales", "Error", JOptionPane.ERROR_MESSAGE);
-					}
-				}
-				catch (Exception e){
-					JOptionPane.showMessageDialog(this, "Debe ingresar un valor numérico válido en el campo de Periodo de Liquidación", "Error", JOptionPane.ERROR_MESSAGE);
-				}
-								
-		}
-		catch (Exception e){
-			JOptionPane.showMessageDialog(this, "Debe ingresar un valor numérico válido en el campo de salario fijo", "Error", JOptionPane.ERROR_MESSAGE);
-		}			
-	}
-	else{
-		JOptionPane.showMessageDialog(this, "Hay campos vacíos que se deben llenar en la Información Laboral", "Error", JOptionPane.INFORMATION_MESSAGE);
-	}
-	
-	return res;
-}
-
-public int verificarCamposConyugue(){
-	int res = 1;
-	
-	String nombreP = nombrePareja.getText();
-	String apellidosP = apellidosPareja.getText();
-	String documentoP0 = cedulaPareja.getText();
-	String telefonoP0 = telefonoPareja.getText();
-	
-	if (!nombreP.equals("") || !apellidosP.equals("") || !documentoP0.equals("") || !telefonoP0.equals("")){
-		
-		if (!nombreP.equals("") && !apellidosP.equals("") && !documentoP0.equals("") && !telefonoP0.equals("")){
-			try{
-				double telefonoP = Double.parseDouble(telefonoP0);	
-				
-				try {
-					double documentoP = Double.parseDouble(documentoP0);
-					res = 2;
-				}
-				catch (Exception e){
-					JOptionPane.showMessageDialog(this, "Debe ingresar valores numéricos válidos en el campo de número del documento de identidad del Cónyugue", "Error", JOptionPane.ERROR_MESSAGE);
-				}
-				
-			}
-			catch (Exception e){
-				JOptionPane.showMessageDialog(this, "Debe ingresar valores numéricos válidos en el campo de número telefónico del Cónyugue", "Error", JOptionPane.ERROR_MESSAGE);
-			}	
-		}
-		else
-		{
-			JOptionPane.showMessageDialog(this, "Debe llenar los campos de nombres, apellidos, telefono y número de documento del Cónyugue", "Error", JOptionPane.ERROR_MESSAGE);
-		}
-		
-	}
-	
-	
-	return res;
-}
-
-public int verificarCamposEmpleado(){
-	
-	int res = 0;
-	
-	String nombreP = nombreEmpleado.getText();
-	String apellidosP = apellidosEmpleado.getText();
-	String documentoP0 = cedulaEmpleado.getText();
-	String direccionP = direccionEmpleado.getText();
-	String ciudadP = ciudadEmpleado.getText();
-	String correoP = correoEmpleado.getText();
-	
-	String telefonoP0 = telefonoEmpleado.getText();
-	String celularP0 = celularEmpleado.getText();
-	
-	if (!nombreP.equalsIgnoreCase("") && !apellidosP.equalsIgnoreCase("")
-			&& !documentoP0.equalsIgnoreCase("") && !direccionP.equalsIgnoreCase("") 
-			&& !ciudadP.equalsIgnoreCase("") && !telefonoP0.equalsIgnoreCase("") 
-			&& !celularP0.equalsIgnoreCase("")){
-		
-		try{
-			double documentoP = Double.parseDouble(documentoP0);	
-				
-				try{
-					double telefonoP = Double.parseDouble(telefonoP0);	
-					double celularP = Double.parseDouble(celularP0);
-					
-					if (correoP.equalsIgnoreCase("")){
-						
-						int rta = JOptionPane.showConfirmDialog(this, "Hay campos sin llenar en la Información del Empleado, ¿Desea continuar?", "Advertencia", JOptionPane.YES_NO_OPTION);
-						
-						if (rta == JOptionPane.YES_OPTION){
-							
-							res = 1;
-						}
-					}
-					
-					res = 2;
-				}
-				catch (Exception e){
-					JOptionPane.showMessageDialog(this, "Debe ingresar valores numéricos válidos en los campos de número telefónico y celular del Empleado", "Error", JOptionPane.ERROR_MESSAGE);
-				}				
-			
-		}
-		catch (Exception e){
-			JOptionPane.showMessageDialog(this, "Debe ingresar un valor numérico válido en el campo de documento de identidad del Empleado", "Error", JOptionPane.ERROR_MESSAGE);
-		}			
-	}
-	else{
-		JOptionPane.showMessageDialog(this, "Hay campos vacíos que se deben llenar en la Información del Empleado", "Error", JOptionPane.INFORMATION_MESSAGE);
 	}
 	
 	return res;
@@ -1997,5 +2120,53 @@ public void subirFotoEmpleado(){
 		}  
 	}
 }
+	public void setCamposEditables(boolean bool){
+		
+		nombreEmpleado.setEditable(bool);
+		apellidosEmpleado.setEditable(bool);
+		cedulaEmpleado.setEditable(bool);
+		direccionEmpleado.setEditable(bool);
+		telefonoEmpleado.setEditable(bool);
+		celularEmpleado.setEditable(bool);
+		correoEmpleado.setEditable(bool);
+		cargoEmpleado.setEditable(bool);
+		salarioFijo.setEditable(bool);
+		salarioVariable.setEditable(bool);
+		
+		nombrePareja.setEditable(bool);
+		apellidosPareja.setEditable(bool);
+		cedulaPareja.setEditable(bool);
+		
+		fechaNacimientoEmpleado.getSpinner().setEnabled(bool); 
+		fechaInicioContrato.getSpinner().setEnabled(bool);
+		fechaFinContrato.getSpinner().setEnabled(bool);
+		fechaAfiliacionSS.getSpinner().setEnabled(bool);
+		
+		sexoEmpleado.setEditable(bool); sexoEmpleado.setEnabled(bool); 
+		estadoCivilEmpleado.setEditable(bool);
+		tipoDocumentoEmpleado.setEditable(bool);
+		tipoContrato.setEditable(bool);
+		duracionContrato.setEditable(bool);
+		
+		sexoPareja.setEditable(bool);
+		tipoLiquidacionEmpleado.setEditable(bool);
+		saludEmpleado.setEditable(bool);
+		pensionesEmpleado.setEditable(bool);
+		arlEmpleado.setEditable(bool);
+		cajaCompensacionEmpleado.setEditable(bool);
+
+		telefonoPareja.setEditable(bool);
+		direccionPareja.setEditable(bool);
+		ciudadPareja.setEditable(bool);
+		ciudadEmpleado.setEditable(bool);
+		
+		departamentoEmpleado.setEditable(bool);
+		nacionalidadEmpleado.setEditable(bool);
+		horasSemanales.setEditable(bool);
+		
+		checkSolidaridad.setEnabled(false);
+		checkAuxilio.setEnabled(false);
+	}
+	
 
 }

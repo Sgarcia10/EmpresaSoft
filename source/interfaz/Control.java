@@ -44,8 +44,7 @@ public class Control {
 			double telefonoParejaP, Date fechaNacimientoParejaP, String sexoParejaP,
 			String direccionParejaP, String ciudadParejaP){
 		
-		Empleado e = empresa.getEmpleadoNuevo();
-		empresa.agregarConyugueEmpleado(e, nombresParejaP, apellidosParejaP, cedulaParejaP, telefonoParejaP, fechaNacimientoParejaP, sexoParejaP, direccionParejaP, ciudadParejaP);
+		empresa.agregarConyugueEmpleado(empresa.getEmpleadoNuevo(), nombresParejaP, apellidosParejaP, cedulaParejaP, telefonoParejaP, fechaNacimientoParejaP, sexoParejaP, direccionParejaP, ciudadParejaP);
 	}
 	
 	public void agregarReferenciaEmpleadoNuevo(String nombresP, String apellidosP, double telefonoP, 
@@ -87,8 +86,8 @@ public class Control {
 	}
 	
 	public void editarReferenciaEmpleadoNuevo(int posicion, String tipoP,
-			String nombresP, String apellidosP, int documentoP,
-			int telefonoP,String sexoP, String direccionP,
+			String nombresP, String apellidosP, double documentoP,
+			double telefonoP,String sexoP, String direccionP,
 			String ciudadP,String empresaP,String conceptoP){
 		
 		Empleado e = empresa.getEmpleadoNuevo();
@@ -106,7 +105,7 @@ public class Control {
 	}
 	
 	public void editarHijoEmpleadoNuevo(int index, String nombreP, String apellidosP, String tipoP,
-			int identificacionP, String sexoP, Date fechaP, String direccionP){
+			double identificacionP, String sexoP, Date fechaP, String direccionP){
 		
 		Empleado e = empresa.getEmpleadoNuevo();
 		empresa.editarHijoEmpleado(e, index, nombreP, apellidosP, tipoP, identificacionP, sexoP, fechaP, direccionP);
@@ -370,7 +369,7 @@ public class Control {
 	}
 	
 	public void agregarInfoLaboralEmpleadoNuevo(String cargoP,
-			int salarioFijoP, int horasP, String tipoP, String duracionP,
+			double salarioFijoP, int horasP, String tipoP, String duracionP,
 			Date fechaInicioP, Date fechaFinP, int tipoLiquidacionP, String saludP,
 			String pensionesP, String arlP, boolean solidaridadP, String cajaCompensacionP,
 			Date fechaAfiliacionP, boolean auxilioP) {

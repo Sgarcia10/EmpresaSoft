@@ -392,15 +392,21 @@ public class InterfazNomina extends JFrame implements ActionListener{
 		
 		if(command.equals("Agregar"))
 		{
-			DialogoAgregarEmpleado agregarEmpleado = new DialogoAgregarEmpleado(control,this);
+			DialogoAgregarEmpleado agregarEmpleado = new DialogoAgregarEmpleado(control,this,-1);
 			agregarEmpleado.setLocationRelativeTo(this);
 			agregarEmpleado.setVisible(true);
 		}
-//		else if (command.equals("Ver mas")){
-//			DialogoVerEmpleado verEmpleado = new DialogoVerEmpleado();
-//			verEmpleado.setLocationRelativeTo(this);
-//			verEmpleado.setVisible(true);
-//		}
+		else if (command.equals("Ver mas")){
+			int pos = -1;
+			
+			if( listaEmpleados.getSelectedValue() != null){
+				pos = listaEmpleados.getSelectedIndex();
+			}
+			
+			DialogoAgregarEmpleado verEmpleado = new DialogoAgregarEmpleado(control,this,pos);
+			verEmpleado.setLocationRelativeTo(this);
+			verEmpleado.setVisible(true);
+		}
 		else if (command.equals("Liquidación de Nómina")){
 			String periodo = darPeriodo();	
 			DialogoNomina nomina = new DialogoNomina(this, control, periodo);
@@ -483,5 +489,9 @@ public class InterfazNomina extends JFrame implements ActionListener{
 	        lblFoto.revalidate(); // ADDED
 	        lblFoto.repaint();
 		}
+	}
+	
+	public ArrayList<Empleado> getListaEmpleados(){
+		return control.getEmpleados();
 	}
 }

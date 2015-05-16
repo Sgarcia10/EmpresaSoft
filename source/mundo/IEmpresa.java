@@ -12,7 +12,7 @@ public interface IEmpresa {
 	public void agregarEmpleado();
 	
 	public void agregarInfoLaboralEmpleado(Empleado empleadoP, String cargoP,
-			int salarioFijoP, int horasP, String tipoP, String duracionP,
+			double salarioFijoP, int horasP, String tipoP, String duracionP,
 			Date fechaInicioP, Date fechaFinP, int tipoLiquidacionP, String saludP,
 			String pensionesP, String arlP, boolean solidaridadP, String cajaCompensacionP,
 			Date fechaAfiliacionP, boolean auxilioP);
@@ -52,15 +52,15 @@ public interface IEmpresa {
 	public void eliminarHijoEmpleado(Empleado empleadoP, int index);
 	
 	public void editarReferenciaEmpleado(Empleado empleadoP, int posicion,
-			String tipoP, String nombresP, String apellidosP, int documentoP,
-			int telefonoP, String sexoP, String direccionP, String ciudadP,
+			String tipoP, String nombresP, String apellidosP, double documentoP,
+			double telefonoP, String sexoP, String direccionP, String ciudadP,
 			String empresaP, String conceptoP);
 	
 	public void editarExperienciaEmpleado(Empleado empleadoP, int index, String empresaP, 
 			String cargoP, String tipoP, Date fechaInicioP, Date fechaFinP);
 	
 	public void editarHijoEmpleado(Empleado empleadoP, int index, String nombreP, String apellidosP, String tipoP,
-			int identificacionP, String sexoP, Date fechaP, String direccionP);
+			double identificacionP, String sexoP, Date fechaP, String direccionP);
 	
 	public ArrayList darListaReferecniasEmpleado(Empleado empleadoP);
 	

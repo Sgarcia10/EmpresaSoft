@@ -7,7 +7,7 @@ public class Contrato implements Serializable
 {
 	private String cargo;
 	
-	private int sueldoBasico;
+	private double sueldoBasico;
 	
 	private boolean auxilioTransporte;
 		
@@ -25,7 +25,7 @@ public class Contrato implements Serializable
 	
 	public final static double AUXILIO = 75000;
 	
-	public Contrato(String cargoP, int sueldoBasicoP, boolean auxilioTransporteP, int periodoLiquidacionP,
+	public Contrato(String cargoP, double sueldoBasicoP, boolean auxilioTransporteP, int periodoLiquidacionP,
 			Date fechaInicioP, String tipoContratoP, Date fechaFinP, String tipoSalarioP, int horasSemanaP)
 	{
 		cargo = cargoP;
@@ -51,7 +51,7 @@ public class Contrato implements Serializable
 		this.cargo = cargo;
 	}
 
-	protected void setSueldoBasico(int sueldoBasico) {
+	protected void setSueldoBasico(double sueldoBasico) {
 		this.sueldoBasico = sueldoBasico;
 	}
 
