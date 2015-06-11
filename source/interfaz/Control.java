@@ -174,8 +174,8 @@ public class Control {
 //	
 	//CESAR
 	public double getNovedadesSueldoBasico(String periodo) {
-		// TODO Auto-generated method stub
-//		double rta = mundo.getEmpleadoActual( ).getSueldoBasico( );
+
+		double rta = empresa.getEmpleadoSeleccionado().getContrato().getSueldoBasico();
 		return 1;
 	}
 
