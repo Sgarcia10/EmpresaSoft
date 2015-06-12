@@ -68,6 +68,8 @@ public interface IEmpresa {
 	
 	public Empleado getEmpleadoNuevo();
 	
+	public Empleado getEmpleadoSeleccionado();
+	
 	public ArrayList getEmpleados();
 	
     public void cargarEstado( String pRutaNombre ) throws PersistenciaException;
