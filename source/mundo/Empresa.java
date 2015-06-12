@@ -122,7 +122,6 @@ public class Empresa implements IEmpresa {
 			double telefonoParejaP, Date fechaNacimientoParejaP, String sexoParejaP,
 			String direccionParejaP, String ciudadParejaP){
 		
-		System.out.println("agregar conyugue");
 		empleadoP.agregarConyugue(nombresParejaP, apellidosParejaP, cedulaParejaP, telefonoParejaP, fechaNacimientoParejaP, sexoParejaP, direccionParejaP, ciudadParejaP);
 	}
 	
@@ -174,10 +173,7 @@ public class Empresa implements IEmpresa {
 		return empleadoNuevo;
 	}
 
-	@Override
-	public ArrayList getEmpleados(){
-		return empleados;
-	}
+
 	
 	public void cargarEstado( String pRutaNombre ) throws PersistenciaException
 	{
@@ -243,8 +239,17 @@ public class Empresa implements IEmpresa {
 		}
 
 	}
+
+	@Override
+	public ArrayList getEmpleados() {
+		// TODO Auto-generated method stub
+		return empleados;
+	}
+
+	@Override
+	public Empleado getEmpleadoSeleccionado() {
+		return empleadoSeleccionado;
+	}
 	
 	
-
-
 }
