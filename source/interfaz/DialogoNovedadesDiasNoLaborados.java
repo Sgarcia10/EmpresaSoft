@@ -118,7 +118,7 @@ public class DialogoNovedadesDiasNoLaborados extends JDialog implements ActionLi
 
 	private void actualizarInformacion() {
 		// TODO Auto-generated method stub
-		ArrayList listaDiasNoLaborados = control.getListaDiasNoLaborados( );
+		ArrayList listaDiasNoLaborados = control.getListaDiasNoLaborados(principal.darPeriodo());
 
 		if( !listaDiasNoLaborados.isEmpty( ) ){
 			for (int i = 0; i < listaDiasNoLaborados.size(); i++){

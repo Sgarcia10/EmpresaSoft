@@ -143,7 +143,7 @@ public class DialogoDevengadoHoras extends JDialog implements ActionListener
 
 	private void actualizarDominicalDiasDomYFestivos() {
 		// TODO Auto-generated method stub
-		ArrayList listaDominicalDominicales = control.getListaDominicalDiasDominicalesYFestivos( );
+		ArrayList listaDominicalDominicales = control.getListaDominicalDiasDominicalesYFestivos(principal.darPeriodo() );
 
 		if( !listaDominicalDominicales.isEmpty( ) ){
 			for (int i = 0; i < listaDominicalDominicales.size(); i++){
@@ -157,7 +157,7 @@ public class DialogoDevengadoHoras extends JDialog implements ActionListener
 
 	private void actualizarDominicalExtraNocturno() {
 		// TODO Auto-generated method stub
-		ArrayList listaDominicalExtraNocturno = control.getListaDominicalExtraNocturno( );
+		ArrayList listaDominicalExtraNocturno = control.getListaDominicalExtraNocturno( principal.darPeriodo());
 
 		if( !listaDominicalExtraNocturno.isEmpty( ) ){
 			for (int i = 0; i < listaDominicalExtraNocturno.size(); i++){
@@ -171,7 +171,7 @@ public class DialogoDevengadoHoras extends JDialog implements ActionListener
 
 	private void actualizarDominicalExtraDiurno() {
 		// TODO Auto-generated method stub
-		ArrayList listaDominicalExtraDiurno = control.getListaDominicalExtraDiurno( );
+		ArrayList listaDominicalExtraDiurno = control.getListaDominicalExtraDiurno(principal.darPeriodo() );
 
 		if( !listaDominicalExtraDiurno.isEmpty( ) ){
 			for (int i = 0; i < listaDominicalExtraDiurno.size(); i++){
@@ -185,7 +185,7 @@ public class DialogoDevengadoHoras extends JDialog implements ActionListener
 
 	private void actualizarOrdinariaExtraNocturno() {
 		// TODO Auto-generated method stub
-		ArrayList listaOrdinariaExtraNocturno = control.getListaOrdinariaExtraNocturno( );
+		ArrayList listaOrdinariaExtraNocturno = control.getListaOrdinariaExtraNocturno( principal.darPeriodo());
 
 		if( !listaOrdinariaExtraNocturno.isEmpty( ) ){
 			for (int i = 0; i < listaOrdinariaExtraNocturno.size(); i++){
@@ -200,7 +200,7 @@ public class DialogoDevengadoHoras extends JDialog implements ActionListener
 	private void actualizarOrdinariaExtraDiurno() {
 		// TODO Auto-generated method stub
 
-		ArrayList listaOrdinariaExtraDiurno = control.getListaOrdinariaExtraDiurno( );
+		ArrayList listaOrdinariaExtraDiurno = control.getListaOrdinariaExtraDiurno(principal.darPeriodo() );
 
 		if( !listaOrdinariaExtraDiurno.isEmpty( ) ){
 			for (int i = 0; i < listaOrdinariaExtraDiurno.size(); i++){

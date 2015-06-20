@@ -122,7 +122,7 @@ public class DialogoDeduccionesPrestamos extends JDialog implements ActionListen
 
 	private void actualizarInformacion() {
 		// TODO Auto-generated method stub
-		ArrayList listaPrestamos = control.getListaDeduccionesPrestamos( );
+		ArrayList listaPrestamos = control.getListaDeduccionesPrestamos( principal.darPeriodo());
 
 		if( !listaPrestamos.isEmpty( ) ){
 			for (int i = 0; i < listaPrestamos.size(); i++){
