@@ -5,9 +5,11 @@ import java.util.Date;
 
 import javax.swing.ImageIcon;
 
+import mundo.DiasNoLaborados;
 import mundo.Empleado;
 import mundo.Empresa;
 import mundo.IEmpresa;
+import mundo.Nomina;
 
 public class Control {
 	
@@ -150,108 +152,105 @@ public class Control {
 	
 //	public String getPeriodoNomina() {
 //		// TODO Auto-generated method stub
-//		String rta = mundo.getEmpleadoActual( ).getSueldoBasico( ); 
+//		String rta = empresa.getEmpleadoActual( ).getSueldoBasico( ); 
 //		return rta;
 //	}
 //
 //	public double getSueldoBasico() {
 //		// TODO Auto-generated method stub
-//		double rta = mundo.getEmpleadoActual( ).getSueldoBasico( );
+//		double rta = empresa.getEmpleadoActual( ).getSueldoBasico( );
 //		return rta;
 //	}
 //
 //	public int getTiempo() {
 //		// TODO Auto-generated method stub
-//		int rta = mundo.getEmpleadoActual().getTiempoLaboradoPeriodo( );
+//		int rta = empresa.getEmpleadoActual().getTiempoLaboradoPeriodo( );
 //		return rta;
 //	}
 //
 //	public double getSueldoPeriodo() {
 //		// TODO Auto-generated method stub
-////		double rta = mundo.getEmpleadoActual( ).getSueldoPeriodo( );
+////		double rta = empresa.getEmpleadoActual( ).getSueldoPeriodo( );
 //		return 1;
 //	}
 //	
 	//CESAR
+	
+	public Nomina getNominaEmpleadoActual(String periodo)
+	{
+		return empresa.getEmpleadoNuevo().buscarNominaPeriodo(periodo);
+	}
+	
 	public double getNovedadesSueldoBasico(String periodo) {
-
-//		double rta = empresa.getEmpleadoSeleccionado().getContrato().getSueldoBasico();
-		return 1;
+		
+		Nomina n = getNominaEmpleadoActual(periodo);
+		double rta = n.getSalarioBasico();
+		return rta;
 	}
 
 	public int getNovedadesTiempoPeriodo(String periodo) {
-		// TODO Auto-generated method stub
-//		int rta = mundo.getEmpleadoActual().getTiempoLaboradoPeriodo( );
-		return 1;
+		Nomina n = getNominaEmpleadoActual(periodo);
+		int rta = n.getPeriodoLiquidacion();
+		return rta;
 	}
 
 	public double getNovedadesSueldoPeriodo(String periodo) {
-		// TODO Auto-generated method stub
-//		double rta = mundo.getEmpleadoActual( ).getSueldoPeriodo( );
-		return 1;
+		Nomina n = getNominaEmpleadoActual(periodo);
+		return n.getSueldoPeriodo();
 	}
 
-
+////////////////////////////////////////////////////////////////////////////////////
+/////	HORAS
+///////////////////////////////////////////////////////////////////////////////////
 
 	public double getDevengadoOrdinarioTotalRecargoNocturno(String periodo) {
-		// TODO Auto-generated method stub
-		return 0;
+		Nomina n = getNominaEmpleadoActual(periodo);
+		return n.getDevengado().getOrdinarioTotalRecargoNocturno();
 	}
-
-
-
-	public double getDevengadoOrdinarioTotalExtraDiurno(String periodo) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-
-
-	public double getDevengadoOrdinarioTotalExtraNocturno(String periodo) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-
-
-	public double getDevengadoDominicalTotalRecargoNocturno(String periodo) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-
-
-	public double getDevengadoDominicalTotalExtraDiurno(String periodo) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-
-
-	public double getDevengadoDominicalTotalExtraNocturno(String periodo) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
+	
 
 
 	public double getDevengadoDominicalTotalDominicalesFestivos(String periodo) {
-		// TODO Auto-generated method stub
-		return 0;
+		Nomina n = getNominaEmpleadoActual(periodo);
+		return n.getDevengado().getDominicalTotalRecargoDiurno();
+	}
+	
+	public double getDevengadoDominicalTotalRecargoNocturno(String periodo) {
+		Nomina n = getNominaEmpleadoActual(periodo);
+		return n.getDevengado().getDominicalTotalRecargoNocturno();
 	}
 
+	public double getDevengadoOrdinarioTotalExtraDiurno(String periodo) {
+		Nomina n = getNominaEmpleadoActual(periodo);
+		return n.getDevengado().getOrdinarioTotalExtraDiurno();
+	}
 
+	public double getDevengadoOrdinarioTotalExtraNocturno(String periodo) {
+		Nomina n = getNominaEmpleadoActual(periodo);
+		return n.getDevengado().getOrdinarioTotalExtraNocturno();
+	}
 
+	public double getDevengadoDominicalTotalExtraDiurno(String periodo) {
+		Nomina n = getNominaEmpleadoActual(periodo);
+		return n.getDevengado().getDominicalTotalExtraDiurno();
+	}
+
+	public double getDevengadoDominicalTotalExtraNocturno(String periodo) {
+		Nomina n = getNominaEmpleadoActual(periodo);
+		return n.getDevengado().getDominicalTotalExtraNocturno();
+	}
+	
 	public double getDevengadoOtrosTotalAuxilioTransporte(String periodo) {
-		// TODO Auto-generated method stub
-		return 0;
+
+		Nomina n = getNominaEmpleadoActual(periodo);
+		return n.getDevengado().valorAuxilioTransporte();
 	}
 
 
 
 	public double getDevengadoOtrosTotalComisiones(String periodo) {
-		// TODO Auto-generated method stub
-		return 0;
+		Nomina n = getNominaEmpleadoActual(periodo);
+		return n.getDevengado().valorComisiones();
 	}
 
 
@@ -320,40 +319,36 @@ public class Control {
 
 
 
-	public ArrayList getListaDiasNoLaborados(String periodo) {
+	public ArrayList<DiasNoLaborados> getListaDiasNoLaborados(String periodo) {
 		// TODO Auto-generated method stub
-		ArrayList rta = new ArrayList( );
-		return rta;
+		Nomina n = getNominaEmpleadoActual(periodo);
+		return n.getDiasNoLaborados();
 	}
 
 
 
 	public ArrayList getListaOrdinariaExtraDiurno(String periodo) {
-		// TODO Auto-generated method stub
-		ArrayList rta = new ArrayList( );
-		return rta;
+		Nomina n = getNominaEmpleadoActual(periodo);
+		return n.getDevengado().getListaOrdinariaExtraDiurno();
 	}
 
 
 
 	public ArrayList getListaOrdinariaExtraNocturno(String periodo) {
-		// TODO Auto-generated method stub
-		ArrayList rta = new ArrayList( );
-		return rta;
+		Nomina n = getNominaEmpleadoActual(periodo);
+		return n.getDevengado().getListaOrdinariaExtraNocturno();
 	}
 
 
 
 	public ArrayList getListaDominicalExtraDiurno(String periodo) {
-		// TODO Auto-generated method stub
-		ArrayList rta = new ArrayList( );
-		return rta;
+		Nomina n = getNominaEmpleadoActual(periodo);
+		return n.getDevengado().getListaDominicalExtraDiurno();
 	}
 
 	public ArrayList getListaDominicalExtraNocturno(String periodo) {
-		// TODO Auto-generated method stub
-		ArrayList rta = new ArrayList( );
-		return rta;
+		Nomina n = getNominaEmpleadoActual(periodo);
+		return n.getDevengado().getListaDominicalExtraNocturno();
 	}
 
 	public ArrayList getListaDominicalDiasDominicalesYFestivos(String periodo) {
@@ -362,7 +357,7 @@ public class Control {
 		return rta;
 	}
 
-	public ArrayList getListaDeduccionesPrestamos(String periodo) {
+	public ArrayList getListaDeduccionesPrestamos() {
 		// TODO Auto-generated method stub
 		ArrayList rta = new ArrayList( );
 		return rta;
