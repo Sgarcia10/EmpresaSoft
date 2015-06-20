@@ -13,10 +13,19 @@ private ArrayList<Hijo> hijos;
 	
 	private ArrayList <Referencia> referencias;
 	
+	private ArrayList <Nomina> nominas;	
+
+	public ArrayList<Nomina> getNominas() {
+		return nominas;
+	}
+
+
+	public void setNominas(ArrayList<Nomina> nominas) {
+		this.nominas = nominas;
+	}
+
 	private ArrayList <Experiencia> experiencia;
-	
-	private ArrayList <Nomina> nominas;
-	
+		
 	private ImageIcon foto;
 	
 	private Contrato contrato;
@@ -43,7 +52,8 @@ private ArrayList<Hijo> hijos;
 	{
 		super(identificacion, tipoDocumento, nombre, apellidos, sexo, fechaNacimiento,
 				estadoCivil, correo, edad, telefono, celularP, direccion, ciudad, 
-				departamento, nacionalidad);		
+				departamento, nacionalidad);
+		nominas = new ArrayList<Nomina>();
 		
 		hijos = new ArrayList();
 		referencias = new ArrayList();
@@ -158,6 +168,18 @@ private ArrayList<Hijo> hijos;
 	{
 		contrato = new Contrato(cargoP, sueldoBasicoP, auxilioTransporteP, periodoLiquidacionP,
 				fechaInicioP, tipoContratoP, fechaFinP, tipoSalarioP, horasSemana);
+	}
+	
+	public Nomina buscarNominaPeriodo(String periodo)
+	{
+		for(int i=0; i<nominas.size(); i++)
+		{
+			if(periodo.equals(nominas.get(i).getPeriodo()))
+			{
+				return nominas.get(i);
+			}
+		}
+		return null;
 	}
 	
 	public Contrato getContrato()

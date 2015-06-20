@@ -15,9 +15,7 @@ public class Nomina
 	
 	private int periodoLiquidacion;
 	
-	private Date periodoInicio;
-	
-	private Date periodoFin;
+	private String periodo;
 	
 	private ArrayList<DiasNoLaborados> diasNoLaborados;
 	
@@ -31,7 +29,7 @@ public class Nomina
 	
 	private int total;
 	
-	public Nomina(Empleado empleadoP)
+	public Nomina(Empleado empleadoP, String peridoP)
 	{
 		salarioBasico = (int) empleadoP.getContrato().getSueldoBasico();
 		
@@ -45,63 +43,70 @@ public class Nomina
 		diasNoLaborados = new ArrayList<DiasNoLaborados>();
 		
 		valorHora = salarioBasico / (horasSemana * 4);
+		
+		periodo = peridoP;
+		
+		devengado = new Devengado(this);
+		
+		deducciones = new Deducciones(this);
+		
 	}
 	
-	private void crearPeriodoActual()
-	{
-		Date fechaActual = new Date();	
-		SimpleDateFormat formatoDelTexto = new SimpleDateFormat("dd-MM-yyyy");
-		String [] valoresFechaActual = formatoDelTexto.format(fechaActual).split("-");
-		int diaActual = Integer.parseInt(valoresFechaActual[0]);
-		int mesActual = Integer.parseInt(valoresFechaActual[1]);
-		int anioActual = Integer.parseInt(valoresFechaActual[2]);
-		
-		if(periodoLiquidacion==15)
-		{
-			if(diaActual>=1 && diaActual<=15)
-			{
-				String fecha1 = "01-"+mesActual+"-"+anioActual;
-				String fecha2 = "15-"+mesActual+"-"+anioActual;
-				try 
-				{
-					periodoInicio = formatoDelTexto.parse(fecha1);
-					periodoFin = formatoDelTexto.parse(fecha2);
-				}
-				catch (ParseException e) 
-				{
-					e.printStackTrace();
-				}
-			}
-			else
-			{
-				String fecha1 = "16-"+mesActual+"-"+anioActual;
-				String fecha2 = "30-"+mesActual+"-"+anioActual;
-				try 
-				{
-					periodoInicio = formatoDelTexto.parse(fecha1);
-					periodoFin = formatoDelTexto.parse(fecha2);
-				}
-				catch (ParseException e) 
-				{
-					e.printStackTrace();
-				}
-			}
-		}
-		else if(periodoLiquidacion==30)
-		{
-			String fecha1 = "01-"+mesActual+"-"+anioActual;
-			String fecha2 = "30-"+mesActual+"-"+anioActual;
-			try 
-			{
-				periodoInicio = formatoDelTexto.parse(fecha1);
-				periodoFin = formatoDelTexto.parse(fecha2);
-			}
-			catch (ParseException e) 
-			{
-				e.printStackTrace();
-			}
-		}
-	}
+//	private void crearPeriodoActual()
+//	{
+//		Date fechaActual = new Date();	
+//		SimpleDateFormat formatoDelTexto = new SimpleDateFormat("dd-MM-yyyy");
+//		String [] valoresFechaActual = formatoDelTexto.format(fechaActual).split("-");
+//		int diaActual = Integer.parseInt(valoresFechaActual[0]);
+//		int mesActual = Integer.parseInt(valoresFechaActual[1]);
+//		int anioActual = Integer.parseInt(valoresFechaActual[2]);
+//		
+//		if(periodoLiquidacion==15)
+//		{
+//			if(diaActual>=1 && diaActual<=15)
+//			{
+//				String fecha1 = "01-"+mesActual+"-"+anioActual;
+//				String fecha2 = "15-"+mesActual+"-"+anioActual;
+//				try 
+//				{
+//					periodoInicio = formatoDelTexto.parse(fecha1);
+//					periodoFin = formatoDelTexto.parse(fecha2);
+//				}
+//				catch (ParseException e) 
+//				{
+//					e.printStackTrace();
+//				}
+//			}
+//			else
+//			{
+//				String fecha1 = "16-"+mesActual+"-"+anioActual;
+//				String fecha2 = "30-"+mesActual+"-"+anioActual;
+//				try 
+//				{
+//					periodoInicio = formatoDelTexto.parse(fecha1);
+//					periodoFin = formatoDelTexto.parse(fecha2);
+//				}
+//				catch (ParseException e) 
+//				{
+//					e.printStackTrace();
+//				}
+//			}
+//		}
+//		else if(periodoLiquidacion==30)
+//		{
+//			String fecha1 = "01-"+mesActual+"-"+anioActual;
+//			String fecha2 = "30-"+mesActual+"-"+anioActual;
+//			try 
+//			{
+//				periodoInicio = formatoDelTexto.parse(fecha1);
+//				periodoFin = formatoDelTexto.parse(fecha2);
+//			}
+//			catch (ParseException e) 
+//			{
+//				e.printStackTrace();
+//			}
+//		}
+//	}
 	
 	protected void agregarDiaNoLaborado(Usuario user, String concepto, boolean excusa, Date fechaInicio, int duracion)
 	{
@@ -113,8 +118,6 @@ public class Nomina
 	public void liquidar()
 	{
 		calcularSueldoPeriodo();
-		devengado = new Devengado(this);
-		deducciones = new Deducciones(this);
 	}
 	
 	public int numeroDiasNoLaborados()
@@ -152,14 +155,6 @@ public class Nomina
 		return periodoLiquidacion;
 	}
 
-	public Date getPeriodoInicio() {
-		return periodoInicio;
-	}
-
-	public Date getPeriodoFin() {
-		return periodoFin;
-	}
-
 	public Devengado getDevengado()
 	{
 		return devengado;
@@ -172,6 +167,19 @@ public class Nomina
 	public boolean isAuxiloTransporte()
 	{
 		return auxilioTransporte;
+	}
+
+	public String getPeriodo() {
+		return periodo;
+	}
+	
+	public double getSueldoPeriodo()
+	{
+		return sueldoPeriodo;
+	}
+
+	protected void setPeriodo(String periodo) {
+		this.periodo = periodo;
 	}
 		
 	

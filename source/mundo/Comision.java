@@ -4,11 +4,11 @@ import java.util.Date;
 
 public class Comision extends Registro
 {
-	private int valor;
+	private double valor;
 	
 	private Date fecha;
 	
-	public Comision(Usuario user, String concepto, int valor, Date fecha)
+	public Comision(Usuario user, String concepto, double valor, Date fecha)
 	{
 		super(concepto, user);
 		
@@ -17,7 +17,7 @@ public class Comision extends Registro
 		this.fecha = fecha;
 	}
 
-	public int getValor() {
+	public double getValor() {
 		return valor;
 	}
 
@@ -27,7 +27,7 @@ public class Comision extends Registro
 	}
 
 
-	protected void setValor(int valor) {
+	protected void setValor(double valor) {
 		this.valor = valor;
 	}
 
