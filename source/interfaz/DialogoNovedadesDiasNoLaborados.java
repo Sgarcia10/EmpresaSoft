@@ -1,12 +1,16 @@
 package interfaz;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Vector;
 
+import javax.swing.DefaultCellEditor;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -14,8 +18,13 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.UIManager;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.CellEditorListener;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 
 
@@ -23,12 +32,31 @@ import javax.swing.table.DefaultTableModel;
 
 
 
+
+import javax.swing.table.TableCellEditor;
+import javax.swing.table.TableColumn;
+
 import mundo.DiasNoLaborados;
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 import java.awt.Toolkit;
 
 import javax.swing.JButton;
+
+import com.toedter.calendar.JDateChooser;
 
 import java.awt.Dialog.ModalityType;
 
@@ -48,7 +76,12 @@ public class DialogoNovedadesDiasNoLaborados extends JDialog implements ActionLi
 	private JButton btnAgregar;
 	private JButton btnAnterior;
 	private JButton btnSiguiente;
-
+	
+	private ValidarCampos validador;
+	private SimpleDateFormat sdf;
+	private boolean resValidacion;
+	private DefaultTableModel model; 
+	
 	public DialogoNovedadesDiasNoLaborados( InterfazNomina ventana, Control pControl) {
 		super(null, java.awt.Dialog.ModalityType.TOOLKIT_MODAL);
 		setIconImage(Toolkit.getDefaultToolkit().getImage(DialogoNovedadesDiasNoLaborados.class.getResource("/com/sun/java/swing/plaf/windows/icons/Computer.gif")));
@@ -62,7 +95,10 @@ public class DialogoNovedadesDiasNoLaborados extends JDialog implements ActionLi
 		getContentPane().setLayout(null);
 		setBounds(100, 100, 688, 384);
 
-
+		sdf = new SimpleDateFormat("dd/MM/yyyy");
+		validador = new ValidarCampos(this);
+		resValidacion = true;
+		
 		panel = new JPanel();
 		panel.setLayout(null);
 		//		panel.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), titulo, TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -80,7 +116,11 @@ public class DialogoNovedadesDiasNoLaborados extends JDialog implements ActionLi
 				return false;
 			}
 		};
-		tableNovedaesDiasNoLaborados = new JTable(modN);
+		tableNovedaesDiasNoLaborados = new JTable(modN){ 
+			public boolean isCellEditable (int iRows, int iCols){ 
+				return true; /// editable la tabla 
+				} 
+				};
 		tableNovedaesDiasNoLaborados.getTableHeader().setReorderingAllowed(false);
 
 		JScrollPane scrollPane = new JScrollPane(tableNovedaesDiasNoLaborados);
@@ -149,7 +189,84 @@ public class DialogoNovedadesDiasNoLaborados extends JDialog implements ActionLi
 		System.out.println( command );
 		if(command.equals("Agregar"))
 		{
+			model = (DefaultTableModel) tableNovedaesDiasNoLaborados.getModel();
+			model.addRow(new Object[]{"","","","","",""});
+			model.isCellEditable(0, 0);
+			
+			tableNovedaesDiasNoLaborados.setCellSelectionEnabled(true);
+		
+			
+			int numeroFilas = model.getRowCount();
+			
+			model.setValueAt(sdf.format(new Date()), numeroFilas-1, 0);
+			tableNovedaesDiasNoLaborados.setColumnSelectionInterval(1, 1);
+			tableNovedaesDiasNoLaborados.setRowSelectionInterval(numeroFilas-1, numeroFilas-1);
+			
+			tableNovedaesDiasNoLaborados.requestFocus();
+			tableNovedaesDiasNoLaborados.editCellAt(numeroFilas-1, 1);
+			
+//			model.addTableModelListener(new TableModelListener() {
+//				
+//				@Override
+//				public void tableChanged(TableModelEvent e) {
+//					
+//					int row = tableNovedaesDiasNoLaborados.getSelectedRow();
+//					int column = tableNovedaesDiasNoLaborados.getSelectedColumn();
+//					String valor = (String) tableNovedaesDiasNoLaborados.getValueAt(row, column);
+//					String tipo = "String";
+//					
+//					if (column == 2){
+//						tipo = "Date";
+//					}
+//					
+//					boolean res = validador.validarIndividual(valor, tipo);
+//					resValidacion = res;
+//					
+//					if (res == false){
+//						
+//						tableNovedaesDiasNoLaborados.setValueAt("", row, column);
+//						tableNovedaesDiasNoLaborados.editCellAt(row, column);
+//						
+//					}
+//				}
+//			});
+			
+			TableCellEditor tce = tableNovedaesDiasNoLaborados.getCellEditor();
+			
+			
+			tce.addCellEditorListener(new CellEditorListener() {
+				
+				@Override
+				public void editingStopped(ChangeEvent arg0) {
+					int row = tableNovedaesDiasNoLaborados.getSelectedRow();
+					int column = tableNovedaesDiasNoLaborados.getSelectedColumn();
+					String valor = (String) tableNovedaesDiasNoLaborados.getValueAt(row, column);
+					String tipo = "String";
+					
+					if (column == 2){
+						tipo = "Date";
+					}
+					
+					boolean res = validador.validarIndividual(valor, tipo);
+					resValidacion = res;
+					
+					if (res == false){
+						
+						tableNovedaesDiasNoLaborados.setValueAt("", row, column);
+						tableNovedaesDiasNoLaborados.editCellAt(row, column);
+						
+					}
+					
+				}
+				
 
+				@Override
+				public void editingCanceled(ChangeEvent arg0) {
+					// TODO Auto-generated method stub
+				}
+			});
+			
+			
 		}
 		else if (command.equals("Modificar")){
 
@@ -166,6 +283,10 @@ public class DialogoNovedadesDiasNoLaborados extends JDialog implements ActionLi
 			novedadesHora.setLocationRelativeTo(principal);
 			novedadesHora.setVisible(true);
 		}
+	}
+	
+	public void makeCellEditable(DefaultTableModel model, boolean valor, int row, int column){
+		
 	}
 
 }
