@@ -338,7 +338,7 @@ public class Control {
 
 
 
-	public ArrayList getListaDiasNoLaborados() {
+	public ArrayList getListaDiasNoLaborados(String periodo) {
 		// TODO Auto-generated method stub
 		ArrayList rta = new ArrayList( );
 		return rta;
@@ -346,7 +346,7 @@ public class Control {
 
 
 
-	public ArrayList getListaOrdinariaExtraDiurno() {
+	public ArrayList getListaOrdinariaExtraDiurno(String periodo) {
 		// TODO Auto-generated method stub
 		ArrayList rta = new ArrayList( );
 		return rta;
@@ -354,7 +354,7 @@ public class Control {
 
 
 
-	public ArrayList getListaOrdinariaExtraNocturno() {
+	public ArrayList getListaOrdinariaExtraNocturno(String periodo) {
 		// TODO Auto-generated method stub
 		ArrayList rta = new ArrayList( );
 		return rta;
@@ -362,25 +362,25 @@ public class Control {
 
 
 
-	public ArrayList getListaDominicalExtraDiurno() {
+	public ArrayList getListaDominicalExtraDiurno(String periodo) {
 		// TODO Auto-generated method stub
 		ArrayList rta = new ArrayList( );
 		return rta;
 	}
 
-	public ArrayList getListaDominicalExtraNocturno() {
+	public ArrayList getListaDominicalExtraNocturno(String periodo) {
 		// TODO Auto-generated method stub
 		ArrayList rta = new ArrayList( );
 		return rta;
 	}
 
-	public ArrayList getListaDominicalDiasDominicalesYFestivos() {
+	public ArrayList getListaDominicalDiasDominicalesYFestivos(String periodo) {
 		// TODO Auto-generated method stub
 		ArrayList rta = new ArrayList( );
 		return rta;
 	}
 
-	public ArrayList getListaDeduccionesPrestamos() {
+	public ArrayList getListaDeduccionesPrestamos(String periodo) {
 		// TODO Auto-generated method stub
 		ArrayList rta = new ArrayList( );
 		return rta;
