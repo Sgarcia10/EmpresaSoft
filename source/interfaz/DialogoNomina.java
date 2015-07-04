@@ -12,6 +12,7 @@ import java.util.Date;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -27,10 +28,14 @@ import javax.swing.table.DefaultTableModel;
 
 
 
+
+
 import java.awt.Toolkit;
 
 import javax.swing.JButton;
 import javax.swing.border.LineBorder;
+
+import Excepciones.NominaNoEncontradaException;
 
 import java.awt.Component;
 
@@ -63,6 +68,7 @@ public class DialogoNomina extends JDialog implements ActionListener, MouseListe
 	private JScrollPane scrollPane_2;
 	private JTable tableDeduccionesSeguridadSocial;
 	private JTable tableDeduccionesOtras;
+	private String mensajeErrorConNomina;
 
 	public DialogoNomina( InterfazNomina ventana, Control pControl, String pPeriodo) {
 		super(null, java.awt.Dialog.ModalityType.TOOLKIT_MODAL);
@@ -71,6 +77,7 @@ public class DialogoNomina extends JDialog implements ActionListener, MouseListe
 		principal = ventana;
 		control = pControl;
 		periodo = pPeriodo;
+		mensajeErrorConNomina = "El empleado seleccionado no posee la nómina seleccionada";
 		//		titulo = "Horas Extras Diurnas";
 		cont = 0;
 		setTitle("Nómina Para Pago De Salarios");
@@ -295,12 +302,19 @@ public class DialogoNomina extends JDialog implements ActionListener, MouseListe
 	private void actualizarPanelNovedades() {
 		// TODO Auto-generated method stub
 
-		double sueldoBasico = control.getNovedadesSueldoBasico(periodo);
-		int tiempoPeriodo = control.getNovedadesTiempoPeriodo(periodo );
-		double sueldoPeriodo = control.getNovedadesSueldoPeriodo(periodo );
+		try{
+			double sueldoBasico = control.getNovedadesSueldoBasico(periodo);
+			int tiempoPeriodo = control.getNovedadesTiempoPeriodo(periodo );
+			double sueldoPeriodo = control.getNovedadesSueldoPeriodo(periodo );
+			
+			DefaultTableModel model = ( DefaultTableModel) tableNovedades.getModel();
+			model.addRow(new Object[]{periodo, sueldoBasico, tiempoPeriodo, sueldoPeriodo});
+		}
 
-		DefaultTableModel model = ( DefaultTableModel) tableNovedades.getModel();
-		model.addRow(new Object[]{periodo, sueldoBasico, tiempoPeriodo, sueldoPeriodo});
+		catch( NominaNoEncontradaException e){
+			JOptionPane.showMessageDialog(this, mensajeErrorConNomina, "Error", JOptionPane.ERROR_MESSAGE);
+		}
+		
 	}
 
 
@@ -358,7 +372,7 @@ public class DialogoNomina extends JDialog implements ActionListener, MouseListe
 		double totalJuzgados = control.getDeduccionesOtrasTotalJuzgados(periodo);
 		double totalPrestamos = control.getDeduccionesOtrasTotalPrestamos(periodo);
 		double totalFondoEmpleados = control.getDeduccionesOtrosTotalFondosEmpleados( periodo);
-				
+
 		DefaultTableModel model = ( DefaultTableModel) tableDeduccionesOtras.getModel();
 		model.addRow(new Object[]{totalRetencion, totalJuzgados, totalPrestamos, totalFondoEmpleados});
 	}
@@ -371,7 +385,7 @@ public class DialogoNomina extends JDialog implements ActionListener, MouseListe
 		double totalPensionVoluntaria = control.getDeduccionesSeguridadSocialTotalPensionVoluntaria(periodo);
 		double totalSolidaridad = control.getDeduccionesSeguridadSocialTotalSolidaridad( periodo);
 		double totalAFC = control.getDeduccionesSeguridadSocialTotalAFC(periodo);
-		
+
 		DefaultTableModel model = ( DefaultTableModel) tableDeduccionesSeguridadSocial.getModel();
 		model.addRow(new Object[]{totalSalud, totalPension, totalPensionVoluntaria, totalSolidaridad, totalAFC});
 	}
@@ -383,7 +397,7 @@ public class DialogoNomina extends JDialog implements ActionListener, MouseListe
 	}
 
 
-	
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
@@ -396,7 +410,7 @@ public class DialogoNomina extends JDialog implements ActionListener, MouseListe
 		else if (command.equals("Modificar")){
 
 		}
-		
+
 	}
 
 
