@@ -5,6 +5,9 @@ import java.util.Date;
 
 public class Contrato implements Serializable
 {
+	
+	private final static long serialVersionUID = 200L;
+	
 	private String cargo;
 	
 	private double sueldoBasico;
