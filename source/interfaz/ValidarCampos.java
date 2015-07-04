@@ -87,8 +87,9 @@ public class ValidarCampos {
 		return res;
 	}
 	
-	public boolean validarIndividual (String valor, String tipo){
+	public boolean validarIndividual (String valor, String tipo) {
 		boolean res = false;
+		
 		if (tipo.equals("int")){
 			
 			try{
@@ -99,6 +100,7 @@ public class ValidarCampos {
 				JOptionPane.showMessageDialog(dialogo, "Debe ingresar un valor numérico válido", "Error", JOptionPane.ERROR_MESSAGE);
 			}	
 		}
+		
 		else if (tipo.equals("double")){
 			
 			try{
@@ -106,35 +108,49 @@ public class ValidarCampos {
 				res = true;
 			}
 			catch (Exception e){
+				
 				JOptionPane.showMessageDialog(dialogo, "Debe ingresar un valor numérico válido", "Error", JOptionPane.ERROR_MESSAGE);
 			}
 		}
+		
 		else if (tipo.equals("String")){
 			res = true;
 		}
-		else if (tipo.equals("Date") && !valor.equals("")){
-
+		
+		else if (tipo.equals("Date") && !valor.equals("") && !valor.equals(null) ){
 			String [] separado = valor.split("/");
+			System.out.println(separado.length+"");
 			
 			boolean listo = false;
-			for (int i = 0; i < 3 && !listo; i++){
-				try{
-					
-					int num = Integer.parseInt(separado[i]);
-					
-					if (i == 0 && num > 31 || i == 1 && num > 12){
-						JOptionPane.showMessageDialog(dialogo, "Debe ingresar la fecha con el formato DD/MM/AAAA", "Error", JOptionPane.ERROR_MESSAGE); 
+			
+			if (separado.length < 2){
+				
+				JOptionPane.showMessageDialog(dialogo, "Debe ingresar la fecha con el formato DD/MM/AAAA", "Error", JOptionPane.ERROR_MESSAGE); 
+				
+			}
+			else{
+				
+				for (int i = 0; i < 3 && !listo; i++){
+					try{
+						
+						int num = Integer.parseInt(separado[i]);
+						
+						if (i == 0 && num > 31 || i == 1 && num > 12){
+							JOptionPane.showMessageDialog(dialogo, "Debe ingresar la fecha con el formato DD/MM/AAAA", "Error", JOptionPane.ERROR_MESSAGE); 
+						}
+						else{
+							res = true;
+						}
 					}
-					else{
-						res = true;
+					catch (Exception e){
+						JOptionPane.showMessageDialog(dialogo, "Debe ingresar la fecha con valores numéricos", "Error", JOptionPane.ERROR_MESSAGE);
+						listo = true;
 					}
 				}
-				catch (Exception e){
-					JOptionPane.showMessageDialog(dialogo, "Debe ingresar la fecha con valores numéricos", "Error", JOptionPane.ERROR_MESSAGE);
-					listo = true;
-				}
-			}	
+			}
+				
 		}
+		
 		System.out.println(res);
 		return res;
 	}

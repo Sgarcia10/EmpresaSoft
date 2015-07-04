@@ -50,6 +50,7 @@ import java.awt.Component;
 import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -179,15 +180,17 @@ public class DialogoAgregarEmpleado extends JDialog implements ActionListener{
 	
 	private ImageIcon foto;
 	private DecimalFormat formatoNumeros;
+	private SimpleDateFormat sdf;
 	
 	private ValidarCampos validar;
 	
-	public DialogoAgregarEmpleado(Control controlP, InterfazNomina interfazP, int posicion) {
+	public DialogoAgregarEmpleado(Control controlP, InterfazNomina interfazP, final int posicion) {
 		
 		super(null, java.awt.Dialog.ModalityType.TOOLKIT_MODAL);
 		
 		formatoNumeros = new DecimalFormat("#############");
 		validar = new ValidarCampos(this);
+		sdf = new SimpleDateFormat("dd/MM/yyyy");
 		
 		setTitle("Agregar Empleado");
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -842,18 +845,19 @@ public class DialogoAgregarEmpleado extends JDialog implements ActionListener{
 			public void valueChanged(ListSelectionEvent event) {
 				//TODO
 					Object source = event.getSource();
+					int index = 0;
 					
 					if (source.equals(tableReferencias.getSelectionModel())){
-						int posicion = tableReferencias.getSelectedRow();
-						actualizarInformacionReferencia(posicion);
+						index = tableReferencias.getSelectedRow();
+						actualizarInformacionReferencia(index,posicion);
 					}
 					else if (source.equals(tableExperiencia.getSelectionModel())){
-						int posicion = tableExperiencia.getSelectedRow();
-						actualizarInformacionExperiencia(posicion);
+						index = tableExperiencia.getSelectedRow();
+						actualizarInformacionExperiencia(index,posicion);
 					}
 					else if (source.equals(tableHijos.getSelectionModel())){
-						int posicion = tableHijos.getSelectedRow();
-						actualizarInformacionHijo(posicion);
+						index = tableHijos.getSelectedRow();
+						actualizarInformacionHijo(index,posicion);
 					}
 					
 			}
@@ -1083,18 +1087,18 @@ public class DialogoAgregarEmpleado extends JDialog implements ActionListener{
 			
 			nombreEmpleado.setText(e.getNombres()); 
 			apellidosEmpleado.setText(e.getApellidos());
-			cedulaEmpleado.setText(String.valueOf(e.getIdentificacion()));
+			cedulaEmpleado.setText(String.valueOf(formatoNumeros.format(e.getIdentificacion())));
 			direccionEmpleado.setText(e.getDireccion());
-			telefonoEmpleado.setText(String.valueOf(e.getTelefono()));
-			celularEmpleado.setText(String.valueOf(e.getCelular()));
+			telefonoEmpleado.setText(String.valueOf(formatoNumeros.format(e.getTelefono())));
+			celularEmpleado.setText(String.valueOf(formatoNumeros.format(e.getCelular())));
 			correoEmpleado.setText(e.getCorreo());
 			cargoEmpleado.setText(e.getContrato().getCargo());
-			salarioFijo.setText(String.valueOf(e.getContrato().getSueldoBasico()));
-			salarioVariable.setText(String.valueOf(e.calcularSueldoVariable()));
+			salarioFijo.setText(String.valueOf(formatoNumeros.format(e.getContrato().getSueldoBasico())));
+			salarioVariable.setText(String.valueOf(formatoNumeros.format(e.calcularSueldoVariable())));
 			
 			nombrePareja.setText(e.getConyugue().getNombres());
 			apellidosPareja.setText(e.getConyugue().getApellidos());
-			cedulaPareja.setText(String.valueOf(e.getConyugue().getIdentificacion()));
+			cedulaPareja.setText(String.valueOf(formatoNumeros.format(e.getConyugue().getIdentificacion())));
 			
 			fechaNacimientoEmpleado.setDate(e.getFechaNacimiento());
 			fechaInicioContrato.setDate(e.getContrato().getFechaInicio());
@@ -1121,15 +1125,16 @@ public class DialogoAgregarEmpleado extends JDialog implements ActionListener{
 			
 			departamentoEmpleado.setText(e.getDepartamento());
 			nacionalidadEmpleado.setText(e.getNacionalidad());
-			horasSemanales.setText(String.valueOf(e.getContrato().getHorasSemana()));
+			horasSemanales.setText(String.valueOf(formatoNumeros.format(e.getContrato().getHorasSemana())));
 			
 			checkSolidaridad.setSelected(e.getSolidaridad());
 			checkAuxilio.setSelected(e.getContrato().isAuxilioTransporte());
 			
 			setCamposEditables(false);
-			actualizarTablaExperiencia();
-			actualizarTablaHijos();
-			actualizarTablaReferecnias();
+			
+			actualizarTablaExperiencia(posicion);
+			actualizarTablaHijos(posicion);
+			actualizarTablaReferecnias(posicion);
 			
 		}
 		
@@ -1254,7 +1259,7 @@ public void agregarReferencia() {
 		control.agregarReferenciaEmpleadoNuevo(nombresP, apellidosP, 
 				telefonoP, documentoP, sexoP, direccionP, ciudadP, 
 				departamentoP, tipoP, empresaP, conceptoP);
-		actualizarTablaReferecnias();
+		actualizarTablaReferecnias(-1);
 		limpiarCamposReferencias();
 	}
 			
@@ -1271,10 +1276,10 @@ public void agregarExperiencia(){
 	Date fechaInicioP = fechaInicioExperiencia.getDate();
 	Date fechaFinP  = fechafinExperiencia.getDate();
 	
-	if (verificarCamposExperiencia() > 0){
+	if (verificarCamposExperiencia() >= 0){
 		
 		control.agregarExperienciaEmpleadoNuevo(cargoP, empresaP, tipoP, fechaInicioP, fechaFinP);
-		actualizarTablaExperiencia();
+		actualizarTablaExperiencia(-1);
 		limpiarCamposExperiencia();
 	}
 	
@@ -1305,7 +1310,7 @@ public void agregarHijos(){
 			identificacionP = Integer.parseInt(documentoP0);
 		}
 		control.agregarHijoEmpleadoNuevo(nombreP, apellidosP, 0, identificacionP, sexoP, direccionP, "", "", tipoP, fechaP);
-		actualizarTablaHijos();
+		actualizarTablaHijos(-1);
 		limpiarCamposHijos();
 	}
 	
@@ -1366,7 +1371,7 @@ public void editarReferencia(){
 			
 			limpiarCamposHijos();
 			
-			actualizarTablaReferecnias();
+			actualizarTablaReferecnias(-1);
 		}
 	}		
 }
@@ -1393,7 +1398,7 @@ public void editarExperiencia(){
 			btnAgregarExperiencia.setEnabled(true);
 			
 			limpiarCamposExperiencia();
-			actualizarTablaExperiencia();
+			actualizarTablaExperiencia(-1);
 		}
 	}
 }
@@ -1435,7 +1440,7 @@ public void editarHijo(){
 			
 			limpiarCamposHijos();
 			
-			actualizarTablaHijos();
+			actualizarTablaHijos(-1);
 		}
 		
 	}
@@ -1458,7 +1463,7 @@ public void eliminarReferencia(){
 		limpiarCamposReferencias();
 	}
 	else{
-		actualizarInformacionReferencia(0);
+		actualizarInformacionReferencia(0,-1);
 	}
 }
 
@@ -1480,7 +1485,7 @@ public void eliminarExperiencia(){
 		limpiarCamposExperiencia();
 	}
 	else{
-		actualizarInformacionExperiencia(0);
+		actualizarInformacionExperiencia(0,-1);
 	}
 }
 
@@ -1502,13 +1507,19 @@ public void eliminarHijo(){
 		limpiarCamposHijos();
 	}
 	else{
-		actualizarInformacionHijo(0);
+		actualizarInformacionHijo(0,-1);
 	}
 }
 
-public void actualizarInformacionReferencia(int index) {
+public void actualizarInformacionReferencia(int index, int posicion) {
 	
-	ArrayList<Referencia> lista = control.darListaReferecniasEmpleadoNuevo();
+	ArrayList<Referencia> lista = new ArrayList();
+	if (posicion > -1){		
+		 lista = control.darListaReferecniasEmpleado(posicion);
+	}
+	else{
+		lista = control.darListaReferecniasEmpleadoNuevo();
+	}
 	Referencia ref = lista.get(index);
 
 	nombreReferencia.setText(ref.getNombres());
@@ -1543,10 +1554,18 @@ public void actualizarInformacionReferencia(int index) {
 }
 
 
-public void actualizarInformacionExperiencia(int posicion){
+public void actualizarInformacionExperiencia(int index, int posicion){
 	
-	ArrayList<Experiencia> lista = control.darListaExperienciaEmpleadoNuevo();
-	Experiencia e = lista.get(posicion);
+	ArrayList<Experiencia> lista = new ArrayList();
+	
+	if (posicion > -1){
+		lista = control.darListaExperienciaEmpleado(posicion);
+	}
+	else{
+		lista = control.darListaExperienciaEmpleadoNuevo();
+	}
+
+	Experiencia e = lista.get(index);
 	
 	empresaExperiencia.setText(e.getEmpresa());
 	cargoExperiencia.setText(e.getCargo());
@@ -1571,10 +1590,21 @@ public void actualizarInformacionExperiencia(int posicion){
 	
 }
 
-public void actualizarInformacionHijo(int posicion){
+public void actualizarInformacionHijo(int index, int posicion){
 	
-	ArrayList<Hijo> lista = control.darListaHijosEmpleadoNuevo();
-	Hijo hij = lista.get(posicion);
+	ArrayList<Hijo> lista = new ArrayList();
+	System.out.println("A");
+	if (posicion > -1){
+		System.out.println("B");
+		lista = control.darListaHijosEmpleado(posicion);
+		
+	}
+	else{
+		System.out.println("C");
+		lista = control.darListaHijosEmpleadoNuevo();
+	}
+
+	Hijo hij = lista.get(index);
 	
 	nombreHijo.setText(hij.getNombres());
 	apellidosHijo.setText(hij.getApellidos());
@@ -1603,14 +1633,21 @@ public void actualizarInformacionHijo(int posicion){
 	
 }
 
-public void actualizarTablaReferecnias(){
+public void actualizarTablaReferecnias(int pos){
 	
 	tableReferencias.getSelectionModel().removeListSelectionListener(listenerTablas);
 	
 	DefaultTableModel model = (DefaultTableModel) tableReferencias.getModel();
 	model.setRowCount(0);
 	
-	ArrayList listaReferencias = control.darListaReferecniasEmpleadoNuevo();
+	ArrayList listaReferencias = new ArrayList();
+	
+	if (pos > -1){
+		listaReferencias = control.darListaReferecniasEmpleado(pos);
+	}
+	else{
+		listaReferencias = control.darListaReferecniasEmpleadoNuevo();	
+	}
 	
 	for (int i = 0;  i<listaReferencias.size(); i++){
 
@@ -1622,31 +1659,47 @@ public void actualizarTablaReferecnias(){
 }
 
 
-public void actualizarTablaExperiencia(){
+public void actualizarTablaExperiencia(int pos){
 	
 	tableExperiencia.getSelectionModel().removeListSelectionListener(listenerTablas);
 	
 	DefaultTableModel model = (DefaultTableModel) tableExperiencia.getModel();
 	model.setRowCount(0);
 	
-	ArrayList listaExperiencia = control.darListaExperienciaEmpleadoNuevo();
+	ArrayList listaExperiencia = new ArrayList();
+	
+	if (pos > -1){
+		listaExperiencia = control.darListaExperienciaEmpleado(pos);
+	}
+	else{
+		listaExperiencia = control.darListaExperienciaEmpleadoNuevo();
+	}
 	
 	for (int i = 0;  i< listaExperiencia.size(); i++){
 
 		Experiencia actual = (Experiencia) listaExperiencia.get(i);
-		model.addRow(new Object[]{i+1,actual.getEmpresa(), actual.getCargo(), actual.getFechaInicio(), actual.getFechaFin()});
+		model.addRow(new Object[]{i+1,actual.getEmpresa(), actual.getCargo(), sdf.format(actual.getFechaInicio()), sdf.format(actual.getFechaFin())});
 	}	
 	
 	tableExperiencia.getSelectionModel().addListSelectionListener(listenerTablas);
 }
 
-public void actualizarTablaHijos(){
+public void actualizarTablaHijos(int pos){
 	
 	tableHijos.getSelectionModel().removeListSelectionListener(listenerTablas);
 	
 	DefaultTableModel model = (DefaultTableModel) tableHijos.getModel();
 	model.setRowCount(0);
-	ArrayList listaHijos = control.darListaHijosEmpleadoNuevo();
+	
+	ArrayList listaHijos = new ArrayList();
+	
+	
+	if (pos > -1){
+		listaHijos = control.darListaHijosEmpleado(pos);
+	}
+	else{
+		listaHijos = control.darListaHijosEmpleadoNuevo();
+	}
 	
 	for (int i = 0;  i< listaHijos.size(); i++){
 
@@ -1764,7 +1817,9 @@ public int agregarInfoEmpleado(){
 	String documentoP0 = cedulaEmpleado.getText();
 	String direccionP = direccionEmpleado.getText();
 	String ciudadP = ciudadEmpleado.getText();
+	String departamentoP = departamentoEmpleado.getText();
 	String correoP = correoEmpleado.getText();
+	String nacionalidadP = nacionalidadEmpleado.getText();
 	
 	String telefonoP0 = telefonoEmpleado.getText();
 	String celularP0 = celularEmpleado.getText();
@@ -1776,7 +1831,7 @@ public int agregarInfoEmpleado(){
 		Double celularP = Double.parseDouble(celularP0);
 		
 		control.agregarInfoPersonalEmpleadoNuevo(nombreP,apellidosP,tipoP,documentoP,
-				sexoP, estadoCivilP, fechaP, direccionP, ciudadP, telefonoP, celularP, foto);
+				sexoP, estadoCivilP, fechaP, direccionP, ciudadP, departamentoP, correoP, nacionalidadP, telefonoP, celularP, foto);
 	}
 	
 	return res;
@@ -2142,18 +2197,18 @@ public void subirFotoEmpleado(){
 		fechaFinContrato.getSpinner().setEnabled(bool);
 		fechaAfiliacionSS.getSpinner().setEnabled(bool);
 		
-		sexoEmpleado.setEditable(bool); sexoEmpleado.setEnabled(bool); 
-		estadoCivilEmpleado.setEditable(bool);
-		tipoDocumentoEmpleado.setEditable(bool);
-		tipoContrato.setEditable(bool);
-		duracionContrato.setEditable(bool);
+		sexoEmpleado.setEnabled(bool); 
+		estadoCivilEmpleado.setEnabled(bool); 
+		tipoDocumentoEmpleado.setEnabled(bool); 
+		tipoContrato.setEnabled(bool); 
+		duracionContrato.setEnabled(bool); 
 		
-		sexoPareja.setEditable(bool);
-		tipoLiquidacionEmpleado.setEditable(bool);
-		saludEmpleado.setEditable(bool);
-		pensionesEmpleado.setEditable(bool);
-		arlEmpleado.setEditable(bool);
-		cajaCompensacionEmpleado.setEditable(bool);
+		sexoPareja.setEnabled(bool); 
+		tipoLiquidacionEmpleado.setEnabled(bool); 
+		saludEmpleado.setEnabled(bool); 
+		pensionesEmpleado.setEnabled(bool); 
+		arlEmpleado.setEnabled(bool); 
+		cajaCompensacionEmpleado.setEnabled(bool); 
 
 		telefonoPareja.setEditable(bool);
 		direccionPareja.setEditable(bool);
@@ -2166,6 +2221,8 @@ public void subirFotoEmpleado(){
 		
 		checkSolidaridad.setEnabled(false);
 		checkAuxilio.setEnabled(false);
+		
+		//Manejar tablas
 	}
 	
 

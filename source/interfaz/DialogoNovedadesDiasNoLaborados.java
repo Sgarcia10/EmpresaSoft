@@ -1,9 +1,13 @@
 package interfaz;
 
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Container;
 import java.awt.Cursor;
+import java.awt.FocusTraversalPolicy;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -18,6 +22,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 import javax.swing.UIManager;
 import javax.swing.border.TitledBorder;
@@ -26,31 +31,10 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
-
-
-
-
-
-
-
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumn;
 
 import mundo.DiasNoLaborados;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 import java.awt.Toolkit;
 
@@ -79,8 +63,11 @@ public class DialogoNovedadesDiasNoLaborados extends JDialog implements ActionLi
 	
 	private ValidarCampos validador;
 	private SimpleDateFormat sdf;
-	private boolean resValidacion;
 	private DefaultTableModel model; 
+	private TableCellEditor tce;
+	
+	private static final String solve = "Solve";
+	
 	
 	public DialogoNovedadesDiasNoLaborados( InterfazNomina ventana, Control pControl) {
 		super(null, java.awt.Dialog.ModalityType.TOOLKIT_MODAL);
@@ -94,10 +81,8 @@ public class DialogoNovedadesDiasNoLaborados extends JDialog implements ActionLi
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		getContentPane().setLayout(null);
 		setBounds(100, 100, 688, 384);
-
+		
 		sdf = new SimpleDateFormat("dd/MM/yyyy");
-		validador = new ValidarCampos(this);
-		resValidacion = true;
 		
 		panel = new JPanel();
 		panel.setLayout(null);
@@ -115,6 +100,7 @@ public class DialogoNovedadesDiasNoLaborados extends JDialog implements ActionLi
 				//all cells false
 				return false;
 			}
+			
 		};
 		tableNovedaesDiasNoLaborados = new JTable(modN){ 
 			public boolean isCellEditable (int iRows, int iCols){ 
@@ -122,6 +108,14 @@ public class DialogoNovedadesDiasNoLaborados extends JDialog implements ActionLi
 				} 
 				};
 		tableNovedaesDiasNoLaborados.getTableHeader().setReorderingAllowed(false);
+		
+		//Enter action command
+		
+		KeyStroke enter = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0);
+		tableNovedaesDiasNoLaborados.getInputMap(JTable.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(enter,solve);
+		tableNovedaesDiasNoLaborados.getActionMap().put(solve, new EnterAction(this));
+		//
+	
 
 		JScrollPane scrollPane = new JScrollPane(tableNovedaesDiasNoLaborados);
 		scrollPane.setBounds(10, 22, 632, 221);
@@ -153,6 +147,7 @@ public class DialogoNovedadesDiasNoLaborados extends JDialog implements ActionLi
 
 		actualizarTitulo();
 		actualizarInformacion();
+		
 	}
 
 
@@ -188,83 +183,33 @@ public class DialogoNovedadesDiasNoLaborados extends JDialog implements ActionLi
 		String command = e.getActionCommand();
 		System.out.println( command );
 		if(command.equals("Agregar"))
+			
 		{
 			model = (DefaultTableModel) tableNovedaesDiasNoLaborados.getModel();
 			model.addRow(new Object[]{"","","","","",""});
-			model.isCellEditable(0, 0);
-			
-			tableNovedaesDiasNoLaborados.setCellSelectionEnabled(true);
-		
+//			model.isCellEditable(0, 0);
 			
 			int numeroFilas = model.getRowCount();
-			
 			model.setValueAt(sdf.format(new Date()), numeroFilas-1, 0);
-			tableNovedaesDiasNoLaborados.setColumnSelectionInterval(1, 1);
-			tableNovedaesDiasNoLaborados.setRowSelectionInterval(numeroFilas-1, numeroFilas-1);
 			
-			tableNovedaesDiasNoLaborados.requestFocus();
-			tableNovedaesDiasNoLaborados.editCellAt(numeroFilas-1, 1);
+			int row = numeroFilas - 1;
+			int column = 1;
 			
-//			model.addTableModelListener(new TableModelListener() {
-//				
-//				@Override
-//				public void tableChanged(TableModelEvent e) {
-//					
-//					int row = tableNovedaesDiasNoLaborados.getSelectedRow();
-//					int column = tableNovedaesDiasNoLaborados.getSelectedColumn();
-//					String valor = (String) tableNovedaesDiasNoLaborados.getValueAt(row, column);
-//					String tipo = "String";
-//					
-//					if (column == 2){
-//						tipo = "Date";
-//					}
-//					
-//					boolean res = validador.validarIndividual(valor, tipo);
-//					resValidacion = res;
-//					
-//					if (res == false){
-//						
-//						tableNovedaesDiasNoLaborados.setValueAt("", row, column);
-//						tableNovedaesDiasNoLaborados.editCellAt(row, column);
-//						
-//					}
-//				}
-//			});
+			tableNovedaesDiasNoLaborados.setCellSelectionEnabled(true);
 			
-			TableCellEditor tce = tableNovedaesDiasNoLaborados.getCellEditor();
-			
-			
-			tce.addCellEditorListener(new CellEditorListener() {
-				
-				@Override
-				public void editingStopped(ChangeEvent arg0) {
-					int row = tableNovedaesDiasNoLaborados.getSelectedRow();
-					int column = tableNovedaesDiasNoLaborados.getSelectedColumn();
-					String valor = (String) tableNovedaesDiasNoLaborados.getValueAt(row, column);
-					String tipo = "String";
-					
-					if (column == 2){
-						tipo = "Date";
-					}
-					
-					boolean res = validador.validarIndividual(valor, tipo);
-					resValidacion = res;
-					
-					if (res == false){
-						
-						tableNovedaesDiasNoLaborados.setValueAt("", row, column);
-						tableNovedaesDiasNoLaborados.editCellAt(row, column);
-						
-					}
-					
-				}
-				
+			tableNovedaesDiasNoLaborados.setColumnSelectionInterval(column, column);
+			tableNovedaesDiasNoLaborados.setRowSelectionInterval(row, row);
 
-				@Override
-				public void editingCanceled(ChangeEvent arg0) {
-					// TODO Auto-generated method stub
-				}
-			});
+			tableNovedaesDiasNoLaborados.requestFocus();
+			tableNovedaesDiasNoLaborados.editCellAt(row, column);
+			
+			if (tableNovedaesDiasNoLaborados.editCellAt(row, column))
+			{
+			    Component editor = tableNovedaesDiasNoLaborados.getEditorComponent();
+			    editor.requestFocusInWindow();
+			}
+			
+//			boolean res = editarCelda(numeroFilas-1, 1);
 			
 			
 		}
@@ -285,8 +230,79 @@ public class DialogoNovedadesDiasNoLaborados extends JDialog implements ActionLi
 		}
 	}
 	
-	public void makeCellEditable(DefaultTableModel model, boolean valor, int row, int column){
+	public boolean editarCelda(int row, int column){
+
+//		tableNovedaesDiasNoLaborados.setCellSelectionEnabled(true);
+//		
+//		tableNovedaesDiasNoLaborados.setColumnSelectionInterval(column, column);
+//		tableNovedaesDiasNoLaborados.setRowSelectionInterval(row, row);
+//
+//		tableNovedaesDiasNoLaborados.requestFocus();
+//		tableNovedaesDiasNoLaborados.editCellAt(row, column);
+		
+		tce = tableNovedaesDiasNoLaborados.getCellEditor();
+		tce.addCellEditorListener(new CellEditorListener() {
+			
+			@Override
+			public void editingStopped(ChangeEvent arg0) {
+				//tce.stopCellEditing();
+				
+				int row = tableNovedaesDiasNoLaborados.getSelectedRow();
+				int column = tableNovedaesDiasNoLaborados.getSelectedColumn();
+				
+				
+				String valor = String.valueOf(tableNovedaesDiasNoLaborados.getValueAt(row, column));			
+				String tipo = "String";
+				boolean res = true;
+				
+				if (column == 2){
+					tipo = "Date";
+				}
+				
+				if (valor != null && !valor.isEmpty()){
+					try {
+						res = validador.validarIndividual(valor, tipo);
+						
+					} 
+					catch (Exception e) {
+						System.out.println("catch exeption");
+						tableNovedaesDiasNoLaborados.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "none");
+						tableNovedaesDiasNoLaborados.getInputMap().remove(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0));
+						res = false;
+//						tableNovedaesDiasNoLaborados.getInputMap();
+					}
+				}
+
+				
+				if (res == false){
+
+					tableNovedaesDiasNoLaborados.setValueAt("", row, column);					
+					editarCelda(row, column+1);
+
+				}
+				
+				else if (column == model.getColumnCount()-1){
+					guardarNovedad();
+				}
+				
+			}
+			
+
+			@Override
+			public void editingCanceled(ChangeEvent arg0) {
+				// TODO Auto-generated method stub
+			}
+		});
+		return false;
 		
 	}
+	
+	public void guardarNovedad(){
+		
+	}
+	
+	public ValidarCampos getValidador(){
+		return validador;
+	} 
 
 }
