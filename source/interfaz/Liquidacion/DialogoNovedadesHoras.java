@@ -1,4 +1,4 @@
-package interfaz;
+package interfaz.Liquidacion;
 
 import interfaz.InterfazNomina;
 

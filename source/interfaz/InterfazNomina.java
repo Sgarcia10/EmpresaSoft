@@ -1,5 +1,7 @@
 package interfaz;
 
+import interfaz.Liquidacion.DialogoNomina;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -48,9 +50,9 @@ import com.toedter.calendar.JMonthChooser;
 import com.toedter.calendar.JYearChooser;
 
 import mundo.Contrato;
-import mundo.Empleado;
 import mundo.Empresa;
-import mundo.Referencia;
+import mundo.Empleado.Empleado;
+import mundo.Empleado.Referencia;
 
 public class InterfazNomina extends JFrame implements ActionListener{
 	private JTextField busquedaEmpleados;

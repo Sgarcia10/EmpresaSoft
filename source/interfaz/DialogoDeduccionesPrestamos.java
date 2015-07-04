@@ -1,5 +1,8 @@
 package interfaz;
 
+import interfaz.Control;
+import interfaz.InterfazNomina;
+
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -26,12 +29,15 @@ import javax.swing.table.DefaultTableModel;
 
 
 
+
+
+
 import java.awt.Toolkit;
 
 import javax.swing.JButton;
 
-import mundo.DiasNoLaborados;
-import mundo.Prestamo;
+import mundo.Nomina.DiasNoLaborados;
+import mundo.Nomina.Prestamo;
 
 import java.awt.Dialog.ModalityType;
 

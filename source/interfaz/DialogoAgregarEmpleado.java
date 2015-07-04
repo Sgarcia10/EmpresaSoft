@@ -39,12 +39,12 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JTabbedPane;
 
-import mundo.Empleado;
 import mundo.Empresa;
-import mundo.Experiencia;
-import mundo.Hijo;
-import mundo.Persona;
-import mundo.Referencia;
+import mundo.Empleado.Empleado;
+import mundo.Empleado.Experiencia;
+import mundo.Empleado.Hijo;
+import mundo.Empleado.Persona;
+import mundo.Empleado.Referencia;
 
 import java.awt.Component;
 import java.io.File;

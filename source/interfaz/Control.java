@@ -5,11 +5,11 @@ import java.util.Date;
 
 import javax.swing.ImageIcon;
 
-import mundo.DiasNoLaborados;
-import mundo.Empleado;
 import mundo.Empresa;
 import mundo.IEmpresa;
-import mundo.Nomina;
+import mundo.Empleado.Empleado;
+import mundo.Nomina.DiasNoLaborados;
+import mundo.Nomina.Nomina;
 
 public class Control {
 	
