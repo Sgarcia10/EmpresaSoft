@@ -1,4 +1,4 @@
-package mundo;
+package mundo.Nomina;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

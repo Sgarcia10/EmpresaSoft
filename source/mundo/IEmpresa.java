@@ -5,6 +5,8 @@ import java.util.Date;
 
 import javax.swing.ImageIcon;
 
+import mundo.Empleado.Empleado;
+
 public interface IEmpresa {
 	
 	public static final String RUTA_ARCHIVO_PERSISTENCIA = "./data/Persistencia/";

@@ -1,4 +1,4 @@
-package mundo;
+package mundo.Empleado;
 
 import java.util.ArrayList;
 import java.util.Date;

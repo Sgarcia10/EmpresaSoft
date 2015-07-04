@@ -1,4 +1,4 @@
-package mundo;
+package mundo.Empleado;
 
 import java.io.Serializable;
 import java.util.Date;

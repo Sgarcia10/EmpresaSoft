@@ -12,6 +12,8 @@ import java.util.Date;
 
 import javax.swing.ImageIcon;
 
+import mundo.Empleado.Empleado;
+
 public class Empresa implements IEmpresa {
 	
 	private ArrayList empleados;
