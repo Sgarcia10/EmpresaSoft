@@ -1,25 +1,34 @@
 package interfaz.liquidacion;
 
 import interfaz.Control;
-
+import interfaz.EnterAction;
 import interfaz.InterfazNomina;
+import interfaz.MyTableModel;
+import interfaz.ValidarCampos;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.CellEditorListener;
+import javax.swing.event.ChangeEvent;
 import javax.swing.table.DefaultTableModel;
 
 
@@ -33,6 +42,12 @@ import javax.swing.table.DefaultTableModel;
 
 
 
+
+
+
+
+
+import javax.swing.table.TableCellEditor;
 
 import java.awt.Toolkit;
 
@@ -59,6 +74,15 @@ public class DialogoDeduccionesPrestamos extends JDialog implements ActionListen
 	private JButton btnAgregar;
 	private JButton btnAnterior;
 	private JButton btnSiguiente;
+	
+	private ValidarCampos validador;
+	private SimpleDateFormat sdf;
+	private DefaultTableModel model; 
+	private TableCellEditor tce;
+	
+	private EnterAction enterA;
+	
+	private static final String solve = "Solve";
 
 	public DialogoDeduccionesPrestamos( InterfazNomina ventana, Control pControl) {
 		super(null, java.awt.Dialog.ModalityType.TOOLKIT_MODAL);
@@ -73,6 +97,7 @@ public class DialogoDeduccionesPrestamos extends JDialog implements ActionListen
 		getContentPane().setLayout(null);
 		setBounds(100, 100, 688, 384);
 
+		sdf = new SimpleDateFormat("dd/MM/yyyy");
 
 		panel = new JPanel();
 		panel.setLayout(null);
@@ -82,18 +107,18 @@ public class DialogoDeduccionesPrestamos extends JDialog implements ActionListen
 		getContentPane().add(panel);
 		Object[] dataHoras = { "", "",""};
 		Object[] columnsPrestamos = {"Fecha Ingreso","Usuario","Fecha Préstamo","Concepto","Total","Cuota Período","Saldo"};
-		DefaultTableModel modN = new DefaultTableModel(columnsPrestamos, 0)
-		{
-
-			@Override
-			public boolean isCellEditable(int row, int column) {
-				//all cells false
-				return false;
-			}
-		};
+		
+		MyTableModel modN = new MyTableModel(columnsPrestamos);
+		
 		tableDeduccionesPrestamos = new JTable(modN);
 		tableDeduccionesPrestamos.getTableHeader().setReorderingAllowed(false);
 
+		//Enter action command
+		KeyStroke enter = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0);
+		tableDeduccionesPrestamos.getInputMap(JTable.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(enter,solve);
+		tableDeduccionesPrestamos.getActionMap().put(solve, new EnterAction(this));
+		//
+		
 		JScrollPane scrollPane = new JScrollPane(tableDeduccionesPrestamos);
 		scrollPane.setBounds(10, 22, 632, 221);
 		panel.add(scrollPane);
@@ -189,7 +214,57 @@ public class DialogoDeduccionesPrestamos extends JDialog implements ActionListen
 		System.out.println( command );
 		if(command.equals("Agregar"))
 		{
+			DefaultTableModel model = (DefaultTableModel) tableDeduccionesPrestamos.getModel();
+			model.addRow(new Object[]{"","","","","",""});
 			
+			int numeroFilas = model.getRowCount();
+			model.setValueAt(sdf.format(new Date()), numeroFilas-1, 0);
+			
+			int row = numeroFilas - 1;
+			int column = 1;
+			
+			MyTableModel myMod = (MyTableModel) tableDeduccionesPrestamos.getModel();
+			myMod.setRowEditable(myMod.getRowCount()-1, true);
+			
+			tableDeduccionesPrestamos.setCellSelectionEnabled(true);
+			
+			tableDeduccionesPrestamos.setColumnSelectionInterval(column, column);
+			tableDeduccionesPrestamos.setRowSelectionInterval(row, row);
+
+			tableDeduccionesPrestamos.requestFocus();
+			tableDeduccionesPrestamos.editCellAt(row, column);
+			
+			if (tableDeduccionesPrestamos.editCellAt(row, column))
+			{
+			    Component editor = tableDeduccionesPrestamos.getEditorComponent();
+			    editor.requestFocusInWindow();
+			}
+			
+			//CellEditorListener para guargdar datos cuando se edite la ultima columna
+			TableCellEditor tce = tableDeduccionesPrestamos.getCellEditor();
+			tce.addCellEditorListener(new CellEditorListener(){
+
+				@Override
+				public void editingCanceled(ChangeEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
+
+				@Override
+				public void editingStopped(ChangeEvent e) {
+					
+					int row = tableDeduccionesPrestamos.getSelectedRow();
+					int column = tableDeduccionesPrestamos.getSelectedColumn();
+					
+					if (column == tableDeduccionesPrestamos.getColumnCount()-1){
+						
+						guardarNovedad();
+							
+					}				
+					
+				}
+				
+			}) ;
 		}
 		else if (command.equals("Modificar")){
 			
@@ -207,5 +282,21 @@ public class DialogoDeduccionesPrestamos extends JDialog implements ActionListen
 //			cont++;
 		}
 	}
+	
+	public void guardarNovedad(){
+		
+		int confirm = JOptionPane.showConfirmDialog(this, "¿Desea guardar los cambios realizados?","Warning",JOptionPane.YES_NO_OPTION);		
+		
+		if (confirm == JOptionPane.YES_NO_OPTION){
+			
+			MyTableModel myMod = (MyTableModel) tableDeduccionesPrestamos.getModel();
+			myMod.setRowEditable(myMod.getRowCount()-1, false);
+		}
+		
+	}
+	
+	public ValidarCampos getValidador(){
+		return validador;
+	} 
 
 }

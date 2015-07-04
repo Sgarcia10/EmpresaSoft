@@ -1,8 +1,10 @@
 package interfaz.liquidacion;
 
 import interfaz.Control;
+
 import interfaz.EnterAction;
 import interfaz.InterfazNomina;
+import interfaz.MyTableModel;
 import interfaz.ValidarCampos;
 
 import java.awt.Color;
@@ -23,6 +25,7 @@ import javax.swing.DefaultCellEditor;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -48,6 +51,8 @@ import mundo.nomina.DiasNoLaborados;
 import com.toedter.calendar.JDateChooser;
 
 import java.awt.Dialog.ModalityType;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 
 public class DialogoNovedadesDiasNoLaborados extends JDialog implements ActionListener
@@ -71,10 +76,13 @@ public class DialogoNovedadesDiasNoLaborados extends JDialog implements ActionLi
 	private DefaultTableModel model; 
 	private TableCellEditor tce;
 	
+	private EnterAction enterA;
+	
 	private static final String solve = "Solve";
 	
 	
 	public DialogoNovedadesDiasNoLaborados( InterfazNomina ventana, Control pControl) {
+		
 		super(null, java.awt.Dialog.ModalityType.TOOLKIT_MODAL);
 		setIconImage(Toolkit.getDefaultToolkit().getImage(DialogoNovedadesDiasNoLaborados.class.getResource("/com/sun/java/swing/plaf/windows/icons/Computer.gif")));
 		getContentPane().setBackground(Color.WHITE);
@@ -88,7 +96,7 @@ public class DialogoNovedadesDiasNoLaborados extends JDialog implements ActionLi
 		setBounds(100, 100, 688, 384);
 		
 		sdf = new SimpleDateFormat("dd/MM/yyyy");
-		
+
 		panel = new JPanel();
 		panel.setLayout(null);
 		//		panel.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), titulo, TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -97,31 +105,19 @@ public class DialogoNovedadesDiasNoLaborados extends JDialog implements ActionLi
 		getContentPane().add(panel);
 		Object[] dataHoras = { "", "",""};
 		Object[] columnsHoras = {"Fecha Ingreso","Usuario","Fecha Incio","Duración", "Concepto","Incapacidad",};
-		DefaultTableModel modN = new DefaultTableModel(columnsHoras, 0)
-		{
-
-			@Override
-			public boolean isCellEditable(int row, int column) {
-				//all cells false
-				return false;
-			}
-			
-		};
-		tableNovedaesDiasNoLaborados = new JTable(modN){ 
-			public boolean isCellEditable (int iRows, int iCols){ 
-				return true; /// editable la tabla 
-				} 
-				};
+		
+		MyTableModel modN = new MyTableModel(columnsHoras);
+		
+		tableNovedaesDiasNoLaborados = new JTable(modN);
 		tableNovedaesDiasNoLaborados.getTableHeader().setReorderingAllowed(false);
 		
-		//Enter action command
-		
+		//Enter action command para validar los campos 
+		enterA = new EnterAction(this);
 		KeyStroke enter = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0);
 		tableNovedaesDiasNoLaborados.getInputMap(JTable.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(enter,solve);
-		tableNovedaesDiasNoLaborados.getActionMap().put(solve, new EnterAction(this));
+		tableNovedaesDiasNoLaborados.getActionMap().put(solve, enterA);
 		//
-	
-
+		
 		JScrollPane scrollPane = new JScrollPane(tableNovedaesDiasNoLaborados);
 		scrollPane.setBounds(10, 22, 632, 221);
 		panel.add(scrollPane);
@@ -192,13 +188,15 @@ public class DialogoNovedadesDiasNoLaborados extends JDialog implements ActionLi
 		{
 			model = (DefaultTableModel) tableNovedaesDiasNoLaborados.getModel();
 			model.addRow(new Object[]{"","","","","",""});
-//			model.isCellEditable(0, 0);
 			
 			int numeroFilas = model.getRowCount();
 			model.setValueAt(sdf.format(new Date()), numeroFilas-1, 0);
 			
 			int row = numeroFilas - 1;
 			int column = 1;
+			
+			MyTableModel myMod = (MyTableModel) tableNovedaesDiasNoLaborados.getModel();
+			myMod.setRowEditable(myMod.getRowCount()-1, true);
 			
 			tableNovedaesDiasNoLaborados.setCellSelectionEnabled(true);
 			
@@ -214,9 +212,31 @@ public class DialogoNovedadesDiasNoLaborados extends JDialog implements ActionLi
 			    editor.requestFocusInWindow();
 			}
 			
-//			boolean res = editarCelda(numeroFilas-1, 1);
-			
-			
+			//CellEditorListener para guargdar datos cuando se edite la ultima columna
+			TableCellEditor tce = tableNovedaesDiasNoLaborados.getCellEditor();
+			tce.addCellEditorListener(new CellEditorListener(){
+
+				@Override
+				public void editingCanceled(ChangeEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
+
+				@Override
+				public void editingStopped(ChangeEvent e) {
+					
+					int row = tableNovedaesDiasNoLaborados.getSelectedRow();
+					int column = tableNovedaesDiasNoLaborados.getSelectedColumn();
+					
+					if (column == tableNovedaesDiasNoLaborados.getColumnCount()-1){
+						
+						guardarNovedad();
+							
+					}				
+					
+				}
+				
+			}) ;
 		}
 		else if (command.equals("Modificar")){
 
@@ -235,74 +255,17 @@ public class DialogoNovedadesDiasNoLaborados extends JDialog implements ActionLi
 		}
 	}
 	
-	public boolean editarCelda(int row, int column){
-
-//		tableNovedaesDiasNoLaborados.setCellSelectionEnabled(true);
-//		
-//		tableNovedaesDiasNoLaborados.setColumnSelectionInterval(column, column);
-//		tableNovedaesDiasNoLaborados.setRowSelectionInterval(row, row);
-//
-//		tableNovedaesDiasNoLaborados.requestFocus();
-//		tableNovedaesDiasNoLaborados.editCellAt(row, column);
-		
-		tce = tableNovedaesDiasNoLaborados.getCellEditor();
-		tce.addCellEditorListener(new CellEditorListener() {
-			
-			@Override
-			public void editingStopped(ChangeEvent arg0) {
-				//tce.stopCellEditing();
-				
-				int row = tableNovedaesDiasNoLaborados.getSelectedRow();
-				int column = tableNovedaesDiasNoLaborados.getSelectedColumn();
-				
-				
-				String valor = String.valueOf(tableNovedaesDiasNoLaborados.getValueAt(row, column));			
-				String tipo = "String";
-				boolean res = true;
-				
-				if (column == 2){
-					tipo = "Date";
-				}
-				
-				if (valor != null && !valor.isEmpty()){
-					try {
-						res = validador.validarIndividual(valor, tipo);
-						
-					} 
-					catch (Exception e) {
-						System.out.println("catch exeption");
-						tableNovedaesDiasNoLaborados.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "none");
-						tableNovedaesDiasNoLaborados.getInputMap().remove(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0));
-						res = false;
-//						tableNovedaesDiasNoLaborados.getInputMap();
-					}
-				}
-
-				
-				if (res == false){
-
-					tableNovedaesDiasNoLaborados.setValueAt("", row, column);					
-					editarCelda(row, column+1);
-
-				}
-				
-				else if (column == model.getColumnCount()-1){
-					guardarNovedad();
-				}
-				
-			}
-			
-
-			@Override
-			public void editingCanceled(ChangeEvent arg0) {
-				// TODO Auto-generated method stub
-			}
-		});
-		return false;
-		
-	}
-	
 	public void guardarNovedad(){
+		
+		int confirm = JOptionPane.showConfirmDialog(this, "¿Desea guardar los cambios realizados?","Warning",JOptionPane.YES_NO_OPTION);		
+		
+		if (confirm == JOptionPane.YES_NO_OPTION){
+			
+			MyTableModel myMod = (MyTableModel) tableNovedaesDiasNoLaborados.getModel();
+			myMod.setRowEditable(myMod.getRowCount()-1, false);
+			
+			tableNovedaesDiasNoLaborados.getRo
+		}
 		
 	}
 	

@@ -306,18 +306,18 @@ public class DialogoNomina extends JDialog implements ActionListener, MouseListe
 	private void actualizarPanelNovedades() {
 		// TODO Auto-generated method stub
 
-		try{
-			double sueldoBasico = control.getNovedadesSueldoBasico(periodo);
-			int tiempoPeriodo = control.getNovedadesTiempoPeriodo(periodo );
-			double sueldoPeriodo = control.getNovedadesSueldoPeriodo(periodo );
-			
-			DefaultTableModel model = ( DefaultTableModel) tableNovedades.getModel();
-			model.addRow(new Object[]{periodo, sueldoBasico, tiempoPeriodo, sueldoPeriodo});
-		}
-
-		catch( NominaNoEncontradaException e){
-			JOptionPane.showMessageDialog(this, mensajeErrorConNomina, "Error", JOptionPane.ERROR_MESSAGE);
-		}
+//		try{
+//			double sueldoBasico = control.getNovedadesSueldoBasico(periodo);
+//			int tiempoPeriodo = control.getNovedadesTiempoPeriodo(periodo );
+//			double sueldoPeriodo = control.getNovedadesSueldoPeriodo(periodo );
+//			
+//			DefaultTableModel model = ( DefaultTableModel) tableNovedades.getModel();
+//			model.addRow(new Object[]{periodo, sueldoBasico, tiempoPeriodo, sueldoPeriodo});
+//		}
+//
+//		catch( NominaNoEncontradaException e){
+//			JOptionPane.showMessageDialog(this, mensajeErrorConNomina, "Error", JOptionPane.ERROR_MESSAGE);
+//		}
 		
 	}
 

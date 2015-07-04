@@ -1,24 +1,33 @@
 package interfaz.liquidacion;
 
 import interfaz.Control;
+import interfaz.EnterAction;
 import interfaz.InterfazNomina;
+import interfaz.MyTableModel;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.CellEditorListener;
+import javax.swing.event.ChangeEvent;
 import javax.swing.table.DefaultTableModel;
 
 
@@ -30,6 +39,9 @@ import javax.swing.table.DefaultTableModel;
 
 
 
+
+import javax.swing.table.TableCellEditor;
+import javax.swing.table.TableModel;
 
 import java.awt.Toolkit;
 
@@ -54,6 +66,16 @@ public class DialogoDevengadoHoras extends JDialog implements ActionListener
 	private JButton btnAgregar;
 	private JButton btnAnterior;
 	private JButton btnSiguiente;
+	
+	private MyTableModel ordinaria_extra_diurno;
+	private MyTableModel ordinaria_extra_nocturno;
+	private MyTableModel dominical_extra_diurno;
+	private MyTableModel dominical_extra_nocturno;
+	private MyTableModel dominical_dia;
+	
+	private static final String solve = "Solve";
+	private EnterAction enterA;
+	private SimpleDateFormat sdf;
 
 	public DialogoDevengadoHoras( InterfazNomina ventana,  Control pControl, int pCont) {
 		super(null, java.awt.Dialog.ModalityType.TOOLKIT_MODAL);
@@ -68,6 +90,7 @@ public class DialogoDevengadoHoras extends JDialog implements ActionListener
 		getContentPane().setLayout(null);
 		setBounds(100, 100, 688, 384);
 
+		sdf = new SimpleDateFormat("dd/MM/yyyy");
 
 		panel = new JPanel();
 		panel.setLayout(null);
@@ -77,18 +100,28 @@ public class DialogoDevengadoHoras extends JDialog implements ActionListener
 		getContentPane().add(panel);
 		Object[] dataHoras = { "", "",""};
 		Object[] columnsHoras = {"Fecha Ingreso","Usuario","Fecha Realización", "Cantidad","Concepto","Valor Unitario","SubTotal"};
-		DefaultTableModel modN = new DefaultTableModel(columnsHoras, 0)
-		{
-
-			@Override
-			public boolean isCellEditable(int row, int column) {
-				//all cells false
-				return false;
-			}
-		};
+		
+		MyTableModel modN = new MyTableModel(columnsHoras);
+		
 		tableNovedaesHoras = new JTable(modN);
 		tableNovedaesHoras.getTableHeader().setReorderingAllowed(false);
-
+		
+		//Enter action command
+		enterA = new EnterAction(this);
+		KeyStroke enter = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0);
+		tableNovedaesHoras.getInputMap(JTable.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(enter,solve);
+		tableNovedaesHoras.getActionMap().put(solve, enterA);
+		//
+		
+		tableNovedaesHoras.getTableHeader().setReorderingAllowed(false);
+		
+		
+		ordinaria_extra_diurno = new MyTableModel(columnsHoras);
+		ordinaria_extra_nocturno = new MyTableModel(columnsHoras);
+		dominical_extra_diurno = new MyTableModel(columnsHoras);
+		dominical_extra_nocturno = new MyTableModel(columnsHoras);
+		dominical_dia = new MyTableModel(columnsHoras);
+		
 		JScrollPane scrollPane = new JScrollPane(tableNovedaesHoras);
 		scrollPane.setBounds(10, 22, 632, 221);
 		panel.add(scrollPane);
@@ -132,12 +165,15 @@ public class DialogoDevengadoHoras extends JDialog implements ActionListener
 			DialogoNovedadesDiasNoLaborados novedadesDias = new DialogoNovedadesDiasNoLaborados(principal, control);
 			novedadesDias.setLocationRelativeTo(principal);
 			novedadesDias.setVisible(true); break;
-		case 0: titulo = "Ordinaria - Extra Diurno"; actualizarOrdinariaExtraDiurno(); break;
-		case 1: titulo = "Ordinaria - Extra Nocturno"; actualizarOrdinariaExtraNocturno(); btnAnterior.setEnabled(true); break;
-		case 2: titulo = "Dominical y Festivo - Extra Diurno";  actualizarDominicalExtraDiurno(); break;
-		case 3: titulo = "Dominical y Festivo - Extra Nocturno";  actualizarDominicalExtraNocturno( ); break;
-		case 4: titulo = "Dominical y Festivo - Dominical y Festivo"; actualizarDominicalDiasDomYFestivos( ); break;
+			
+			
+		case 0: titulo = "Ordinaria - Extra Diurno"; actualizarOrdinariaExtraDiurno(); tableNovedaesHoras.setModel(ordinaria_extra_diurno);break;
+		case 1: titulo = "Ordinaria - Extra Nocturno"; actualizarOrdinariaExtraNocturno(); btnAnterior.setEnabled(true); tableNovedaesHoras.setModel(ordinaria_extra_nocturno); break;
+		case 2: titulo = "Dominical y Festivo - Extra Diurno";  actualizarDominicalExtraDiurno();tableNovedaesHoras.setModel(dominical_extra_diurno); break;
+		case 3: titulo = "Dominical y Festivo - Extra Nocturno";  actualizarDominicalExtraNocturno( );tableNovedaesHoras.setModel(dominical_extra_nocturno);break;
+		case 4: titulo = "Dominical y Festivo - Dominical y Festivo"; actualizarDominicalDiasDomYFestivos( ); tableNovedaesHoras.setModel(dominical_dia);break;
 		case 5: 
+			
 			this.setVisible(false);
 			this.dispose();
 			DialogoDeduccionesPrestamos deducciones = new DialogoDeduccionesPrestamos(principal, control);
@@ -165,28 +201,30 @@ public class DialogoDevengadoHoras extends JDialog implements ActionListener
 	private void actualizarDominicalExtraNocturno() {
 		// TODO Auto-generated method stub
 		ArrayList listaDominicalExtraNocturno = control.getListaDominicalExtraNocturno( principal.darPeriodo());
-
-		if( !listaDominicalExtraNocturno.isEmpty( ) ){
-			for (int i = 0; i < listaDominicalExtraNocturno.size(); i++){
-				HoraExtra hora = (HoraExtra) listaDominicalExtraNocturno.get(i);
-				DefaultTableModel model = (DefaultTableModel) tableNovedaesHoras.getModel();
-				model.addRow(new Object[]{hora.getFecha(), hora.getUser().getUser(), hora.getFechaLaborada().toLocaleString(), hora.getNumeroHoras(), hora.getConcepto(), hora.getValorUnitario(), hora.getSubTotal()});
-			}
-		}
+		tableNovedaesHoras.setModel(dominical_extra_nocturno);
+		
+//		if( !listaDominicalExtraNocturno.isEmpty( ) ){
+//			for (int i = 0; i < listaDominicalExtraNocturno.size(); i++){
+//				HoraExtra hora = (HoraExtra) listaDominicalExtraNocturno.get(i);
+//				DefaultTableModel model = (DefaultTableModel) tableNovedaesHoras.getModel();
+//				model.addRow(new Object[]{hora.getFecha(), hora.getUser().getUser(), hora.getFechaLaborada().toLocaleString(), hora.getNumeroHoras(), hora.getConcepto(), hora.getValorUnitario(), hora.getSubTotal()});
+//			}
+//		}
 	}
 
 
 	private void actualizarDominicalExtraDiurno() {
 		// TODO Auto-generated method stub
 		ArrayList listaDominicalExtraDiurno = control.getListaDominicalExtraDiurno(principal.darPeriodo() );
-
-		if( !listaDominicalExtraDiurno.isEmpty( ) ){
-			for (int i = 0; i < listaDominicalExtraDiurno.size(); i++){
-				HoraExtra hora = (HoraExtra) listaDominicalExtraDiurno.get(i);
-				DefaultTableModel model = (DefaultTableModel) tableNovedaesHoras.getModel();
-				model.addRow(new Object[]{hora.getFecha(), hora.getUser().getUser(), hora.getFechaLaborada().toLocaleString(), hora.getNumeroHoras(), hora.getConcepto(), hora.getValorUnitario(), hora.getSubTotal()});
-			}
-		}
+		tableNovedaesHoras.setModel(dominical_extra_diurno);
+		
+//		if( !listaDominicalExtraDiurno.isEmpty( ) ){
+//			for (int i = 0; i < listaDominicalExtraDiurno.size(); i++){
+//				HoraExtra hora = (HoraExtra) listaDominicalExtraDiurno.get(i);
+//				DefaultTableModel model = (DefaultTableModel) tableNovedaesHoras.getModel();
+//				model.addRow(new Object[]{hora.getFecha(), hora.getUser().getUser(), hora.getFechaLaborada().toLocaleString(), hora.getNumeroHoras(), hora.getConcepto(), hora.getValorUnitario(), hora.getSubTotal()});
+//			}
+//		}
 	}
 
 
@@ -241,9 +279,21 @@ public class DialogoDevengadoHoras extends JDialog implements ActionListener
 		// TODO Auto-generated method stub
 		String command = e.getActionCommand();
 		System.out.println( command );
+		
 		if(command.equals("Agregar"))
 		{
 
+			switch ( cont ) {
+
+			case 0: agregarFila(ordinaria_extra_diurno); break;
+			case 1: agregarFila(ordinaria_extra_nocturno); break;
+			case 2: agregarFila(dominical_extra_diurno); break;
+			case 3: agregarFila(dominical_extra_nocturno); break;
+			case 4: agregarFila(dominical_dia); break;
+
+			default: ; break;
+			}
+			
 		}
 		else if (command.equals("Modificar")){
 
@@ -256,6 +306,76 @@ public class DialogoDevengadoHoras extends JDialog implements ActionListener
 			cont++;
 			actualizarTitulo();
 		}
+	}
+	
+	private void agregarFila(TableModel mod){
+		
+		DefaultTableModel model = (DefaultTableModel) mod;
+		
+		model.addRow(new Object[]{"","","","","","",""});
+		model.isCellEditable(0, 0);
+		
+		int numeroFilas = model.getRowCount();
+		int numeroColumnas = model.getColumnCount();
+		
+		model.setValueAt(sdf.format(new Date()), numeroFilas-1, 0);
+		
+		int row = numeroFilas - 1;
+		int column = 1;
+		
+		MyTableModel myMod = (MyTableModel) tableNovedaesHoras.getModel();
+		myMod.setRowEditable(myMod.getRowCount()-1, true);
+		
+		tableNovedaesHoras.setCellSelectionEnabled(true);
+		
+		tableNovedaesHoras.setColumnSelectionInterval(column, column);
+		tableNovedaesHoras.setRowSelectionInterval(row, row);
+
+		tableNovedaesHoras.requestFocus();
+		tableNovedaesHoras.editCellAt(row, column);
+		
+		if (tableNovedaesHoras.editCellAt(row, column))
+		{
+		    Component editor = tableNovedaesHoras.getEditorComponent();
+		    editor.requestFocusInWindow();
+		}
+		
+		TableCellEditor tce = tableNovedaesHoras.getCellEditor();
+		tce.addCellEditorListener(new CellEditorListener(){
+
+			@Override
+			public void editingCanceled(ChangeEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void editingStopped(ChangeEvent e) {
+				
+				int row = tableNovedaesHoras.getSelectedRow();
+				int column = tableNovedaesHoras.getSelectedColumn();
+				
+				if (column == tableNovedaesHoras.getColumnCount()-1){
+					
+					guardarNovedad();
+						
+				}				
+				
+			}
+			
+		}) ;
+	}
+	
+	public void guardarNovedad(){
+		
+		int confirm = JOptionPane.showConfirmDialog(this, "¿Desea guardar los cambios realizados?","Warning",JOptionPane.YES_NO_OPTION);		
+		
+		if (confirm == JOptionPane.YES_NO_OPTION){
+			
+			MyTableModel myMod = (MyTableModel) tableNovedaesHoras.getModel();
+			myMod.setRowEditable(myMod.getRowCount()-1, false);
+		}
+		
 	}
 
 }
