@@ -1,6 +1,7 @@
 package interfaz;
 
 import java.util.ArrayList;
+
 import java.util.Date;
 
 import javax.swing.ImageIcon;
@@ -392,6 +393,7 @@ public class Control {
 				cajaCompensacionP, fechaAfiliacionP, auxilioP); 
 		
 	}
+
 	
 	public void agregarInfoPersonalEmpleadoNuevo(String nombreP,String apellidosP,
 			String tipoP, double documentoP, String sexoP, String estadoCivilP, 
