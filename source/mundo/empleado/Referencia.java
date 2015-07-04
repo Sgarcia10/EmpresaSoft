@@ -5,6 +5,7 @@ import java.util.Date;
 
 public class Referencia extends Persona implements Serializable{
 	
+	private final static long serialVersionUID = 200L;
 	
 	private String tipo;
 	private String empresa;

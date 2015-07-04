@@ -11,6 +11,8 @@ public class Experiencia implements Serializable{
 	private Date fechaInicio;
 	private Date fechaFin;
 	
+	private final static long serialVersionUID = 200L;
+	
 	public Experiencia(String cargoP, String empresaP, String tipoContratoP, Date fechaInicioP, Date fechaFinP){
 		empresa = empresaP;
 		cargo = cargoP;
