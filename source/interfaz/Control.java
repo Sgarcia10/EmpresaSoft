@@ -5,18 +5,11 @@ import java.util.Date;
 
 import javax.swing.ImageIcon;
 
-<<<<<<< .mine
-import Excepciones.NoExisteEmpleadoException;
-import Excepciones.NominaNoEncontradaException;
-import mundo.DiasNoLaborados;
-import mundo.Empleado;
-=======
->>>>>>> .r58
 import mundo.Empresa;
 import mundo.IEmpresa;
-import mundo.empleado.Empleado;
-import mundo.nomina.DiasNoLaborados;
-import mundo.nomina.Nomina;
+import mundo.Empleado;
+import mundo.DiasNoLaborados;
+import mundo.Nomina;
 
 public class Control {
 	
@@ -198,118 +191,45 @@ public class Control {
 //	}
 //	
 	//CESAR
-<<<<<<< .mine
-	
-	public Nomina getNominaEmpleadoSeleccionado(String periodo) throws NoExisteEmpleadoException, NominaNoEncontradaException
-	{
-		if(empresa.getEmpleadoSeleccionado()==null)
-		{
-			throw new NoExisteEmpleadoException("Debe seleccionar un empleado");
-		}
-		Nomina n =empresa.getEmpleadoSeleccionado().buscarNominaPeriodo(periodo);
-		if(n==null)
-		{
-			throw new NominaNoEncontradaException("La nomina no fue encontrada");
-		}
-		return n;
-	}
-	
-=======
->>>>>>> .r58
-	public double getNovedadesSueldoBasico(String periodo) throws NoExisteEmpleadoException, NominaNoEncontradaException {
-<<<<<<< .mine
-		
-		Nomina n = getNominaEmpleadoSeleccionado(periodo);
-		double rta = n.getSalarioBasico();
-		return rta;
-=======
+	public double getNovedadesSueldoBasico(String periodo) {
 
 		//double rta = empresa.getEmpleadoSeleccionado().getContrato().getSueldoBasico();
 		return 1;
->>>>>>> .r58
 	}
 
-<<<<<<< .mine
-	public int getNovedadesTiempoPeriodo(String periodo) throws NoExisteEmpleadoException, NominaNoEncontradaException {
-		Nomina n = getNominaEmpleadoSeleccionado(periodo);
-		int rta = n.getPeriodoLiquidacion();
-		return rta;
-=======
 	public int getNovedadesTiempoPeriodo(String periodo) {
 		// TODO Auto-generated method stub
 //		int rta = mundo.getEmpleadoActual().getTiempoLaboradoPeriodo( );
 		return 1;
->>>>>>> .r58
 	}
 
-<<<<<<< .mine
-	public double getNovedadesSueldoPeriodo(String periodo) throws NoExisteEmpleadoException, NominaNoEncontradaException {
-		Nomina n = getNominaEmpleadoSeleccionado(periodo);
-		return n.getSueldoPeriodo();
-=======
 	public double getNovedadesSueldoPeriodo(String periodo) {
 		// TODO Auto-generated method stub
 //		double rta = mundo.getEmpleadoActual( ).getSueldoPeriodo( );
 		return 1;
->>>>>>> .r58
 	}
 
 
-<<<<<<< .mine
-	public double getDevengadoOrdinarioTotalRecargoNocturno(String periodo) throws NoExisteEmpleadoException, NominaNoEncontradaException {
-		Nomina n = getNominaEmpleadoSeleccionado(periodo);
-		return n.getDevengado().getOrdinarioTotalRecargoNocturno();
-=======
 
 	public double getDevengadoOrdinarioTotalRecargoNocturno(String periodo) {
 		// TODO Auto-generated method stub
 		return 0;
->>>>>>> .r58
 	}
 
 
-<<<<<<< .mine
-	public double getDevengadoDominicalTotalDominicalesFestivos(String periodo) throws NoExisteEmpleadoException, NominaNoEncontradaException {
-		Nomina n = getNominaEmpleadoSeleccionado(periodo);
-		return n.getDevengado().getDominicalTotalRecargoDiurno();
-	}
-	
-	public double getDevengadoDominicalTotalRecargoNocturno(String periodo) throws NoExisteEmpleadoException, NominaNoEncontradaException {
-		Nomina n = getNominaEmpleadoSeleccionado(periodo);
-		return n.getDevengado().getDominicalTotalRecargoNocturno();
-	}
-=======
->>>>>>> .r58
 
-<<<<<<< .mine
-	public double getDevengadoOrdinarioTotalExtraDiurno(String periodo) throws NoExisteEmpleadoException, NominaNoEncontradaException {
-		Nomina n = getNominaEmpleadoSeleccionado(periodo);
-		return n.getDevengado().getOrdinarioTotalExtraDiurno();
-=======
 	public double getDevengadoOrdinarioTotalExtraDiurno(String periodo) {
 		// TODO Auto-generated method stub
 		return 0;
->>>>>>> .r58
 	}
 
-<<<<<<< .mine
-	public double getDevengadoOrdinarioTotalExtraNocturno(String periodo) throws NoExisteEmpleadoException, NominaNoEncontradaException {
-		Nomina n = getNominaEmpleadoSeleccionado(periodo);
-		return n.getDevengado().getOrdinarioTotalExtraNocturno();
-=======
 
 
 	public double getDevengadoOrdinarioTotalExtraNocturno(String periodo) {
 		// TODO Auto-generated method stub
 		return 0;
->>>>>>> .r58
 	}
 
-<<<<<<< .mine
-	public double getDevengadoDominicalTotalExtraDiurno(String periodo) throws NoExisteEmpleadoException, NominaNoEncontradaException {
-		Nomina n = getNominaEmpleadoSeleccionado(periodo);
-		return n.getDevengado().getDominicalTotalExtraDiurno();
-=======
 
 
 	public double getDevengadoDominicalTotalRecargoNocturno(String periodo) {
@@ -322,46 +242,24 @@ public class Control {
 	public double getDevengadoDominicalTotalExtraDiurno(String periodo) {
 		// TODO Auto-generated method stub
 		return 0;
->>>>>>> .r58
 	}
 
-<<<<<<< .mine
-	public double getDevengadoDominicalTotalExtraNocturno(String periodo) throws NoExisteEmpleadoException, NominaNoEncontradaException {
-		Nomina n = getNominaEmpleadoSeleccionado(periodo);
-		return n.getDevengado().getDominicalTotalExtraNocturno();
-=======
 
 
 	public double getDevengadoDominicalTotalExtraNocturno(String periodo) {
 		// TODO Auto-generated method stub
 		return 0;
->>>>>>> .r58
 	}
-<<<<<<< .mine
-	
-	public double getDevengadoOtrosTotalAuxilioTransporte(String periodo) throws NoExisteEmpleadoException, NominaNoEncontradaException {
-=======
->>>>>>> .r58
 
-<<<<<<< .mine
-		Nomina n = getNominaEmpleadoSeleccionado(periodo);
-		return n.getDevengado().valorAuxilioTransporte();
-=======
 
 
 	public double getDevengadoDominicalTotalDominicalesFestivos(String periodo) {
 		// TODO Auto-generated method stub
 		return 0;
->>>>>>> .r58
 	}
 
 
 
-<<<<<<< .mine
-	public double getDevengadoOtrosTotalComisiones(String periodo) throws NoExisteEmpleadoException, NominaNoEncontradaException {
-		Nomina n = getNominaEmpleadoSeleccionado(periodo);
-		return n.getDevengado().valorComisiones();
-=======
 	public double getDevengadoOtrosTotalAuxilioTransporte(String periodo) {
 		// TODO Auto-generated method stub
 		return 0;
@@ -372,7 +270,6 @@ public class Control {
 	public double getDevengadoOtrosTotalComisiones(String periodo) {
 		// TODO Auto-generated method stub
 		return 0;
->>>>>>> .r58
 	}
 
 
@@ -391,7 +288,8 @@ public class Control {
 
 
 
-	public double getDeduccionesSeguridadSocialTotalPensionVoluntaria(String periodo) {
+	public double getDeduccionesSeguridadSocialTotalPensionVoluntaria(
+			String periodo) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
@@ -440,73 +338,40 @@ public class Control {
 
 
 
-<<<<<<< .mine
-	public ArrayList<DiasNoLaborados> getListaDiasNoLaborados(String periodo) throws NoExisteEmpleadoException, NominaNoEncontradaException {
-=======
 	public ArrayList getListaDiasNoLaborados(String periodo) {
->>>>>>> .r58
 		// TODO Auto-generated method stub
-<<<<<<< .mine
-		Nomina n = getNominaEmpleadoSeleccionado(periodo);
-		return n.getDiasNoLaborados();
-=======
 		ArrayList rta = new ArrayList( );
 		return rta;
->>>>>>> .r58
 	}
 
 
 
-<<<<<<< .mine
-	public ArrayList getListaOrdinariaExtraDiurno(String periodo) throws NoExisteEmpleadoException, NominaNoEncontradaException {
-		Nomina n = getNominaEmpleadoSeleccionado(periodo);
-		return n.getDevengado().getListaOrdinariaExtraDiurno();
-=======
 	public ArrayList getListaOrdinariaExtraDiurno(String periodo) {
 		// TODO Auto-generated method stub
 		ArrayList rta = new ArrayList( );
 		return rta;
->>>>>>> .r58
 	}
 
 
 
-<<<<<<< .mine
-	public ArrayList getListaOrdinariaExtraNocturno(String periodo) throws NoExisteEmpleadoException, NominaNoEncontradaException {
-		Nomina n = getNominaEmpleadoSeleccionado(periodo);
-		return n.getDevengado().getListaOrdinariaExtraNocturno();
-=======
 	public ArrayList getListaOrdinariaExtraNocturno(String periodo) {
 		// TODO Auto-generated method stub
 		ArrayList rta = new ArrayList( );
 		return rta;
->>>>>>> .r58
 	}
 
 
 
-<<<<<<< .mine
-	public ArrayList getListaDominicalExtraDiurno(String periodo) throws NoExisteEmpleadoException, NominaNoEncontradaException {
-		Nomina n = getNominaEmpleadoSeleccionado(periodo);
-		return n.getDevengado().getListaDominicalExtraDiurno();
-=======
 	public ArrayList getListaDominicalExtraDiurno(String periodo) {
 		// TODO Auto-generated method stub
 		ArrayList rta = new ArrayList( );
 		return rta;
->>>>>>> .r58
 	}
 
-<<<<<<< .mine
-	public ArrayList getListaDominicalExtraNocturno(String periodo) throws NoExisteEmpleadoException, NominaNoEncontradaException {
-		Nomina n = getNominaEmpleadoSeleccionado(periodo);
-		return n.getDevengado().getListaDominicalExtraNocturno();
-=======
 	public ArrayList getListaDominicalExtraNocturno(String periodo) {
 		// TODO Auto-generated method stub
 		ArrayList rta = new ArrayList( );
 		return rta;
->>>>>>> .r58
 	}
 
 	public ArrayList getListaDominicalDiasDominicalesYFestivos(String periodo) {
