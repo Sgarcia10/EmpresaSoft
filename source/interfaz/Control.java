@@ -5,11 +5,13 @@ import java.util.Date;
 
 import javax.swing.ImageIcon;
 
+import Excepciones.NoExisteEmpleadoException;
+import Excepciones.NominaNoEncontradaException;
 import mundo.Empresa;
 import mundo.IEmpresa;
-import mundo.Empleado;
-import mundo.DiasNoLaborados;
-import mundo.Nomina;
+import mundo.empleado.Empleado;
+import mundo.nomina.DiasNoLaborados;
+import mundo.nomina.Nomina;
 
 public class Control {
 	
@@ -191,85 +193,87 @@ public class Control {
 //	}
 //	
 	//CESAR
-	public double getNovedadesSueldoBasico(String periodo) {
 
-		//double rta = empresa.getEmpleadoSeleccionado().getContrato().getSueldoBasico();
-		return 1;
+	
+	public Nomina getNominaEmpleadoSeleccionado(String periodo) throws NoExisteEmpleadoException, NominaNoEncontradaException
+	{
+		if(empresa.getEmpleadoSeleccionado()==null)
+		{
+			throw new NoExisteEmpleadoException("Debe seleccionar un empleado");
+		}
+		Nomina n =empresa.getEmpleadoSeleccionado().buscarNominaPeriodo(periodo);
+		if(n==null)
+		{
+			throw new NominaNoEncontradaException("La nomina no fue encontrada");
+		}
+		return n;
+	}
+	
+	public double getNovedadesSueldoBasico(String periodo) throws NoExisteEmpleadoException, NominaNoEncontradaException {
+		
+		Nomina n = getNominaEmpleadoSeleccionado(periodo);
+		double rta = n.getSalarioBasico();
+		return rta;
 	}
 
-	public int getNovedadesTiempoPeriodo(String periodo) {
-		// TODO Auto-generated method stub
-//		int rta = mundo.getEmpleadoActual().getTiempoLaboradoPeriodo( );
-		return 1;
+	public int getNovedadesTiempoPeriodo(String periodo) throws NoExisteEmpleadoException, NominaNoEncontradaException {
+		Nomina n = getNominaEmpleadoSeleccionado(periodo);
+		int rta = n.getPeriodoLiquidacion();
+		return rta;
 	}
 
-	public double getNovedadesSueldoPeriodo(String periodo) {
-		// TODO Auto-generated method stub
-//		double rta = mundo.getEmpleadoActual( ).getSueldoPeriodo( );
-		return 1;
-	}
-
-
-
-	public double getDevengadoOrdinarioTotalRecargoNocturno(String periodo) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-
-
-	public double getDevengadoOrdinarioTotalExtraDiurno(String periodo) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-
-
-	public double getDevengadoOrdinarioTotalExtraNocturno(String periodo) {
-		// TODO Auto-generated method stub
-		return 0;
+	public double getNovedadesSueldoPeriodo(String periodo) throws NoExisteEmpleadoException, NominaNoEncontradaException {
+		Nomina n = getNominaEmpleadoSeleccionado(periodo);
+		return n.getSueldoPeriodo();
 	}
 
 
-
-	public double getDevengadoDominicalTotalRecargoNocturno(String periodo) {
-		// TODO Auto-generated method stub
-		return 0;
+	public double getDevengadoOrdinarioTotalRecargoNocturno(String periodo) throws NoExisteEmpleadoException, NominaNoEncontradaException {
+		Nomina n = getNominaEmpleadoSeleccionado(periodo);
+		return n.getDevengado().getOrdinarioTotalRecargoNocturno();
 	}
 
 
+	public double getDevengadoDominicalTotalDominicalesFestivos(String periodo) throws NoExisteEmpleadoException, NominaNoEncontradaException {
+		Nomina n = getNominaEmpleadoSeleccionado(periodo);
+		return n.getDevengado().getDominicalTotalRecargoDiurno();
+	}
+	
+	public double getDevengadoDominicalTotalRecargoNocturno(String periodo) throws NoExisteEmpleadoException, NominaNoEncontradaException {
+		Nomina n = getNominaEmpleadoSeleccionado(periodo);
+		return n.getDevengado().getDominicalTotalRecargoNocturno();
+	}
 
-	public double getDevengadoDominicalTotalExtraDiurno(String periodo) {
-		// TODO Auto-generated method stub
-		return 0;
+	public double getDevengadoOrdinarioTotalExtraDiurno(String periodo) throws NoExisteEmpleadoException, NominaNoEncontradaException {
+		Nomina n = getNominaEmpleadoSeleccionado(periodo);
+		return n.getDevengado().getOrdinarioTotalExtraDiurno();
+	}
+
+	public double getDevengadoOrdinarioTotalExtraNocturno(String periodo) throws NoExisteEmpleadoException, NominaNoEncontradaException {
+		Nomina n = getNominaEmpleadoSeleccionado(periodo);
+		return n.getDevengado().getOrdinarioTotalExtraNocturno();
+	}
+
+	public double getDevengadoDominicalTotalExtraDiurno(String periodo) throws NoExisteEmpleadoException, NominaNoEncontradaException {
+		Nomina n = getNominaEmpleadoSeleccionado(periodo);
+		return n.getDevengado().getDominicalTotalExtraDiurno();
+	}
+
+	public double getDevengadoDominicalTotalExtraNocturno(String periodo) throws NoExisteEmpleadoException, NominaNoEncontradaException {
+		Nomina n = getNominaEmpleadoSeleccionado(periodo);
+		return n.getDevengado().getDominicalTotalExtraNocturno();
+	}
+	
+	public double getDevengadoOtrosTotalAuxilioTransporte(String periodo) throws NoExisteEmpleadoException, NominaNoEncontradaException {
+
+		Nomina n = getNominaEmpleadoSeleccionado(periodo);
+		return n.getDevengado().valorAuxilioTransporte();
 	}
 
 
-
-	public double getDevengadoDominicalTotalExtraNocturno(String periodo) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-
-
-	public double getDevengadoDominicalTotalDominicalesFestivos(String periodo) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-
-
-	public double getDevengadoOtrosTotalAuxilioTransporte(String periodo) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-
-
-	public double getDevengadoOtrosTotalComisiones(String periodo) {
-		// TODO Auto-generated method stub
-		return 0;
+	public double getDevengadoOtrosTotalComisiones(String periodo) throws NoExisteEmpleadoException, NominaNoEncontradaException {
+		Nomina n = getNominaEmpleadoSeleccionado(periodo);
+		return n.getDevengado().valorComisiones();
 	}
 
 
@@ -288,8 +292,7 @@ public class Control {
 
 
 
-	public double getDeduccionesSeguridadSocialTotalPensionVoluntaria(
-			String periodo) {
+	public double getDeduccionesSeguridadSocialTotalPensionVoluntaria(String periodo) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
@@ -336,42 +339,32 @@ public class Control {
 		return 0;
 	}
 
+	public ArrayList<DiasNoLaborados> getListaDiasNoLaborados(String periodo) throws NoExisteEmpleadoException, NominaNoEncontradaException {
 
+		Nomina n = getNominaEmpleadoSeleccionado(periodo);
+		return n.getDiasNoLaborados();
+	}
 
-	public ArrayList getListaDiasNoLaborados(String periodo) {
-		// TODO Auto-generated method stub
-		ArrayList rta = new ArrayList( );
-		return rta;
+	public ArrayList getListaOrdinariaExtraDiurno(String periodo) throws NoExisteEmpleadoException, NominaNoEncontradaException {
+		Nomina n = getNominaEmpleadoSeleccionado(periodo);
+		return n.getDevengado().getListaOrdinariaExtraDiurno();
+
+	}
+
+	public ArrayList getListaOrdinariaExtraNocturno(String periodo) throws NoExisteEmpleadoException, NominaNoEncontradaException {
+		Nomina n = getNominaEmpleadoSeleccionado(periodo);
+		return n.getDevengado().getListaOrdinariaExtraNocturno();
 	}
 
 
-
-	public ArrayList getListaOrdinariaExtraDiurno(String periodo) {
-		// TODO Auto-generated method stub
-		ArrayList rta = new ArrayList( );
-		return rta;
+	public ArrayList getListaDominicalExtraDiurno(String periodo) throws NoExisteEmpleadoException, NominaNoEncontradaException {
+		Nomina n = getNominaEmpleadoSeleccionado(periodo);
+		return n.getDevengado().getListaDominicalExtraDiurno();
 	}
 
-
-
-	public ArrayList getListaOrdinariaExtraNocturno(String periodo) {
-		// TODO Auto-generated method stub
-		ArrayList rta = new ArrayList( );
-		return rta;
-	}
-
-
-
-	public ArrayList getListaDominicalExtraDiurno(String periodo) {
-		// TODO Auto-generated method stub
-		ArrayList rta = new ArrayList( );
-		return rta;
-	}
-
-	public ArrayList getListaDominicalExtraNocturno(String periodo) {
-		// TODO Auto-generated method stub
-		ArrayList rta = new ArrayList( );
-		return rta;
+	public ArrayList getListaDominicalExtraNocturno(String periodo) throws NoExisteEmpleadoException, NominaNoEncontradaException {
+		Nomina n = getNominaEmpleadoSeleccionado(periodo);
+		return n.getDevengado().getListaDominicalExtraNocturno();
 	}
 
 	public ArrayList getListaDominicalDiasDominicalesYFestivos(String periodo) {
@@ -409,6 +402,7 @@ public class Control {
 		empresa.agregarInfoPersonalEmpleado( e,  nombreP, apellidosP,
 				 tipoP,  documentoP,  sexoP,  estadoCivilP, 
 				 fechaP,  direccionP,  ciudadP, departamentoP, correoP, nacionalidadP, telefonoP, celularP,fotoP);
+		
 	}
 
 	
