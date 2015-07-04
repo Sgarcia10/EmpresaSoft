@@ -1,7 +1,6 @@
 package mundo.nomina;
 
 import java.text.ParseException;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -31,7 +30,9 @@ public class Nomina
 	
 	private double valorHora;
 	
-	private int total;
+	private double total;
+	
+	private ArrayList<Prestamo> prestamos;
 	
 	public Nomina(Empleado empleadoP, String peridoP)
 	{
@@ -43,16 +44,18 @@ public class Nomina
 		
 		periodoLiquidacion = empleadoP.getContrato().getPeriodoLiquidacion();
 		
-
 		diasNoLaborados = new ArrayList<DiasNoLaborados>();
 		
 		valorHora = salarioBasico / (horasSemana * 4);
 		
 		periodo = peridoP;
 		
+		prestamos = empleadoP.getPrestamos();
+		
 		devengado = new Devengado(this);
 		
 		deducciones = new Deducciones(this);
+		
 		
 	}
 	
@@ -129,6 +132,7 @@ public class Nomina
 		return 0;
 	}
 	
+
 	private void calcularSueldoPeriodo()
 	{
 		sueldoPeriodo=0;
@@ -164,7 +168,7 @@ public class Nomina
 		return devengado;
 	}
 
-	public int getTotal() {
+	public double getTotal() {
 		return total;
 	}
 	
@@ -184,7 +188,12 @@ public class Nomina
 
 	protected void setPeriodo(String periodo) {
 		this.periodo = periodo;
+	}	
+
+	public ArrayList<Prestamo> getPrestamos()
+	{
+		return prestamos;
 	}
-		
+	
 	
 }

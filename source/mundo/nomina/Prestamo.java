@@ -15,7 +15,11 @@ public class Prestamo extends Registro
 	
 	private int numeroCuotas;
 	
+	private double valorCuota;
+	
 	private double interes;
+	
+	private boolean amortizado;
 	
 	public Prestamo(Usuario user, String concepto, double cantidadP, int numeroCuotasP, double interesP)
 	{
@@ -24,6 +28,8 @@ public class Prestamo extends Registro
 		cantidad = cantidadP;
 		numeroCuotas=numeroCuotasP;
 		interes=interesP;
+		amortizado = false;
+		valorCuota = Math.round(cantidad/numeroCuotasP);
 	}
 
 	public Date getFechaExpedicion() {
@@ -66,13 +72,13 @@ public class Prestamo extends Registro
 		this.interes = interes;
 	}
 
-	public Double getCuotaPeriodo() {
-		// TODO Auto-generated method stub
-		double rta = 0;
-		return rta;
+	public Double getValorCuota() {
+		return valorCuota;
 	}
-	
-	
+
+	public boolean isAmortizado() {
+		return amortizado;
+	}	
 	
 
 }
