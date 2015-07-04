@@ -7,9 +7,9 @@ import javax.swing.ImageIcon;
 
 import mundo.Empresa;
 import mundo.IEmpresa;
-import mundo.Empleado.Empleado;
-import mundo.Nomina.DiasNoLaborados;
-import mundo.Nomina.Nomina;
+import mundo.empleado.Empleado;
+import mundo.nomina.DiasNoLaborados;
+import mundo.nomina.Nomina;
 
 public class Control {
 	

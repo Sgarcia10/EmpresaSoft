@@ -1,6 +1,7 @@
 package interfaz.liquidacion;
 
 import interfaz.Control;
+
 import interfaz.InterfazNomina;
 
 import java.awt.Color;

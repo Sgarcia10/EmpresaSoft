@@ -1,11 +1,12 @@
 package mundo;
 
 import java.util.ArrayList;
+
 import java.util.Date;
 
 import javax.swing.ImageIcon;
 
-import mundo.Empleado.Empleado;
+import mundo.empleado.Empleado;
 
 public interface IEmpresa {
 	

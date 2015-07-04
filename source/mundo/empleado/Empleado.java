@@ -1,6 +1,7 @@
 package mundo.empleado;
 
 import java.util.ArrayList;
+
 import java.util.Date;
 
 import javax.swing.ImageIcon;

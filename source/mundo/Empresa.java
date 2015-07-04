@@ -1,6 +1,7 @@
 package mundo;
 
 import java.io.File;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -12,7 +13,7 @@ import java.util.Date;
 
 import javax.swing.ImageIcon;
 
-import mundo.Empleado.Empleado;
+import mundo.empleado.Empleado;
 
 public class Empresa implements IEmpresa {
 	
