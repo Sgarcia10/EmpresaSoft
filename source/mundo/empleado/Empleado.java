@@ -1,13 +1,13 @@
 package mundo.empleado;
 
 import java.util.ArrayList;
-
 import java.util.Date;
 
 import javax.swing.ImageIcon;
 
 import mundo.Contrato;
 import mundo.nomina.Nomina;
+import mundo.nomina.Prestamo;
 
 public class Empleado extends Persona{
 
@@ -18,15 +18,8 @@ private ArrayList<Hijo> hijos;
 	private ArrayList <Referencia> referencias;
 	
 	private ArrayList <Nomina> nominas;	
-
-	public ArrayList<Nomina> getNominas() {
-		return nominas;
-	}
-
-
-	public void setNominas(ArrayList<Nomina> nominas) {
-		this.nominas = nominas;
-	}
+	
+	private ArrayList<Prestamo> prestamos;
 
 	private ArrayList <Experiencia> experiencia;
 		
@@ -62,7 +55,8 @@ private ArrayList<Hijo> hijos;
 		hijos = new ArrayList();
 		referencias = new ArrayList();
 		experiencia = new ArrayList();
-		nominas = new ArrayList<>();
+		nominas = new ArrayList<>();		
+		prestamos = new ArrayList<Prestamo>();
 		foto = null;
 	}
 	
@@ -167,7 +161,7 @@ private ArrayList<Hijo> hijos;
 	}
 	
 	
-	protected void setContrato(String cargoP, int sueldoBasicoP, boolean auxilioTransporteP, int periodoLiquidacionP,
+	public void setContrato(String cargoP, int sueldoBasicoP, boolean auxilioTransporteP, int periodoLiquidacionP,
 			Date fechaInicioP, String tipoContratoP, Date fechaFinP, String tipoSalarioP, int horasSemana)
 	{
 		contrato = new Contrato(cargoP, sueldoBasicoP, auxilioTransporteP, periodoLiquidacionP,
@@ -196,7 +190,7 @@ private ArrayList<Hijo> hijos;
 	}
 
 
-	protected void setHijos(ArrayList hijos) {
+	public void setHijos(ArrayList hijos) {
 		this.hijos = hijos;
 	}
 	
@@ -205,7 +199,7 @@ private ArrayList<Hijo> hijos;
 	}
 
 
-	protected void setConyugue(Conyuge conyugueP) {
+	public void setConyugue(Conyuge conyugueP) {
 		conyugue = conyugueP;
 	}
 
@@ -291,7 +285,21 @@ private ArrayList<Hijo> hijos;
 
 	public void setFoto(ImageIcon foto) {
 		this.foto = foto;
+	}	
+
+	public ArrayList<Prestamo> getPrestamos()
+	{
+		return prestamos;
+	}	
+
+	public ArrayList<Nomina> getNominas() {
+		return nominas;
 	}
-	
+
+	public void setNominas(ArrayList<Nomina> nominas) {
+		this.nominas = nominas;
+	}
+
+		
 
 }
