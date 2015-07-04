@@ -357,6 +357,7 @@ public class Control {
 		return rta;
 	}
 
+	
 	public ArrayList getListaDeduccionesPrestamos(String periodo) {
 		// TODO Auto-generated method stub
 		ArrayList rta = new ArrayList( );
