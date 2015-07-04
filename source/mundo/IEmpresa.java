@@ -19,8 +19,8 @@ public interface IEmpresa {
 	
 	public void agregarInfoPersonalEmpleado(Empleado empleadoP, String nombreP,String apellidosP,
 			String tipoP, double documentoP, String sexoP, String estadoCivilP, 
-			Date fechaP, String direccionP, String ciudadP, double telefonoP,double celularP,
-			ImageIcon fotoP);
+			Date fechaP, String direccionP, String ciudadP, String departamentoP, String correoP, String nacionalidadP,
+			double telefonoP,double celularP, ImageIcon fotoP);
 	
 	public void darEmpleado() throws Exception;
 	

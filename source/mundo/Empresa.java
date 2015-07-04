@@ -62,7 +62,8 @@ public class Empresa implements IEmpresa {
 	public void agregarInfoPersonalEmpleado(Empleado empleadoP,
 			String nombreP, String apellidosP, String tipoP, double documentoP,
 			String sexoP, String estadoCivilP, Date fechaP, String direccionP,
-			String ciudadP, double telefonoP, double celularP, ImageIcon fotoP) {
+			String ciudadP, String departamentoP, String correoP, String nacionalidadP, 
+			double telefonoP, double celularP, ImageIcon fotoP) {
 
 		empleadoP.setNombres(nombreP);
 		empleadoP.setApellidos(apellidosP);
@@ -76,6 +77,9 @@ public class Empresa implements IEmpresa {
 		empleadoP.setTelefono(telefonoP);
 		empleadoP.setCelular(celularP);
 		empleadoP.setFoto(fotoP);
+		empleadoP.setDepartamento(departamentoP);
+		empleadoP.setCorreo(correoP);
+		empleadoP.setNacionalidad(nacionalidadP);
 	}
 
 	@Override

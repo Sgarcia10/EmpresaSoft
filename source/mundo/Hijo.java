@@ -3,7 +3,7 @@ package mundo;
 import java.io.Serializable;
 import java.util.Date;
 
-public class Hijo extends Persona implements Serializable{
+public class Hijo extends Persona implements Serializable {
 		
 	public Hijo(String nombre, String apellidos, double telefono,
 			double identificacion, String sexo, String direccion, String ciudad, String departamento,
