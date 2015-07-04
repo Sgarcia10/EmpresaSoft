@@ -21,6 +21,8 @@ public class EnterAction extends AbstractAction {
 
 		validador = new ValidarCampos(dialogoP);
 		dialogo = dialogoP;
+		String titulo = dialogo.getTitle();
+		System.out.println(titulo);
 	}
 	
 	@Override
@@ -31,23 +33,20 @@ public class EnterAction extends AbstractAction {
 		int column = t.getSelectedColumn();
 		int row = t.getSelectedRow();
 		
-		validarCampo(t, row, column);
+		if (column >= 0 && row >= 0){
+			validarCampo(t, row, column);
+		}
+		
 	}
 	
 	public boolean validarCampo(JTable t, int row, int column){
 		
 		String valor = String.valueOf(t.getValueAt(row, column));			
-		String tipo = "String";
-		System.out.println(valor);
 		
 		boolean res = true;
 		
-		if (column == 2){
-			tipo = "Date";
-		}
-		else if (column == 3){
-			tipo = "int";
-		}
+		String tipo = compararTipoCampo(column);
+		
 		
 		if (valor != null && !valor.isEmpty()){
 
@@ -79,9 +78,13 @@ public class EnterAction extends AbstractAction {
 				}
 			}
 			
-//			else {
-//				guardarNovedad();
-//			}
+			else {
+				
+				t.clearSelection();
+				t.setCellSelectionEnabled(false);
+				
+				
+			}
 
 		}
 		
@@ -90,6 +93,45 @@ public class EnterAction extends AbstractAction {
 		}
 				
 		return res;
+	}
+
+	private String compararTipoCampo(int column) {
+		String tipo = "String";
+		
+		if (dialogo.getTitle().equalsIgnoreCase("Novedades")){
+			if (column == 2){
+				tipo = "Date";
+			}
+			else if (column == 3){
+				tipo = "int";
+			}
+		}
+		
+		else if ((dialogo.getTitle().equalsIgnoreCase("Devengado"))){
+			if (column == 2){
+				tipo = "Date";
+			}
+			else if (column == 3 || column == 5){
+				tipo = "int";
+			}
+		}
+		
+		else if ((dialogo.getTitle().equalsIgnoreCase("Deducciones"))){
+			if (column == 2){
+				tipo = "Date";
+			}
+			else if (column == 4 || column == 5){
+				tipo = "int";
+			}
+		}
+		
+		
+		return tipo;
+	}
+
+	private void guardarNovedad() {
+		// TODO Auto-generated method stub
+		//escribir valores en la 
 	}
 
 }
