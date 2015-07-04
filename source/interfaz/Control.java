@@ -134,12 +134,28 @@ public class Control {
 		return empresa.getEmpleadoNuevo().getReferencias();
 	}
 	
+	public ArrayList darListaReferecniasEmpleado(int pos){
+		Empleado e = (Empleado) empresa.getEmpleados().get(pos);
+		return e.getReferencias();
+	}
+	
 	public ArrayList darListaExperienciaEmpleadoNuevo(){
 		return empresa.getEmpleadoNuevo().getExperiencia();
 	}
 	
+	public ArrayList darListaExperienciaEmpleado(int pos){
+		Empleado e = (Empleado) empresa.getEmpleados().get(pos);
+		return e.getExperiencia();
+	}
+	
 	public ArrayList darListaHijosEmpleadoNuevo(){
 		return empresa.getEmpleadoNuevo().getHijos();
+	}
+	
+	public ArrayList darListaHijosEmpleado(int pos){
+		
+		Empleado e = (Empleado) empresa.getEmpleados().get(pos);
+		return e.getHijos();
 	}
 	
 	public ArrayList darListaEmpleados(){
@@ -152,105 +168,108 @@ public class Control {
 	
 //	public String getPeriodoNomina() {
 //		// TODO Auto-generated method stub
-//		String rta = empresa.getEmpleadoActual( ).getSueldoBasico( ); 
+//		String rta = mundo.getEmpleadoActual( ).getSueldoBasico( ); 
 //		return rta;
 //	}
 //
 //	public double getSueldoBasico() {
 //		// TODO Auto-generated method stub
-//		double rta = empresa.getEmpleadoActual( ).getSueldoBasico( );
+//		double rta = mundo.getEmpleadoActual( ).getSueldoBasico( );
 //		return rta;
 //	}
 //
 //	public int getTiempo() {
 //		// TODO Auto-generated method stub
-//		int rta = empresa.getEmpleadoActual().getTiempoLaboradoPeriodo( );
+//		int rta = mundo.getEmpleadoActual().getTiempoLaboradoPeriodo( );
 //		return rta;
 //	}
 //
 //	public double getSueldoPeriodo() {
 //		// TODO Auto-generated method stub
-////		double rta = empresa.getEmpleadoActual( ).getSueldoPeriodo( );
+////		double rta = mundo.getEmpleadoActual( ).getSueldoPeriodo( );
 //		return 1;
 //	}
 //	
 	//CESAR
-	
-	public Nomina getNominaEmpleadoActual(String periodo)
-	{
-		return empresa.getEmpleadoNuevo().buscarNominaPeriodo(periodo);
-	}
-	
 	public double getNovedadesSueldoBasico(String periodo) {
-		
-		Nomina n = getNominaEmpleadoActual(periodo);
-		double rta = n.getSalarioBasico();
-		return rta;
+
+		//double rta = empresa.getEmpleadoSeleccionado().getContrato().getSueldoBasico();
+		return 1;
 	}
 
 	public int getNovedadesTiempoPeriodo(String periodo) {
-		Nomina n = getNominaEmpleadoActual(periodo);
-		int rta = n.getPeriodoLiquidacion();
-		return rta;
+		// TODO Auto-generated method stub
+//		int rta = mundo.getEmpleadoActual().getTiempoLaboradoPeriodo( );
+		return 1;
 	}
 
 	public double getNovedadesSueldoPeriodo(String periodo) {
-		Nomina n = getNominaEmpleadoActual(periodo);
-		return n.getSueldoPeriodo();
+		// TODO Auto-generated method stub
+//		double rta = mundo.getEmpleadoActual( ).getSueldoPeriodo( );
+		return 1;
 	}
 
-////////////////////////////////////////////////////////////////////////////////////
-/////	HORAS
-///////////////////////////////////////////////////////////////////////////////////
+
 
 	public double getDevengadoOrdinarioTotalRecargoNocturno(String periodo) {
-		Nomina n = getNominaEmpleadoActual(periodo);
-		return n.getDevengado().getOrdinarioTotalRecargoNocturno();
+		// TODO Auto-generated method stub
+		return 0;
 	}
-	
+
+
+
+	public double getDevengadoOrdinarioTotalExtraDiurno(String periodo) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+
+
+	public double getDevengadoOrdinarioTotalExtraNocturno(String periodo) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+
+
+	public double getDevengadoDominicalTotalRecargoNocturno(String periodo) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+
+
+	public double getDevengadoDominicalTotalExtraDiurno(String periodo) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+
+
+	public double getDevengadoDominicalTotalExtraNocturno(String periodo) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 
 
 	public double getDevengadoDominicalTotalDominicalesFestivos(String periodo) {
-		Nomina n = getNominaEmpleadoActual(periodo);
-		return n.getDevengado().getDominicalTotalRecargoDiurno();
-	}
-	
-	public double getDevengadoDominicalTotalRecargoNocturno(String periodo) {
-		Nomina n = getNominaEmpleadoActual(periodo);
-		return n.getDevengado().getDominicalTotalRecargoNocturno();
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
-	public double getDevengadoOrdinarioTotalExtraDiurno(String periodo) {
-		Nomina n = getNominaEmpleadoActual(periodo);
-		return n.getDevengado().getOrdinarioTotalExtraDiurno();
-	}
 
-	public double getDevengadoOrdinarioTotalExtraNocturno(String periodo) {
-		Nomina n = getNominaEmpleadoActual(periodo);
-		return n.getDevengado().getOrdinarioTotalExtraNocturno();
-	}
 
-	public double getDevengadoDominicalTotalExtraDiurno(String periodo) {
-		Nomina n = getNominaEmpleadoActual(periodo);
-		return n.getDevengado().getDominicalTotalExtraDiurno();
-	}
-
-	public double getDevengadoDominicalTotalExtraNocturno(String periodo) {
-		Nomina n = getNominaEmpleadoActual(periodo);
-		return n.getDevengado().getDominicalTotalExtraNocturno();
-	}
-	
 	public double getDevengadoOtrosTotalAuxilioTransporte(String periodo) {
-
-		Nomina n = getNominaEmpleadoActual(periodo);
-		return n.getDevengado().valorAuxilioTransporte();
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 
 
 	public double getDevengadoOtrosTotalComisiones(String periodo) {
-		Nomina n = getNominaEmpleadoActual(periodo);
-		return n.getDevengado().valorComisiones();
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 
@@ -319,46 +338,49 @@ public class Control {
 
 
 
-	public ArrayList<DiasNoLaborados> getListaDiasNoLaborados(String periodo) {
-		// TODO Auto-generated method stub
-		Nomina n = getNominaEmpleadoActual(periodo);
-		return n.getDiasNoLaborados();
-	}
-
-
-
-	public ArrayList getListaOrdinariaExtraDiurno(String periodo) {
-		Nomina n = getNominaEmpleadoActual(periodo);
-		return n.getDevengado().getListaOrdinariaExtraDiurno();
-	}
-
-
-
-	public ArrayList getListaOrdinariaExtraNocturno(String periodo) {
-		Nomina n = getNominaEmpleadoActual(periodo);
-		return n.getDevengado().getListaOrdinariaExtraNocturno();
-	}
-
-
-
-	public ArrayList getListaDominicalExtraDiurno(String periodo) {
-		Nomina n = getNominaEmpleadoActual(periodo);
-		return n.getDevengado().getListaDominicalExtraDiurno();
-	}
-
-	public ArrayList getListaDominicalExtraNocturno(String periodo) {
-		Nomina n = getNominaEmpleadoActual(periodo);
-		return n.getDevengado().getListaDominicalExtraNocturno();
-	}
-
-	public ArrayList getListaDominicalDiasDominicalesYFestivos(String periodo) {
+	public ArrayList getListaDiasNoLaborados() {
 		// TODO Auto-generated method stub
 		ArrayList rta = new ArrayList( );
 		return rta;
 	}
 
-	
-	public ArrayList getListaDeduccionesPrestamos(String periodo) {
+
+
+	public ArrayList getListaOrdinariaExtraDiurno() {
+		// TODO Auto-generated method stub
+		ArrayList rta = new ArrayList( );
+		return rta;
+	}
+
+
+
+	public ArrayList getListaOrdinariaExtraNocturno() {
+		// TODO Auto-generated method stub
+		ArrayList rta = new ArrayList( );
+		return rta;
+	}
+
+
+
+	public ArrayList getListaDominicalExtraDiurno() {
+		// TODO Auto-generated method stub
+		ArrayList rta = new ArrayList( );
+		return rta;
+	}
+
+	public ArrayList getListaDominicalExtraNocturno() {
+		// TODO Auto-generated method stub
+		ArrayList rta = new ArrayList( );
+		return rta;
+	}
+
+	public ArrayList getListaDominicalDiasDominicalesYFestivos() {
+		// TODO Auto-generated method stub
+		ArrayList rta = new ArrayList( );
+		return rta;
+	}
+
+	public ArrayList getListaDeduccionesPrestamos() {
 		// TODO Auto-generated method stub
 		ArrayList rta = new ArrayList( );
 		return rta;
@@ -380,13 +402,14 @@ public class Control {
 	
 	public void agregarInfoPersonalEmpleadoNuevo(String nombreP,String apellidosP,
 			String tipoP, double documentoP, String sexoP, String estadoCivilP, 
-			Date fechaP, String direccionP, String ciudadP, double telefonoP,double celularP,
-			ImageIcon fotoP)
+			Date fechaP, String direccionP, String ciudadP, String departamentoP, String correoP, 
+			String nacionalidadP, double telefonoP,double celularP,	ImageIcon fotoP)
 	{
 		Empleado e = empresa.getEmpleadoNuevo();
 		empresa.agregarInfoPersonalEmpleado( e,  nombreP, apellidosP,
 				 tipoP,  documentoP,  sexoP,  estadoCivilP, 
-				 fechaP,  direccionP,  ciudadP,  telefonoP, celularP,fotoP);
+				 fechaP,  direccionP,  ciudadP, departamentoP, correoP, nacionalidadP, telefonoP, celularP,fotoP);
 	}
+
 	
 }
