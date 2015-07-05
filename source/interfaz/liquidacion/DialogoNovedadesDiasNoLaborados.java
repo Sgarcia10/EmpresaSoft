@@ -264,7 +264,6 @@ public class DialogoNovedadesDiasNoLaborados extends JDialog implements ActionLi
 			MyTableModel myMod = (MyTableModel) tableNovedaesDiasNoLaborados.getModel();
 			myMod.setRowEditable(myMod.getRowCount()-1, false);
 			
-			tableNovedaesDiasNoLaborados.getRo
 		}
 		
 	}
