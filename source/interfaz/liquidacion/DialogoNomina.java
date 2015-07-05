@@ -296,6 +296,7 @@ public class DialogoNomina extends JDialog implements ActionListener, MouseListe
 
 		catch( Exception e){
 			JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+			
 		}
 		//		actualizarAbonos();
 		//		actualizarNotas();

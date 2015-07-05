@@ -161,7 +161,7 @@ public class DialogoDeduccionesPrestamos extends JDialog implements ActionListen
 			for (int i = 0; i < listaPrestamos.size(); i++){
 				Prestamo prestamoActual = (Prestamo) listaPrestamos.get(i);
 				DefaultTableModel model = (DefaultTableModel) tableDeduccionesPrestamos.getModel();
-				model.addRow(new Object[]{prestamoActual.getFecha(), prestamoActual.getUser().getUser(), prestamoActual.getFechaExpedicion().toLocaleString(), prestamoActual.getConcepto(), prestamoActual.getCantidad(), prestamoActual.getCuotaPeriodo(), prestamoActual.getSaldo()});
+				model.addRow(new Object[]{prestamoActual.getFecha(), prestamoActual.getUser().getUser(), prestamoActual.getFechaExpedicion().toLocaleString(), prestamoActual.getConcepto(), prestamoActual.getCantidad(), prestamoActual.getValorCuota(), prestamoActual.getSaldo()});
 			}
 		}
 	}
