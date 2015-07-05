@@ -205,7 +205,7 @@ public class Control {
 		Nomina n =empresa.getEmpleadoSeleccionado().buscarNominaPeriodo(periodo);
 		if(n==null)
 		{
-			throw new NominaNoEncontradaException("La nomina no fue encontrada");
+			throw new NominaNoEncontradaException("La nómina no fue encontrada");
 		}
 		return n;
 	}
@@ -279,63 +279,63 @@ public class Control {
 
 
 
-	public double getDeduccionesSeguridadSocialTotalSalud(String periodo) {
+	public double getDeduccionesSeguridadSocialTotalSalud(String periodo) throws NoExisteEmpleadoException, NominaNoEncontradaException{
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 
 
-	public double getDeduccionesSeguridadSocialTotalPension(String periodo) {
+	public double getDeduccionesSeguridadSocialTotalPension(String periodo) throws NoExisteEmpleadoException, NominaNoEncontradaException {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 
 
-	public double getDeduccionesSeguridadSocialTotalPensionVoluntaria(String periodo) {
+	public double getDeduccionesSeguridadSocialTotalPensionVoluntaria(String periodo) throws NoExisteEmpleadoException, NominaNoEncontradaException {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 
 
-	public double getDeduccionesSeguridadSocialTotalSolidaridad(String periodo) {
+	public double getDeduccionesSeguridadSocialTotalSolidaridad(String periodo) throws NoExisteEmpleadoException, NominaNoEncontradaException{
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 
 
-	public double getDeduccionesSeguridadSocialTotalAFC(String periodo) {
+	public double getDeduccionesSeguridadSocialTotalAFC(String periodo) throws NoExisteEmpleadoException, NominaNoEncontradaException{
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 
 
-	public double getDeduccionesOtrasTotalRetencion(String periodo) {
+	public double getDeduccionesOtrasTotalRetencion(String periodo) throws NoExisteEmpleadoException, NominaNoEncontradaException{
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 
 
-	public double getDeduccionesOtrasTotalJuzgados(String periodo) {
+	public double getDeduccionesOtrasTotalJuzgados(String periodo) throws NoExisteEmpleadoException, NominaNoEncontradaException{
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 
 
-	public double getDeduccionesOtrasTotalPrestamos(String periodo) {
+	public double getDeduccionesOtrasTotalPrestamos(String periodo) throws NoExisteEmpleadoException, NominaNoEncontradaException{
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 
 
-	public double getDeduccionesOtrosTotalFondosEmpleados(String periodo) {
+	public double getDeduccionesOtrosTotalFondosEmpleados(String periodo) throws NoExisteEmpleadoException, NominaNoEncontradaException{
 		// TODO Auto-generated method stub
 		return 0;
 	}

@@ -34,11 +34,13 @@ import javax.swing.table.DefaultTableModel;
 
 
 
+
 import java.awt.Toolkit;
 
 import javax.swing.JButton;
 import javax.swing.border.LineBorder;
 
+import Excepciones.NoExisteEmpleadoException;
 import Excepciones.NominaNoEncontradaException;
 
 import java.awt.Component;
@@ -287,14 +289,20 @@ public class DialogoNomina extends JDialog implements ActionListener, MouseListe
 		btnModificar.addActionListener(this);
 		btnModificar.setActionCommand("Modificar");
 
-		actualizarInformacion( );
+		try{
+			actualizarInformacion( );
 
+		}
+
+		catch( Exception e){
+			JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+		}
 		//		actualizarAbonos();
 		//		actualizarNotas();
 	}
 
 
-	public void actualizarInformacion() {
+	public void actualizarInformacion() throws NoExisteEmpleadoException, NominaNoEncontradaException {
 		// TODO Auto-generated method stub
 		actualizarPanelNovedades( );
 		actualizarPanelDevengado( );
@@ -303,26 +311,19 @@ public class DialogoNomina extends JDialog implements ActionListener, MouseListe
 	}
 
 
-	private void actualizarPanelNovedades() {
+	private void actualizarPanelNovedades() throws NoExisteEmpleadoException, NominaNoEncontradaException{
 		// TODO Auto-generated method stub
 
-//		try{
-//			double sueldoBasico = control.getNovedadesSueldoBasico(periodo);
-//			int tiempoPeriodo = control.getNovedadesTiempoPeriodo(periodo );
-//			double sueldoPeriodo = control.getNovedadesSueldoPeriodo(periodo );
-//			
-//			DefaultTableModel model = ( DefaultTableModel) tableNovedades.getModel();
-//			model.addRow(new Object[]{periodo, sueldoBasico, tiempoPeriodo, sueldoPeriodo});
-//		}
-//
-//		catch( NominaNoEncontradaException e){
-//			JOptionPane.showMessageDialog(this, mensajeErrorConNomina, "Error", JOptionPane.ERROR_MESSAGE);
-//		}
-		
+		double sueldoBasico = control.getNovedadesSueldoBasico(periodo);
+		int tiempoPeriodo = control.getNovedadesTiempoPeriodo(periodo );
+		double sueldoPeriodo = control.getNovedadesSueldoPeriodo(periodo );
+
+		DefaultTableModel model = ( DefaultTableModel) tableNovedades.getModel();
+		model.addRow(new Object[]{periodo, sueldoBasico, tiempoPeriodo, sueldoPeriodo});
 	}
 
 
-	private void actualizarPanelDevengado() {
+	private void actualizarPanelDevengado() throws NoExisteEmpleadoException, NominaNoEncontradaException {
 		// TODO Auto-generated method stub
 		actualizarPanelDevengadoOridnaria();
 		actualizarPanelDevengadoDominical();
@@ -330,17 +331,17 @@ public class DialogoNomina extends JDialog implements ActionListener, MouseListe
 	}
 
 
-	private void actualizarPanelDevengadoOtros() {
+	private void actualizarPanelDevengadoOtros() throws NoExisteEmpleadoException, NominaNoEncontradaException {
 		// TODO Auto-generated method stub
 		double totalAuxilioTransporte = control.getDevengadoOtrosTotalAuxilioTransporte(periodo);
 		double totalComisiones = control.getDevengadoOtrosTotalComisiones(periodo);
-
 		DefaultTableModel model = ( DefaultTableModel) tableDevengadoOtros.getModel();
 		model.addRow(new Object[]{totalAuxilioTransporte, totalComisiones});
+
 	}
 
 
-	private void actualizarPanelDevengadoDominical() {
+	private void actualizarPanelDevengadoDominical() throws NoExisteEmpleadoException, NominaNoEncontradaException{
 		// TODO Auto-generated method stub
 		double totalRecargoNocturno = control.getDevengadoDominicalTotalRecargoNocturno(periodo);
 		double totalExtraDiurno = control.getDevengadoDominicalTotalExtraDiurno(periodo);
@@ -352,7 +353,7 @@ public class DialogoNomina extends JDialog implements ActionListener, MouseListe
 	}
 
 
-	private void actualizarPanelDevengadoOridnaria() {
+	private void actualizarPanelDevengadoOridnaria() throws NoExisteEmpleadoException, NominaNoEncontradaException {
 		// TODO Auto-generated method stub
 		double totalRecargoNocturno = control.getDevengadoOrdinarioTotalRecargoNocturno(periodo);
 		double totalExtraDiurno = control.getDevengadoOrdinarioTotalExtraDiurno(periodo);
@@ -363,14 +364,14 @@ public class DialogoNomina extends JDialog implements ActionListener, MouseListe
 	}
 
 
-	private void actualizarPanelDeducciones() {
+	private void actualizarPanelDeducciones() throws NoExisteEmpleadoException, NominaNoEncontradaException{
 		// TODO Auto-generated method stub
 		actualizarPanelDeduccionesSeguridadSocial();
 		actualizarPanelDeduccionesOtros();
 	}
 
 
-	private void actualizarPanelDeduccionesOtros() {
+	private void actualizarPanelDeduccionesOtros() throws NoExisteEmpleadoException, NominaNoEncontradaException{
 		// TODO Auto-generated method stub
 		double totalRetencion = control.getDeduccionesOtrasTotalRetencion(periodo);
 		double totalJuzgados = control.getDeduccionesOtrasTotalJuzgados(periodo);
@@ -382,7 +383,7 @@ public class DialogoNomina extends JDialog implements ActionListener, MouseListe
 	}
 
 
-	private void actualizarPanelDeduccionesSeguridadSocial() {
+	private void actualizarPanelDeduccionesSeguridadSocial() throws NoExisteEmpleadoException, NominaNoEncontradaException{
 		// TODO Auto-generated method stub
 		double totalSalud = control.getDeduccionesSeguridadSocialTotalSalud(periodo);
 		double totalPension = control.getDeduccionesSeguridadSocialTotalPension(periodo);
