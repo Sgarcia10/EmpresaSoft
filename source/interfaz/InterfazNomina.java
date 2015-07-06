@@ -1,58 +1,45 @@
 package interfaz;
 
-import interfaz.liquidacion.DialogoNomina;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Image;
-
-import javax.swing.ButtonGroup;
-import javax.swing.JOptionPane;
-import javax.swing.JRadioButton;
-import javax.swing.JTabbedPane;
-import javax.swing.JScrollPane;
-import javax.swing.JList;
-import javax.swing.JLabel;
-import javax.swing.JComboBox;
-import javax.swing.JTextField;
-import javax.swing.JButton;
-import javax.swing.ImageIcon;
-import javax.swing.ListSelectionModel;
-
-import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-
-import javax.swing.border.TitledBorder;
-
-import java.awt.Color;
-
-import javax.swing.JToolBar;
-import javax.swing.JMenuBar;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.KeyStroke;
-
-import java.awt.event.KeyEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
+import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+import javax.swing.KeyStroke;
+import javax.swing.ListSelectionModel;
 import javax.swing.border.LineBorder;
+import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import com.toedter.calendar.JMonthChooser;
 import com.toedter.calendar.JYearChooser;
 
+import interfaz.liquidacion.DialogoNomina;
 import mundo.Contrato;
 import mundo.Empresa;
 import mundo.empleado.Empleado;
-import mundo.empleado.Referencia;
 
 public class InterfazNomina extends JFrame implements ActionListener{
 	private JTextField busquedaEmpleados;
@@ -456,7 +443,8 @@ public class InterfazNomina extends JFrame implements ActionListener{
 		
 	}
 	
-	public void actualizarResumenDatosEmpleadoSeleccionado(int posicionP){
+	public void actualizarResumenDatosEmpleadoSeleccionado(int posicionP)
+	{
 		Empleado e = (Empleado) control.darListaEmpleados().get(posicionP);
 		Contrato c = e.getContrato();
 		
