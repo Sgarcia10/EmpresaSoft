@@ -183,15 +183,12 @@ public class Empresa implements IEmpresa {
 	
 	public void cargarEstado( String pRutaNombre ) throws PersistenciaException
 	{
-		System.out.println("cargar");
 		
 		String rutaEmpleados = pRutaNombre + "estadoEmpleados.data";
 		
 		try
 		{
-			System.out.println("cargar0");
 			File archivoEmpleados = new File(rutaEmpleados);
-			System.out.println("cargar1");
 			
 			if( archivoEmpleados.exists( ) )
 			{
@@ -224,8 +221,6 @@ public class Empresa implements IEmpresa {
 
 	public void guardarEstado( String pRutaNombre) throws PersistenciaException
 	{
-		System.out.println("guardar");
-		
 		try
 		{
 			//Se crean las tres rutas

@@ -72,6 +72,8 @@ public interface IEmpresa {
 	
 	public Empleado getEmpleadoSeleccionado();
 	
+	public void seleccionarEmpleado();
+	
 	public ArrayList getEmpleados();
 	
     public void cargarEstado( String pRutaNombre ) throws PersistenciaException;
