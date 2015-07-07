@@ -72,7 +72,9 @@ public interface IEmpresa {
 	
 	public Empleado getEmpleadoSeleccionado();
 	
-	public void seleccionarEmpleado();
+	public Empleado buscarEmpleadoIdentificacion(double identificacionP);
+	
+	public void seleccionarEmpleado(Empleado e);
 	
 	public ArrayList getEmpleados();
 	

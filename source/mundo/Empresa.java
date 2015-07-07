@@ -16,7 +16,7 @@ import mundo.empleado.Empleado;
 
 public class Empresa implements IEmpresa {
 	
-	private ArrayList empleados;
+	private ArrayList <Empleado> empleados;
 	
 	private Empleado empleadoNuevo;
 	
@@ -252,5 +252,22 @@ public class Empresa implements IEmpresa {
 		return empleadoSeleccionado;
 	}
 	
+	public void seleccionarEmpleado(Empleado e)
+	{
+		if(e!=null)
+			empleadoSeleccionado = e;
+	}
+
+	@Override
+	public Empleado buscarEmpleadoIdentificacion(double identificacionP) {
+		Empleado e = null;
+		for(int i=0; i<empleados.size(); i++)
+		{
+			e=empleados.get(i);
+			if(e.getIdentificacion()==identificacionP)
+				return e;
+		}
+		return e;
+	}
 	
 }

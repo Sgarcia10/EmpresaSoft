@@ -1,5 +1,6 @@
 package mundo.empleado;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -9,11 +10,11 @@ import mundo.Contrato;
 import mundo.nomina.Nomina;
 import mundo.nomina.Prestamo;
 
-public class Empleado extends Persona{
+public class Empleado extends Persona implements Serializable{
 
-//TODO extends Persona
+	private final static long serialVersionUID = 200L;
 	
-private ArrayList<Hijo> hijos;
+	private ArrayList<Hijo> hijos;
 	
 	private ArrayList <Referencia> referencias;
 	
@@ -300,6 +301,10 @@ private ArrayList<Hijo> hijos;
 		this.nominas = nominas;
 	}
 
+	public String toString()
+	{
+		return getApellidos() + " " + getNombres();
+	}
 		
 
 }
