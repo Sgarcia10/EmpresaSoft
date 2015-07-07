@@ -1515,7 +1515,7 @@ public void actualizarInformacionReferencia(int index, int posicion) {
 	
 	ArrayList<Referencia> lista = new ArrayList();
 	if (posicion > -1){		
-		 lista = control.darListaReferecniasEmpleado(posicion);
+		 lista = control.darListaReferecniasEmpleado();
 	}
 	else{
 		lista = control.darListaReferecniasEmpleadoNuevo();
@@ -1559,7 +1559,7 @@ public void actualizarInformacionExperiencia(int index, int posicion){
 	ArrayList<Experiencia> lista = new ArrayList();
 	
 	if (posicion > -1){
-		lista = control.darListaExperienciaEmpleado(posicion);
+		lista = control.darListaExperienciaEmpleado();
 	}
 	else{
 		lista = control.darListaExperienciaEmpleadoNuevo();
@@ -1596,7 +1596,7 @@ public void actualizarInformacionHijo(int index, int posicion){
 	System.out.println("A");
 	if (posicion > -1){
 		System.out.println("B");
-		lista = control.darListaHijosEmpleado(posicion);
+		lista = control.darListaHijosEmpleado();
 		
 	}
 	else{
@@ -1643,7 +1643,7 @@ public void actualizarTablaReferecnias(int pos){
 	ArrayList listaReferencias = new ArrayList();
 	
 	if (pos > -1){
-		listaReferencias = control.darListaReferecniasEmpleado(pos);
+		listaReferencias = control.darListaReferecniasEmpleado();
 	}
 	else{
 		listaReferencias = control.darListaReferecniasEmpleadoNuevo();	
@@ -1669,7 +1669,7 @@ public void actualizarTablaExperiencia(int pos){
 	ArrayList listaExperiencia = new ArrayList();
 	
 	if (pos > -1){
-		listaExperiencia = control.darListaExperienciaEmpleado(pos);
+		listaExperiencia = control.darListaExperienciaEmpleado();
 	}
 	else{
 		listaExperiencia = control.darListaExperienciaEmpleadoNuevo();
@@ -1695,7 +1695,7 @@ public void actualizarTablaHijos(int pos){
 	
 	
 	if (pos > -1){
-		listaHijos = control.darListaHijosEmpleado(pos);
+		listaHijos = control.darListaHijosEmpleado();
 	}
 	else{
 		listaHijos = control.darListaHijosEmpleadoNuevo();

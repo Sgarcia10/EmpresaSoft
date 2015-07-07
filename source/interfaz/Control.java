@@ -125,10 +125,6 @@ public class Control {
 		return empresa.getEmpleadoNuevo().getExperiencia();
 	}
 	
-	public Empleado getEmpleado(){
-		return empresa.getEmpleadoNuevo();
-	}
-	
 	public ArrayList getEmpleados(){
 		return empresa.getEmpleados();
 	}
@@ -153,28 +149,25 @@ public class Control {
 		return empresa.getEmpleadoNuevo().getReferencias();
 	}
 	
-	public ArrayList darListaReferecniasEmpleado(int pos){
-		Empleado e = (Empleado) empresa.getEmpleados().get(pos);
-		return e.getReferencias();
+	public ArrayList darListaReferecniasEmpleado(){
+		return empresa.getEmpleadoSeleccionado().getReferencias();
 	}
 	
 	public ArrayList darListaExperienciaEmpleadoNuevo(){
 		return empresa.getEmpleadoNuevo().getExperiencia();
 	}
 	
-	public ArrayList darListaExperienciaEmpleado(int pos){
-		Empleado e = (Empleado) empresa.getEmpleados().get(pos);
-		return e.getExperiencia();
+	public ArrayList darListaExperienciaEmpleado(){
+		return empresa.getEmpleadoSeleccionado().getExperiencia();
 	}
 	
 	public ArrayList darListaHijosEmpleadoNuevo(){
 		return empresa.getEmpleadoNuevo().getHijos();
 	}
 	
-	public ArrayList darListaHijosEmpleado(int pos){
+	public ArrayList darListaHijosEmpleado(){
 		
-		Empleado e = (Empleado) empresa.getEmpleados().get(pos);
-		return e.getHijos();
+		return empresa.getEmpleadoSeleccionado().getHijos();
 	}
 	
 	public ArrayList darListaEmpleados(){
@@ -183,6 +176,11 @@ public class Control {
 	
 	public Empresa getEmpresa(){
 		return (Empresa) empresa;
+	}
+	
+	public Empleado getEmpleadoSeleccionado()
+	{
+		return empresa.getEmpleadoSeleccionado();
 	}
 	
 //	public String getPeriodoNomina() {
