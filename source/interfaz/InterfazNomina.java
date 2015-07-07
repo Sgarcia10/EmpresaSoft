@@ -25,6 +25,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
@@ -32,6 +33,9 @@ import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableColumnModel;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 
 import com.toedter.calendar.JMonthChooser;
 import com.toedter.calendar.JYearChooser;
@@ -61,6 +65,8 @@ public class InterfazNomina extends JFrame implements ActionListener{
 	private ButtonGroup botonesPeriodo;
 	
 	private JList listaEmpleados;
+	private DefaultTableModel modeloTablaEmpleados;
+	private JTable tablaEmpleados;
 	
 	private JLabel lblFoto;
 	
@@ -77,8 +83,9 @@ public class InterfazNomina extends JFrame implements ActionListener{
 
 		setTitle("Liquidación de Nómina");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(200, 50, 766, 544);
-		setResizable(false);
+		setBounds(100, 100, 798, 653);
+		setPreferredSize(new Dimension(970, 580));;
+		setResizable(true);
 		setVisible(false);
 		
 		try {
@@ -98,7 +105,7 @@ public class InterfazNomina extends JFrame implements ActionListener{
 		JPanel panel_1 = new JPanel();
 		panel_1.setBackground(Color.WHITE);
 		panel_1.setBorder(new TitledBorder(null, "Informacion Empleado", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		panel_1.setBounds(241, 145, 498, 353);
+		panel_1.setBounds(441, 140, 500, 367);
 		panel.add(panel_1);
 		panel_1.setLayout(null);
 		
@@ -195,46 +202,90 @@ public class InterfazNomina extends JFrame implements ActionListener{
 		lblTelefonoCelular.setBounds(168, 182, 135, 14);
 		panel_1.add(lblTelefonoCelular);
 		
-		JPanel panel_3 = new JPanel();
-		panel_3.setBackground(Color.WHITE);
-		panel_3.setBorder(new TitledBorder(null, "Lista Empleados", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		panel_3.setBounds(10, 11, 221, 498);
-		panel.add(panel_3);
-		panel_3.setLayout(null);
+		JPanel panelListaEmpleado = new JPanel();
+		panelListaEmpleado.setBackground(Color.WHITE);
+		panelListaEmpleado.setBorder(new TitledBorder(null, "Lista Empleados", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		panelListaEmpleado.setBounds(10, 11, 421, 498);
+		panel.add(panelListaEmpleado);
+		panelListaEmpleado.setLayout(null);
 		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBackground(Color.WHITE);
-		scrollPane.setBounds(10, 52, 201, 401);
-		panel_3.add(scrollPane);
+		scrollPane.setBounds(10, 52, 400, 401);
+		panelListaEmpleado.add(scrollPane);
 		
-		listaEmpleados = new JList();
-		listaEmpleados.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		listaEmpleados.setBackground(Color.WHITE);
-		listaEmpleados.addListSelectionListener(new ListSelectionListener() {
+		modeloTablaEmpleados = new DefaultTableModel();
+		
+	
+		
+		modeloTablaEmpleados.addColumn("Nombre");
+		modeloTablaEmpleados.addColumn("Indentificación");
+		
+		
+		TableColumn columnaNombre, columnaId;
+		DefaultTableColumnModel headers; 
+		DefaultTableModel rows;	
 
-			@Override
-			public void valueChanged(ListSelectionEvent e) {
-				if( listaEmpleados.getSelectedValue() != null){
-					int pos = listaEmpleados.getSelectedIndex();
-					actualizarResumenDatosEmpleadoSeleccionado(pos);
-				}
-				
-			}
-		});	
-		scrollPane.setViewportView(listaEmpleados);
+		//create and define columns 
+		columnaNombre = new TableColumn(0); 
+		columnaNombre.setHeaderValue("Nombre"); // set column name 
+		columnaNombre.setPreferredWidth(150); //set column width 
+
+		columnaId = new TableColumn(1); 
+		columnaId.setHeaderValue("Indentificación"); 
+		columnaId.setPreferredWidth(50); 
+
+		// A DefaultTableColumnModel object is created and the three 
+		// TableColumn objects are added to it. 
+
+		headers = new DefaultTableColumnModel(); 
+		headers.addColumn(columnaNombre); 
+		headers.addColumn(columnaId);  
+		
+
+		tablaEmpleados = new JTable(modeloTablaEmpleados, headers);
+
+		tablaEmpleados.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+	
+		
+		tablaEmpleados.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
+	        public void valueChanged(ListSelectionEvent event) {
+	            // do some actions here, for example
+	            // print first column value from selected row
+	        	String id = tablaEmpleados.getValueAt(tablaEmpleados.getSelectedRow(), 1).toString();
+	            System.out.println(id);
+	            actualizarResumenDatosEmpleadoSeleccionado(id);
+	        }
+	    });
+		
+//		listaEmpleados = new JList();
+//		listaEmpleados.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+//		listaEmpleados.setBackground(Color.WHITE);
+//		listaEmpleados.addListSelectionListener(new ListSelectionListener() {
+//
+//			@Override
+//			public void valueChanged(ListSelectionEvent e) {
+//				if( listaEmpleados.getSelectedValue() != null){
+//					int pos = listaEmpleados.getSelectedIndex();
+//					actualizarResumenDatosEmpleadoSeleccionado(pos);
+//				}
+//				
+//			}
+//		});	
+		scrollPane.setViewportView(tablaEmpleados);
 		
 		JLabel lblBuscar = new JLabel("Buscar");
 		lblBuscar.setBounds(10, 30, 46, 14);
-		panel_3.add(lblBuscar);
+		panelListaEmpleado.add(lblBuscar);
 		
 		busquedaEmpleados = new JTextField();
 		busquedaEmpleados.setBounds(77, 27, 98, 20);
-		panel_3.add(busquedaEmpleados);
+		panelListaEmpleado.add(busquedaEmpleados);
 		busquedaEmpleados.setColumns(10);
 		
 		JButton btnBuscarEmpleados = new JButton("");
 		btnBuscarEmpleados.setBounds(185, 24, 26, 23);
-		panel_3.add(btnBuscarEmpleados);
+		panelListaEmpleado.add(btnBuscarEmpleados);
 		btnBuscarEmpleados.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 			}
@@ -246,11 +297,11 @@ public class InterfazNomina extends JFrame implements ActionListener{
 		btnAgregarEmpleados.setActionCommand("Agregar");
 		btnAgregarEmpleados.addActionListener(this);
 		btnAgregarEmpleados.setBounds(122, 464, 89, 23);
-		panel_3.add(btnAgregarEmpleados);
+		panelListaEmpleado.add(btnAgregarEmpleados);
 		
 		JPanel panel_5 = new JPanel();
 		panel_5.setBackground(Color.WHITE);
-		panel_5.setBounds(242, 11, 157, 123);
+		panel_5.setBounds(442, 11, 157, 123);
 		panel.add(panel_5);
 		
 		JLabel lblNewLabel = new JLabel("");
@@ -289,7 +340,7 @@ public class InterfazNomina extends JFrame implements ActionListener{
 		JPanel panel_Periodo = new JPanel();
 		panel_Periodo.setBorder(new TitledBorder(null, "Período", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		panel_Periodo.setBackground(Color.WHITE);
-		panel_Periodo.setBounds(409, 36, 341, 73);
+		panel_Periodo.setBounds(604, 36, 341, 73);
 		panel.add(panel_Periodo);
 		panel_Periodo.setLayout(null);
 		
@@ -324,6 +375,8 @@ public class InterfazNomina extends JFrame implements ActionListener{
 		loggin.setVisible(true);
 		
 		actualizarListaEmpleados();
+		
+		pack();
 	}
 	
 	public static void main(String[] args) {
@@ -433,19 +486,27 @@ public class InterfazNomina extends JFrame implements ActionListener{
 		ArrayList<Empleado> listaE = control.getEmpleados();
 		
 		if( !listaE.isEmpty( ) ){
-			listaEmpleados.setListData( listaE.toArray( ) );
-			System.out.println(listaE.size());
-			listaEmpleados.setSelectedIndex( listaE.size() - 1);
-			actualizarResumenDatosEmpleadoSeleccionado(listaE.size() - 1);
-
+//			listaEmpleados.setListData( listaE.toArray( ) );
+//			System.out.println(listaE.size());
+//			listaEmpleados.setSelectedIndex( listaE.size() - 1);
+//			actualizarResumenDatosEmpleadoSeleccionado(listaE.size() - 1);
+			for(int i=0; i<listaE.size(); i++)
+			{
+				Empleado e = listaE.get(i);		
+				double d = e.getIdentificacion();
+				DecimalFormat format = new DecimalFormat("#");
+				Object [] row = {e.toString().toUpperCase(), format.format(d)};
+				modeloTablaEmpleados.addRow(row);
+			}
+			
 		}
 		
 		
 	}
 	
-	public void actualizarResumenDatosEmpleadoSeleccionado(int posicionP)
+	public void actualizarResumenDatosEmpleadoSeleccionado(String id)
 	{
-		Empleado e = (Empleado) control.darListaEmpleados().get(posicionP);
+		Empleado e = control.seleccionarEmpleadoIdentificacion(id);
 		Contrato c = e.getContrato();
 		
 		

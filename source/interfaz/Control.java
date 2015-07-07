@@ -133,6 +133,22 @@ public class Control {
 		return empresa.getEmpleados();
 	}
 	
+	public Empleado seleccionarEmpleadoIdentificacion(String id)
+	{
+		String [] idlist = id.split(".");
+		String idp = "";
+		for(int i=0; i<idlist.length; i++)
+		{
+			idp+=idlist[i];
+			System.out.println(idlist[i]);
+		}
+		double identificacion = Double.parseDouble(id);
+		Empleado e = empresa.buscarEmpleadoIdentificacion(identificacion);
+		empresa.seleccionarEmpleado(e);
+		return e;
+	}
+	
+	
 	public ArrayList darListaReferecniasEmpleadoNuevo(){
 		return empresa.getEmpleadoNuevo().getReferencias();
 	}
