@@ -179,6 +179,17 @@ public class DialogoDevengadoHoras extends JDialog implements ActionListener
 		catch( Exception e){
 			JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 		}
+		
+		if(tableNovedaesHoras.getRowCount() == 0){
+			btnAgregar.setEnabled(true);
+			btnModificar.setEnabled(false);
+			btnEliminar.setEnabled(false);
+		}
+		else{
+			btnAgregar.setEnabled(true);
+			btnModificar.setEnabled(true);
+			btnEliminar.setEnabled(true);
+		}
 
 	}
 
@@ -337,6 +348,8 @@ public class DialogoDevengadoHoras extends JDialog implements ActionListener
 			if (confirm == JOptionPane.YES_NO_OPTION){
 				
 				int index = tableNovedaesHoras.getSelectedRow();
+				DefaultTableModel dm = (DefaultTableModel) tableNovedaesHoras.getModel();
+				dm.removeRow(index);
 				eliminar(index);
 			}
 		}
@@ -366,8 +379,8 @@ public class DialogoDevengadoHoras extends JDialog implements ActionListener
 	private void agregarFila(MyTableModel mod){
 
 		btnAgregar.setEnabled(false);
-		escapeA.activar(true);
 		btnEliminar.setEnabled(false);
+		escapeA.activar(true);
 		
 		MyTableModel model = mod;
 		model.addRow(new Object[]{"","","","","","",""});
@@ -419,7 +432,7 @@ public class DialogoDevengadoHoras extends JDialog implements ActionListener
 			
 			btnAgregar.setEnabled(true);
 			btnModificar.setEnabled(true);
-			btnModificar.setEnabled(true);
+			btnEliminar.setEnabled(true);
 			
 			escapeA.activar(false);
 			
@@ -427,6 +440,9 @@ public class DialogoDevengadoHoras extends JDialog implements ActionListener
 			myMod.setRowEditable(myMod.getRowCount()-1, false);
 
 			int row = tableNovedaesHoras.getRowCount();
+			
+			tableNovedaesHoras.setColumnSelectionInterval(2, 2);
+			tableNovedaesHoras.setRowSelectionInterval(row-1, row-1);
 			
 			String fechaRealizado = (String) tableNovedaesHoras.getValueAt(row-1, 2);
 			String cantidad = (String) tableNovedaesHoras.getValueAt(row-1, 3);
@@ -469,6 +485,8 @@ public class DialogoDevengadoHoras extends JDialog implements ActionListener
 	public void cancelarCreación() {
 		
 		btnAgregar.setEnabled(true);
+		btnModificar.setEnabled(true);
+		btnEliminar.setEnabled(true);
 		escapeA.activar(false);
 		
 		int row = tableNovedaesHoras.getRowCount();
@@ -496,6 +514,18 @@ public class DialogoDevengadoHoras extends JDialog implements ActionListener
 	}
 	
 	public void eliminar(int index){
+		
+		if(tableNovedaesHoras.getRowCount() == 0){
+			btnAgregar.setEnabled(true);
+			btnModificar.setEnabled(true);
+			btnEliminar.setEnabled(false);
+		}
+		else{
+			btnAgregar.setEnabled(true);
+			btnModificar.setEnabled(true);
+			btnEliminar.setEnabled(true);
+		}
+		
 		switch ( cont ) {
 
 		case 0: control.eliminarOrdinarioExtraDiurno(index);

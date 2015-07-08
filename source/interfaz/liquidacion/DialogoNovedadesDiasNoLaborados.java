@@ -170,10 +170,22 @@ public class DialogoNovedadesDiasNoLaborados extends JDialog implements ActionLi
 		try{
 			actualizarTitulo();
 			actualizarInformacion();
+			
 		}
 
 		catch( Exception e){
 			JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+		}
+		
+		if(tableNovedaesDiasNoLaborados.getRowCount() == 0){
+			btnAgregar.setEnabled(true);
+			btnModificar.setEnabled(false);
+			btnEliminar.setEnabled(false);
+		}
+		else{
+			btnAgregar.setEnabled(true);
+			btnModificar.setEnabled(true);
+			btnEliminar.setEnabled(true);
 		}
 	}
 
@@ -213,6 +225,7 @@ public class DialogoNovedadesDiasNoLaborados extends JDialog implements ActionLi
 
 		{
 			btnAgregar.setEnabled(false);
+			btnEliminar.setEnabled(false);
 			escapeA.activar(true);
 			btnEliminar.setEnabled(false);
 			
@@ -269,6 +282,8 @@ public class DialogoNovedadesDiasNoLaborados extends JDialog implements ActionLi
 			if (confirm == JOptionPane.YES_NO_OPTION){
 				
 				int index = tableNovedaesDiasNoLaborados.getSelectedRow();
+				DefaultTableModel dm = (DefaultTableModel) tableNovedaesDiasNoLaborados.getModel();
+				dm.removeRow(index);
 				eliminar(index);
 			}
 		}
@@ -295,14 +310,17 @@ public class DialogoNovedadesDiasNoLaborados extends JDialog implements ActionLi
 			
 			btnAgregar.setEnabled(true);
 			btnModificar.setEnabled(true);
-			btnModificar.setEnabled(true);
+			btnEliminar.setEnabled(true);
 			
 			escapeA.activar(false);
 			
 			MyTableModel myMod = (MyTableModel) tableNovedaesDiasNoLaborados.getModel();
 			myMod.setRowEditable(myMod.getRowCount()-1, false);
-
+			
 			int row = tableNovedaesDiasNoLaborados.getRowCount();
+			
+			tableNovedaesDiasNoLaborados.setColumnSelectionInterval(2, 2);
+			tableNovedaesDiasNoLaborados.setRowSelectionInterval(row-1, row-1);
 			
 			String fechaInicio = (String) tableNovedaesDiasNoLaborados.getValueAt(row-1, 2);
 			String duracion = (String) tableNovedaesDiasNoLaborados.getValueAt(row-1, 3);
@@ -328,6 +346,8 @@ public class DialogoNovedadesDiasNoLaborados extends JDialog implements ActionLi
 	public void cancelarCreación() {
 		
 		btnAgregar.setEnabled(true);
+		btnModificar.setEnabled(true);
+		btnEliminar.setEnabled(true);
 		escapeA.activar(false);
 		
 		int row = tableNovedaesDiasNoLaborados.getRowCount();
@@ -355,6 +375,16 @@ public class DialogoNovedadesDiasNoLaborados extends JDialog implements ActionLi
 	}
 	
 	public void eliminar(int index){
+		if(tableNovedaesDiasNoLaborados.getRowCount() == 0){
+			btnAgregar.setEnabled(true);
+			btnModificar.setEnabled(true);
+			btnEliminar.setEnabled(false);
+		}
+		else{
+			btnAgregar.setEnabled(true);
+			btnModificar.setEnabled(true);
+			btnEliminar.setEnabled(true);
+		}
 		control.eliminarDiaNoLaborado(index);
 	}
 }

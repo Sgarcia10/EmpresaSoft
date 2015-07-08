@@ -175,6 +175,17 @@ public class DialogoDeduccionesPrestamos extends JDialog implements ActionListen
 			JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 		}
 		
+		if(tableDeduccionesPrestamos.getRowCount() == 0){
+			btnAgregar.setEnabled(true);
+			btnModificar.setEnabled(false);
+			btnEliminar.setEnabled(false);
+		}
+		else{
+			btnAgregar.setEnabled(true);
+			btnModificar.setEnabled(true);
+			btnEliminar.setEnabled(true);
+		}
+		
 	}
 
 
@@ -240,6 +251,7 @@ public class DialogoDeduccionesPrestamos extends JDialog implements ActionListen
 		if(command.equals("Agregar"))
 		{
 			btnAgregar.setEnabled(false);
+			btnEliminar.setEnabled(false);
 			escapeA.activar(true);
 			btnEliminar.setEnabled(false);
 			
@@ -294,6 +306,8 @@ public class DialogoDeduccionesPrestamos extends JDialog implements ActionListen
 			if (confirm == JOptionPane.YES_NO_OPTION){
 				
 				int index = tableDeduccionesPrestamos.getSelectedRow();
+				DefaultTableModel dm = (DefaultTableModel) tableDeduccionesPrestamos.getModel();
+				dm.removeRow(index);
 				eliminar(index);
 			}
 		}
@@ -319,7 +333,7 @@ public class DialogoDeduccionesPrestamos extends JDialog implements ActionListen
 			
 			btnAgregar.setEnabled(true);
 			btnModificar.setEnabled(true);
-			btnModificar.setEnabled(true);
+			btnEliminar.setEnabled(true);
 			
 			escapeA.activar(false);
 			
@@ -327,6 +341,9 @@ public class DialogoDeduccionesPrestamos extends JDialog implements ActionListen
 			myMod.setRowEditable(myMod.getRowCount()-1, false);
 
 			int row = tableDeduccionesPrestamos.getRowCount();
+			
+			tableDeduccionesPrestamos.setColumnSelectionInterval(2, 2);
+			tableDeduccionesPrestamos.setRowSelectionInterval(row-1, row-1);
 			
 			String fechaPrestamo = (String) tableDeduccionesPrestamos.getValueAt(row-1, 2);
 			String concepto = (String) tableDeduccionesPrestamos.getValueAt(row-1, 3);
@@ -351,6 +368,8 @@ public class DialogoDeduccionesPrestamos extends JDialog implements ActionListen
 	public void cancelarCreación() {
 		
 		btnAgregar.setEnabled(true);
+		btnModificar.setEnabled(true);
+		btnEliminar.setEnabled(true);
 		escapeA.activar(false);
 		
 		int row = tableDeduccionesPrestamos.getRowCount();
@@ -378,6 +397,17 @@ public class DialogoDeduccionesPrestamos extends JDialog implements ActionListen
 	}
 	
 	public void eliminar(int index){
+		
+		if(tableDeduccionesPrestamos.getRowCount() == 0){
+			btnAgregar.setEnabled(true);
+			btnModificar.setEnabled(true);
+			btnEliminar.setEnabled(false);
+		}
+		else{
+			btnAgregar.setEnabled(true);
+			btnModificar.setEnabled(true);
+			btnEliminar.setEnabled(true);
+		}
 		control.eliminarDiaNoLaborado(index);
 	}
 
