@@ -138,6 +138,7 @@ public class DialogoDeduccionesPrestamos extends JDialog implements ActionListen
 		btnModificar.setBounds(77, 254, 169, 23);
 		btnModificar.addActionListener(this);
 		btnModificar.setActionCommand("Modificar");
+		btnModificar.setEnabled(false);
 		panel.add(btnModificar);
 
 		btnAgregar = new JButton("Agregar");

@@ -144,6 +144,7 @@ public class DialogoDevengadoHoras extends JDialog implements ActionListener
 		btnModificar = new JButton("Modificar");
 		btnModificar.setBounds(71, 254, 169, 23);
 		btnModificar.addActionListener(this);
+		btnModificar.setEnabled(false);
 		btnModificar.setActionCommand("Modificar");
 		panel.add(btnModificar);
 
