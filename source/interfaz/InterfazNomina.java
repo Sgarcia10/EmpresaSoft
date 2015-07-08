@@ -451,9 +451,15 @@ public class InterfazNomina extends JFrame implements ActionListener{
 		}
 		else if (command.equals("Liquidación de Nómina")){
 			String periodo = darPeriodo();	
-			DialogoNomina nomina = new DialogoNomina(this, control, periodo);
-			nomina.setLocationRelativeTo(this);
-			nomina.setVisible(true);
+			
+			if (tablaEmpleados.getSelectedRow() >= 0){
+				DialogoNomina nomina = new DialogoNomina(this, control, periodo);
+				nomina.setLocationRelativeTo(this);
+				nomina.setVisible(true);
+			}
+			else{
+				JOptionPane.showMessageDialog(this, "Debe seleccionar un empleado", "Error", JOptionPane.ERROR_MESSAGE);
+			}
 		}
 		
 	}

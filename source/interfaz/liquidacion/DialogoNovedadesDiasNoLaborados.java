@@ -2,6 +2,7 @@ package interfaz.liquidacion;
 
 import interfaz.Control;
 import interfaz.EnterAction;
+import interfaz.EscapeAction;
 import interfaz.InterfazNomina;
 import interfaz.MyTableModel;
 import interfaz.ValidarCampos;
@@ -69,6 +70,7 @@ public class DialogoNovedadesDiasNoLaborados extends JDialog implements ActionLi
 	private JPanel panel;
 	private JButton btnModificar;
 	private JButton btnAgregar;
+	private JButton btnEliminar;
 	private JButton btnAnterior;
 	private JButton btnSiguiente;
 
@@ -78,8 +80,11 @@ public class DialogoNovedadesDiasNoLaborados extends JDialog implements ActionLi
 	private TableCellEditor tce;
 
 	private EnterAction enterA;
+	private EscapeAction escapeA;
 
 	private static final String solve = "Solve";
+	private static final String cancel = "Cancel";
+
 
 
 	public DialogoNovedadesDiasNoLaborados( InterfazNomina ventana, Control pControl) {
@@ -118,22 +123,38 @@ public class DialogoNovedadesDiasNoLaborados extends JDialog implements ActionLi
 		tableNovedaesDiasNoLaborados.getInputMap(JTable.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(enter,solve);
 		tableNovedaesDiasNoLaborados.getActionMap().put(solve, enterA);
 		//
-
+		
+		//Escape action command para cancelar el proceso de agregar
+		escapeA = new EscapeAction(this);
+		KeyStroke escape = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0);
+		tableNovedaesDiasNoLaborados.getInputMap(JTable.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(escape,cancel);
+		tableNovedaesDiasNoLaborados.getActionMap().put(cancel, escapeA);
+		//
+		
+		
 		JScrollPane scrollPane = new JScrollPane(tableNovedaesDiasNoLaborados);
 		scrollPane.setBounds(10, 22, 632, 221);
 		panel.add(scrollPane);
 
 		btnModificar = new JButton("Modificar");
-		btnModificar.setBounds(164, 254, 169, 23);
+		btnModificar.setBounds(76, 254, 169, 23);
 		btnModificar.addActionListener(this);
 		btnModificar.setActionCommand("Modificar");
+		btnModificar.setEnabled(false);
 		panel.add(btnModificar);
 
 		btnAgregar = new JButton("Agregar");
-		btnAgregar.setBounds(343, 254, 169, 23);
+		btnAgregar.setBounds(255, 254, 169, 23);
 		btnAgregar.addActionListener(this);
 		btnAgregar.setActionCommand("Agregar");
 		panel.add(btnAgregar);
+		
+		btnEliminar = new JButton("Eliminar");
+		btnEliminar.addActionListener(this);
+		btnEliminar.setEnabled(false);
+		btnEliminar.setActionCommand("Eliminar");
+		btnEliminar.setBounds(434, 254, 169, 23);
+		panel.add(btnEliminar);
 
 		btnAnterior = new JButton("Anterior");
 		btnAnterior.setBounds(165, 310, 186, 23);
@@ -192,24 +213,39 @@ public class DialogoNovedadesDiasNoLaborados extends JDialog implements ActionLi
 		if(command.equals("Agregar"))
 
 		{
+			btnAgregar.setEnabled(false);
+			escapeA.activar(true);
+			btnEliminar.setEnabled(false);
+			
 			model = (DefaultTableModel) tableNovedaesDiasNoLaborados.getModel();
 			model.addRow(new Object[]{"","","","","",""});
 
+			MyTableModel myMod = (MyTableModel) tableNovedaesDiasNoLaborados.getModel();
+			myMod.agregarFila();
+			
 			int numeroFilas = model.getRowCount();
 			model.setValueAt(sdf.format(new Date()), numeroFilas-1, 0);
+			
+			String user = control.darUsuario();
+			model.setValueAt(user, numeroFilas-1, 1);
 
 			int row = numeroFilas - 1;
-			int column = 1;
-
-			MyTableModel myMod = (MyTableModel) tableNovedaesDiasNoLaborados.getModel();
+			int column = 2;
+			
+			if (numeroFilas > 0){
+				for (int i = 0; i < numeroFilas-1; i++){
+					myMod.setRowEditable(i, false);
+				}
+			}
+			
 			myMod.setRowEditable(myMod.getRowCount()-1, true);
-
+			
 			tableNovedaesDiasNoLaborados.setCellSelectionEnabled(true);
 
 			tableNovedaesDiasNoLaborados.setColumnSelectionInterval(column, column);
 			tableNovedaesDiasNoLaborados.setRowSelectionInterval(row, row);
 
-			tableNovedaesDiasNoLaborados.requestFocus();
+//			tableNovedaesDiasNoLaborados.requestFocus();
 			tableNovedaesDiasNoLaborados.editCellAt(row, column);
 
 			if (tableNovedaesDiasNoLaborados.editCellAt(row, column))
@@ -217,36 +253,27 @@ public class DialogoNovedadesDiasNoLaborados extends JDialog implements ActionLi
 				Component editor = tableNovedaesDiasNoLaborados.getEditorComponent();
 				editor.requestFocusInWindow();
 			}
-
-			//CellEditorListener para guargdar datos cuando se edite la ultima columna
-			TableCellEditor tce = tableNovedaesDiasNoLaborados.getCellEditor();
-			tce.addCellEditorListener(new CellEditorListener(){
-
-				@Override
-				public void editingCanceled(ChangeEvent e) {
-					// TODO Auto-generated method stub
-
-				}
-
-				@Override
-				public void editingStopped(ChangeEvent e) {
-
-					int row = tableNovedaesDiasNoLaborados.getSelectedRow();
-					int column = tableNovedaesDiasNoLaborados.getSelectedColumn();
-
-					if (column == tableNovedaesDiasNoLaborados.getColumnCount()-1){
-
-						guardarNovedad();
-
-					}				
-
-				}
-
-			}) ;
+			 
+//			myMod.setRowEditable(myMod.getRowCount()-1, true);
 		}
 		else if (command.equals("Modificar")){
-
+			
+			int row = tableNovedaesDiasNoLaborados.getSelectedRow();
+			int column = tableNovedaesDiasNoLaborados.getSelectedColumn();
+			modificar(row, column);
 		}
+		
+		else if (command.equals("Eliminar")){
+			
+			int confirm = JOptionPane.showConfirmDialog(this, "¿Desea eliminar la novedad seleccionada?","Warning",JOptionPane.YES_NO_OPTION);		
+
+			if (confirm == JOptionPane.YES_NO_OPTION){
+				
+				int index = tableNovedaesDiasNoLaborados.getSelectedRow();
+				eliminar(index);
+			}
+		}
+		
 		else if( command.equals("Anterior")){
 			//			cont--;
 			//			actualizarTitulo();
@@ -266,16 +293,69 @@ public class DialogoNovedadesDiasNoLaborados extends JDialog implements ActionLi
 		int confirm = JOptionPane.showConfirmDialog(this, "¿Desea guardar los cambios realizados?","Warning",JOptionPane.YES_NO_OPTION);		
 
 		if (confirm == JOptionPane.YES_NO_OPTION){
-
+			
+			btnAgregar.setEnabled(true);
+			btnModificar.setEnabled(true);
+			btnModificar.setEnabled(true);
+			
+			escapeA.activar(false);
+			
 			MyTableModel myMod = (MyTableModel) tableNovedaesDiasNoLaborados.getModel();
 			myMod.setRowEditable(myMod.getRowCount()-1, false);
 
+			int row = tableNovedaesDiasNoLaborados.getRowCount();
+			
+			String fechaInicio = (String) tableNovedaesDiasNoLaborados.getValueAt(row-1, 2);
+			String duracion = (String) tableNovedaesDiasNoLaborados.getValueAt(row-1, 3);
+			String concepto = (String) tableNovedaesDiasNoLaborados.getValueAt(row-1, 4);
+			String incapacidad = (String) tableNovedaesDiasNoLaborados.getValueAt(row-1, 5);
+			
+			if (btnModificar.isEnabled()){
+				control.editarDiaNoLaborado(tableNovedaesDiasNoLaborados.getSelectedRow(), fechaInicio,duracion,concepto,incapacidad);
+			}
+			else{
+				control.agregarDiaNoLaborado(fechaInicio,duracion,concepto,incapacidad);
+			}
+			
 		}
 
 	}
 
 	public ValidarCampos getValidador(){
 		return validador;
-	} 
+	}
 
+
+	public void cancelarCreación() {
+		
+		btnAgregar.setEnabled(true);
+		escapeA.activar(false);
+		
+		int row = tableNovedaesDiasNoLaborados.getRowCount();
+		DefaultTableModel model = (DefaultTableModel) tableNovedaesDiasNoLaborados.getModel();
+		model.removeRow(row-1);
+	} 
+	
+	public void modificar(int row, int column){
+		
+		btnAgregar.setEnabled(false);
+		btnModificar.setEnabled(true);
+		btnEliminar.setEnabled(true);
+		
+		MyTableModel myMod = (MyTableModel) tableNovedaesDiasNoLaborados.getModel();
+		myMod.setRowEditable(row, true);
+		
+		tableNovedaesDiasNoLaborados.editCellAt(row, column);
+
+		if (tableNovedaesDiasNoLaborados.editCellAt(row, column))
+		{
+			Component editor = tableNovedaesDiasNoLaborados.getEditorComponent();
+			editor.requestFocusInWindow();
+		}
+		
+	}
+	
+	public void eliminar(int index){
+		control.eliminarDiaNoLaborado(index);
+	}
 }

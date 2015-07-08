@@ -78,6 +78,7 @@ public class DialogoDevengadoHoras extends JDialog implements ActionListener
 	private static final String solve = "Solve";
 	private EnterAction enterA;
 	private SimpleDateFormat sdf;
+	private JButton btnEliminar;
 
 	public DialogoDevengadoHoras( InterfazNomina ventana,  Control pControl, int pCont) {
 		super(null, java.awt.Dialog.ModalityType.TOOLKIT_MODAL);
@@ -129,16 +130,22 @@ public class DialogoDevengadoHoras extends JDialog implements ActionListener
 		panel.add(scrollPane);
 
 		btnModificar = new JButton("Modificar");
-		btnModificar.setBounds(164, 254, 169, 23);
+		btnModificar.setBounds(71, 254, 169, 23);
 		btnModificar.addActionListener(this);
 		btnModificar.setActionCommand("Modificar");
 		panel.add(btnModificar);
 
 		btnAgregar = new JButton("Agregar");
-		btnAgregar.setBounds(343, 254, 169, 23);
+		btnAgregar.setBounds(250, 254, 169, 23);
 		btnAgregar.addActionListener(this);
 		btnAgregar.setActionCommand("Agregar");
 		panel.add(btnAgregar);
+		
+		btnEliminar = new JButton("Eliminar");
+		btnEliminar.addActionListener(this);
+		btnEliminar.setActionCommand("Eliminar");
+		btnEliminar.setBounds(429, 254, 169, 23);
+		panel.add(btnEliminar);
 
 		btnAnterior = new JButton("Anterior");
 		btnAnterior.setBounds(165, 310, 186, 23);
@@ -175,11 +182,11 @@ public class DialogoDevengadoHoras extends JDialog implements ActionListener
 			novedadesDias.setVisible(true); break;
 
 
-		case 0: titulo = "Ordinaria - Extra Diurno"; actualizarOrdinariaExtraDiurno(); tableNovedaesHoras.setModel(ordinaria_extra_diurno);break;
-		case 1: titulo = "Ordinaria - Extra Nocturno"; actualizarOrdinariaExtraNocturno(); btnAnterior.setEnabled(true); tableNovedaesHoras.setModel(ordinaria_extra_nocturno); break;
-		case 2: titulo = "Dominical y Festivo - Extra Diurno";  actualizarDominicalExtraDiurno();tableNovedaesHoras.setModel(dominical_extra_diurno); break;
-		case 3: titulo = "Dominical y Festivo - Extra Nocturno";  actualizarDominicalExtraNocturno( );tableNovedaesHoras.setModel(dominical_extra_nocturno);break;
-		case 4: titulo = "Dominical y Festivo - Dominical y Festivo"; actualizarDominicalDiasDomYFestivos( ); tableNovedaesHoras.setModel(dominical_dia);break;
+		case 0: titulo = "Ordinaria - Extra Diurno"; /*actualizarOrdinariaExtraDiurno();*/ tableNovedaesHoras.setModel(ordinaria_extra_diurno);break;
+		case 1: titulo = "Ordinaria - Extra Nocturno";  /*actualizarOrdinariaExtraNocturno();*/ btnAnterior.setEnabled(true); tableNovedaesHoras.setModel(ordinaria_extra_nocturno); break;
+		case 2: titulo = "Dominical y Festivo - Extra Diurno";  /* actualizarDominicalExtraDiurno();*/tableNovedaesHoras.setModel(dominical_extra_diurno); break;
+		case 3: titulo = "Dominical y Festivo - Extra Nocturno";   /*actualizarDominicalExtraNocturno( );*/tableNovedaesHoras.setModel(dominical_extra_nocturno);break;
+		case 4: titulo = "Dominical y Festivo - Dominical y Festivo";  /*actualizarDominicalDiasDomYFestivos( );*/ tableNovedaesHoras.setModel(dominical_dia);break;
 		case 5: 
 
 			this.setVisible(false);

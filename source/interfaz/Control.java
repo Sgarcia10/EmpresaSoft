@@ -1,7 +1,6 @@
 package interfaz;
 
 import java.util.ArrayList;
-
 import java.util.Date;
 
 import javax.swing.ImageIcon;
@@ -236,6 +235,79 @@ public class Control {
 		int rta = n.getPeriodoLiquidacion();
 		return rta;
 	}
+	
+	
+	public void agregarDiaNoLaborado(String fechaInicio, String duracion, String concepto, String incapacidad){
+		
+	}
+	
+	public void editarDiaNoLaborado(int index, String fechaInicio, String duracion, String concepto, String incapacidad){
+		
+	}
+	
+	public void eliminarDiaNoLaborado(int index){
+		
+	}
+	
+	public void agregarOrdinarioExtraDiurno(String fechaRealizado, String cantidad, String concepto, String valorUnitario, String subTotal){
+		
+	}
+	
+	public void editarOrdinarioExtraDiurno(int index, String fechaRealizado, String cantidad, String concepto, String valorUnitario, String subTotal){
+		
+	}
+	
+	public void eliminarOrdinarioExtraDiurno(int index){
+		
+	}
+	
+	public void agregarOrdinarioExtraNocturno(String fechaRealizado, String cantidad, String concepto, String valorUnitario, String subTotal){
+		
+	}
+	
+	public void editarOrdinarioExtraNocturno(int index, String fechaRealizado, String cantidad, String concepto, String valorUnitario, String subTotal){
+		
+	}
+	
+	public void eliminarOrdinarioExtraNocturno(int index){
+		
+	}
+	
+	public void agregarDominicalExtraDiurno(String fechaRealizado, String cantidad, String concepto, String valorUnitario, String subTotal){
+		
+	}
+	
+	public void editarDominicalExtraDiurno(int index, String fechaRealizado, String cantidad, String concepto, String valorUnitario, String subTotal){
+		
+	}
+	
+	public void eliminarDominicalExtraDiurno(int index){
+		
+	}
+	
+	public void agregarDominicalExtraNocturno(String fechaRealizado, String cantidad, String concepto, String valorUnitario, String subTotal){
+		
+	}
+	
+	public void editarDominicalExtraNocturno(int index, String fechaRealizado, String cantidad, String concepto, String valorUnitario, String subTotal){
+		
+	}
+	
+	public void eliminarDominicalExtraNocturno(int index){
+		
+	}
+	
+	public void agregarDominicalDiasDominicalesYFestivos(String fechaRealizado, String cantidad, String concepto, String valorUnitario, String subTotal){
+		
+	}
+	
+	public void editarDominicalDiasDominicalesYFestivos(int index, String fechaRealizado, String cantidad, String concepto, String valorUnitario, String subTotal){
+		
+	}
+	
+	public void eliminarDominicalDiasDominicalesYFestivos(int index){
+		
+	}
 
 	public double getNovedadesSueldoPeriodo(String periodo) throws NoExisteEmpleadoException, NominaNoEncontradaException {
 		Nomina n = getNominaEmpleadoSeleccionado(periodo);
@@ -419,6 +491,11 @@ public class Control {
 				 tipoP,  documentoP,  sexoP,  estadoCivilP, 
 				 fechaP,  direccionP,  ciudadP, departamentoP, correoP, nacionalidadP, telefonoP, celularP,fotoP);
 		
+	}
+	
+	public String darUsuario(){
+		String res = "usuario";
+		return res;
 	}
 
 	

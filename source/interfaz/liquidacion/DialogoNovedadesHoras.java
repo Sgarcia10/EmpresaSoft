@@ -169,4 +169,11 @@ public class DialogoNovedadesHoras extends JDialog implements ActionListener
 		}
 	}
 
+
+	public void cancelarCreación() {
+		btnAgregar.setEnabled(true);
+		int row = tableNovedaesHoras.getRowCount();
+		tableNovedaesHoras.removeRowSelectionInterval(row-1, row-1);
+	}
+
 }

@@ -77,6 +77,7 @@ public class DialogoNomina extends JDialog implements ActionListener, MouseListe
 	private String mensajeErrorConNomina;
 
 	public DialogoNomina( InterfazNomina ventana, Control pControl, String pPeriodo) {
+		
 		super(null, java.awt.Dialog.ModalityType.TOOLKIT_MODAL);
 		setIconImage(Toolkit.getDefaultToolkit().getImage(DialogoNomina.class.getResource("/com/sun/java/swing/plaf/windows/icons/Computer.gif")));
 		getContentPane().setBackground(Color.WHITE);
@@ -296,7 +297,6 @@ public class DialogoNomina extends JDialog implements ActionListener, MouseListe
 
 		catch( Exception e){
 			JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-			
 		}
 		//		actualizarAbonos();
 		//		actualizarNotas();
@@ -462,4 +462,5 @@ public class DialogoNomina extends JDialog implements ActionListener, MouseListe
 		// TODO Auto-generated method stub
 
 	}
+
 }

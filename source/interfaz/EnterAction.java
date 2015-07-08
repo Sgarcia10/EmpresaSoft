@@ -1,5 +1,8 @@
 package interfaz;
 
+import interfaz.liquidacion.DialogoNovedadesDiasNoLaborados;
+import interfaz.liquidacion.DialogoNovedadesHoras;
+
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeListener;
@@ -81,8 +84,8 @@ public class EnterAction extends AbstractAction {
 			else {
 				
 				t.clearSelection();
-				t.setCellSelectionEnabled(false);
-				
+//				t.setCellSelectionEnabled(false);
+				guardarNovedad();
 				
 			}
 
@@ -130,8 +133,17 @@ public class EnterAction extends AbstractAction {
 	}
 
 	private void guardarNovedad() {
-		// TODO Auto-generated method stub
-		//escribir valores en la 
+		String titulo = dialogo.getTitle();
+		
+		if (titulo.equalsIgnoreCase("Novedades")){
+			((DialogoNovedadesDiasNoLaborados) dialogo).guardarNovedad();
+		}
+		else if (titulo.equalsIgnoreCase("Devengado")){
+			((DialogoNovedadesHoras) dialogo).cancelarCreación();
+		}
+		else if (titulo.equalsIgnoreCase("Deducciones")){
+			((DialogoNovedadesHoras) dialogo).cancelarCreación();
+		}
 	}
 
 }

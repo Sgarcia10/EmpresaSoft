@@ -83,6 +83,7 @@ public class DialogoDeduccionesPrestamos extends JDialog implements ActionListen
 	private EnterAction enterA;
 	
 	private static final String solve = "Solve";
+	private JButton btnEliminar;
 
 	public DialogoDeduccionesPrestamos( InterfazNomina ventana, Control pControl) {
 		super(null, java.awt.Dialog.ModalityType.TOOLKIT_MODAL);
@@ -124,16 +125,22 @@ public class DialogoDeduccionesPrestamos extends JDialog implements ActionListen
 		panel.add(scrollPane);
 
 		btnModificar = new JButton("Modificar");
-		btnModificar.setBounds(164, 254, 169, 23);
+		btnModificar.setBounds(77, 254, 169, 23);
 		btnModificar.addActionListener(this);
 		btnModificar.setActionCommand("Modificar");
 		panel.add(btnModificar);
 
 		btnAgregar = new JButton("Agregar");
-		btnAgregar.setBounds(343, 254, 169, 23);
+		btnAgregar.setBounds(256, 254, 169, 23);
 		btnAgregar.addActionListener(this);
 		btnAgregar.setActionCommand("Agregar");
 		panel.add(btnAgregar);
+		
+		btnEliminar = new JButton("Eliminar");
+		btnEliminar.addActionListener(this);
+		btnEliminar.setActionCommand("Eliminar");
+		btnEliminar.setBounds(435, 254, 169, 23);
+		panel.add(btnEliminar);
 
 		btnAnterior = new JButton("Anterior");
 		btnAnterior.setBounds(165, 310, 186, 23);
@@ -148,7 +155,7 @@ public class DialogoDeduccionesPrestamos extends JDialog implements ActionListen
 		getContentPane().add(btnSiguiente);
 
 		actualizarTitulo();
-		actualizarInformacion();
+//		actualizarInformacion();
 		
 	}
 
