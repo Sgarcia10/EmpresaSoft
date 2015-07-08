@@ -73,6 +73,10 @@ public class EnterAction extends AbstractAction {
 			
 			else if (column < t.getColumnCount()-1){
 				
+				if (dialogo.getTitle().equalsIgnoreCase("Devengado") && column == 5){
+					((DialogoDevengadoHoras) dialogo).calcularSubtotal();
+				}
+				
 				t.setColumnSelectionInterval(column+1, column+1);
 				t.setRowSelectionInterval(row, row);
 				
@@ -81,6 +85,8 @@ public class EnterAction extends AbstractAction {
 				    Component editor = t.getEditorComponent();
 				    editor.requestFocusInWindow();
 				}
+				
+				
 			}
 			
 			else {

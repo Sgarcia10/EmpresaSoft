@@ -4,6 +4,7 @@ import interfaz.Control;
 import interfaz.EnterAction;
 import interfaz.EscapeAction;
 import interfaz.InterfazNomina;
+import interfaz.MyDateSelector;
 import interfaz.MyTableModel;
 import interfaz.ValidarCampos;
 
@@ -231,6 +232,9 @@ public class DialogoNovedadesDiasNoLaborados extends JDialog implements ActionLi
 			
 			model = (DefaultTableModel) tableNovedaesDiasNoLaborados.getModel();
 			model.addRow(new Object[]{"","","","","",""});
+			
+			TableColumn fechaI = tableNovedaesDiasNoLaborados.getColumnModel().getColumn(2);
+			fechaI.setCellEditor(new MyDateSelector());
 
 			MyTableModel myMod = (MyTableModel) tableNovedaesDiasNoLaborados.getModel();
 			myMod.agregarFila();
@@ -265,8 +269,7 @@ public class DialogoNovedadesDiasNoLaborados extends JDialog implements ActionLi
 				Component editor = tableNovedaesDiasNoLaborados.getEditorComponent();
 				editor.requestFocusInWindow();
 			}
-			 
-//			myMod.setRowEditable(myMod.getRowCount()-1, true);
+
 		}
 		else if (command.equals("Modificar")){
 			

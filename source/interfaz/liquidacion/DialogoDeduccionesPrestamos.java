@@ -4,6 +4,7 @@ import interfaz.Control;
 import interfaz.EnterAction;
 import interfaz.EscapeAction;
 import interfaz.InterfazNomina;
+import interfaz.MyDateSelector;
 import interfaz.MyTableModel;
 import interfaz.ValidarCampos;
 
@@ -49,6 +50,7 @@ import javax.swing.table.DefaultTableModel;
 
 
 import javax.swing.table.TableCellEditor;
+import javax.swing.table.TableColumn;
 
 import java.awt.Toolkit;
 
@@ -257,6 +259,9 @@ public class DialogoDeduccionesPrestamos extends JDialog implements ActionListen
 			
 			DefaultTableModel model = (DefaultTableModel) tableDeduccionesPrestamos.getModel();
 			model.addRow(new Object[]{"","","","","",""});
+			
+			TableColumn fechaI = tableDeduccionesPrestamos.getColumnModel().getColumn(2);
+			fechaI.setCellEditor(new MyDateSelector());
 			
 			MyTableModel myMod = (MyTableModel) tableDeduccionesPrestamos.getModel();
 			myMod.agregarFila();

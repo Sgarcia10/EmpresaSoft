@@ -14,7 +14,14 @@ public class MyTableModel extends DefaultTableModel {
 
     @Override
     public boolean isCellEditable(int row, int column) { // custom isCellEditable function
-        return this.editable_row [row];
+        
+    	if (column == 0 || column == 1){
+    		return false;
+    	}
+    	else{
+    		return this.editable_row [row];
+    	}
+    	
     }
 
     public void setRowEditable(int row, boolean value) {

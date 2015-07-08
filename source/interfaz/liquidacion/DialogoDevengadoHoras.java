@@ -4,6 +4,7 @@ import interfaz.Control;
 import interfaz.EnterAction;
 import interfaz.EscapeAction;
 import interfaz.InterfazNomina;
+import interfaz.MyDateSelector;
 import interfaz.MyTableModel;
 
 import java.awt.Color;
@@ -42,6 +43,7 @@ import javax.swing.table.DefaultTableModel;
 
 
 import javax.swing.table.TableCellEditor;
+import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 
 import java.awt.Toolkit;
@@ -385,6 +387,9 @@ public class DialogoDevengadoHoras extends JDialog implements ActionListener
 		MyTableModel model = mod;
 		model.addRow(new Object[]{"","","","","","",""});
 		model.agregarFila();
+		
+		TableColumn fechaI = tableNovedaesHoras.getColumnModel().getColumn(2);
+		fechaI.setCellEditor(new MyDateSelector());
 
 		int numeroFilas = model.getRowCount();
 		int numeroColumnas = model.getColumnCount();
@@ -536,6 +541,20 @@ public class DialogoDevengadoHoras extends JDialog implements ActionListener
 
 		default: ; break;
 		
+		}
+		
+	}
+	
+	public void calcularSubtotal() {
+		
+		try{
+			int cantidad = Integer.parseInt((String) tableNovedaesHoras.getValueAt(tableNovedaesHoras.getRowCount()-1, 3));
+			int precio = Integer.parseInt((String) tableNovedaesHoras.getValueAt(tableNovedaesHoras.getRowCount()-1, 5));
+			int subTotal = cantidad*precio;
+			tableNovedaesHoras.setValueAt(subTotal, tableNovedaesHoras.getRowCount()-1, 6);
+		}
+		catch (Exception e){
+			JOptionPane.showMessageDialog(this, "Cantidad y Valor Unitario deben ser valores numéricos enteros", "Error", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 
