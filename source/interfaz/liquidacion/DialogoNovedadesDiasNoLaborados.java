@@ -131,7 +131,6 @@ public class DialogoNovedadesDiasNoLaborados extends JDialog implements ActionLi
 		tableNovedaesDiasNoLaborados.getActionMap().put(cancel, escapeA);
 		//
 		
-		
 		JScrollPane scrollPane = new JScrollPane(tableNovedaesDiasNoLaborados);
 		scrollPane.setBounds(10, 22, 632, 221);
 		panel.add(scrollPane);

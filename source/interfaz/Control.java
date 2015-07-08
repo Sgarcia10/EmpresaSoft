@@ -308,6 +308,18 @@ public class Control {
 	public void eliminarDominicalDiasDominicalesYFestivos(int index){
 		
 	}
+	
+	public void agregarDeduccionesOtrosTotalPrestamos(String fechaPrestamo, String concepto, String total, String cuotaPeriodo, String saldo){
+		
+	}
+	
+	public void editarDeduccionesOtrosTotalPrestamos(int index, String fechaPrestamo, String concepto, String total, String cuotaPeriodo, String saldo){
+		
+	}
+	
+	public void eliminarDeduccionesOtrosTotalPrestamos(int index){
+		
+	}
 
 	public double getNovedadesSueldoPeriodo(String periodo) throws NoExisteEmpleadoException, NominaNoEncontradaException {
 		Nomina n = getNominaEmpleadoSeleccionado(periodo);

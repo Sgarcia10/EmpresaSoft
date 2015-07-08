@@ -1,5 +1,7 @@
 package interfaz;
 
+import interfaz.liquidacion.DialogoDeduccionesPrestamos;
+import interfaz.liquidacion.DialogoDevengadoHoras;
 import interfaz.liquidacion.DialogoNovedadesDiasNoLaborados;
 import interfaz.liquidacion.DialogoNovedadesHoras;
 
@@ -43,10 +45,10 @@ public class EscapeAction extends AbstractAction{
 					((DialogoNovedadesDiasNoLaborados) dialogo).cancelarCreación();
 				}
 				else if (titulo.equalsIgnoreCase("Devengado")){
-					((DialogoNovedadesHoras) dialogo).cancelarCreación();
+					((DialogoDevengadoHoras) dialogo).cancelarCreación();
 				}
 				else if (titulo.equalsIgnoreCase("Deducciones")){
-					((DialogoNovedadesHoras) dialogo).cancelarCreación();
+					((DialogoDeduccionesPrestamos) dialogo).cancelarCreación();
 				}
 			}
 		}		

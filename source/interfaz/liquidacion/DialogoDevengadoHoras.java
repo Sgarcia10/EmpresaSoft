@@ -2,6 +2,7 @@ package interfaz.liquidacion;
 
 import interfaz.Control;
 import interfaz.EnterAction;
+import interfaz.EscapeAction;
 import interfaz.InterfazNomina;
 import interfaz.MyTableModel;
 
@@ -75,10 +76,14 @@ public class DialogoDevengadoHoras extends JDialog implements ActionListener
 	private MyTableModel dominical_extra_nocturno;
 	private MyTableModel dominical_dia;
 
-	private static final String solve = "Solve";
-	private EnterAction enterA;
 	private SimpleDateFormat sdf;
 	private JButton btnEliminar;
+	
+	private EnterAction enterA;
+	private EscapeAction escapeA;
+
+	private static final String solve = "Solve";
+	private static final String cancel = "Cancel";
 
 	public DialogoDevengadoHoras( InterfazNomina ventana,  Control pControl, int pCont) {
 		super(null, java.awt.Dialog.ModalityType.TOOLKIT_MODAL);
@@ -115,6 +120,13 @@ public class DialogoDevengadoHoras extends JDialog implements ActionListener
 		tableNovedaesHoras.getInputMap(JTable.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(enter,solve);
 		tableNovedaesHoras.getActionMap().put(solve, enterA);
 		//
+		
+		//Escape action command para cancelar el proceso de agregar
+		escapeA = new EscapeAction(this);
+		KeyStroke escape = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0);
+		tableNovedaesHoras.getInputMap(JTable.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(escape,cancel);
+		tableNovedaesHoras.getActionMap().put(cancel, escapeA);
+		//
 
 		tableNovedaesHoras.getTableHeader().setReorderingAllowed(false);
 
@@ -144,6 +156,7 @@ public class DialogoDevengadoHoras extends JDialog implements ActionListener
 		btnEliminar = new JButton("Eliminar");
 		btnEliminar.addActionListener(this);
 		btnEliminar.setActionCommand("Eliminar");
+		btnEliminar.setEnabled(false);
 		btnEliminar.setBounds(429, 254, 169, 23);
 		panel.add(btnEliminar);
 
@@ -164,7 +177,6 @@ public class DialogoDevengadoHoras extends JDialog implements ActionListener
 		}
 		catch( Exception e){
 			JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-
 		}
 
 	}
@@ -311,7 +323,21 @@ public class DialogoDevengadoHoras extends JDialog implements ActionListener
 
 		}
 		else if (command.equals("Modificar")){
+			
+			int row = tableNovedaesHoras.getSelectedRow();
+			int column = tableNovedaesHoras.getSelectedColumn();
+			modificar(row, column);
+		}
+		
+		else if (command.equals("Eliminar")){
+			
+			int confirm = JOptionPane.showConfirmDialog(this, "¿Desea eliminar la novedad seleccionada?","Warning",JOptionPane.YES_NO_OPTION);		
 
+			if (confirm == JOptionPane.YES_NO_OPTION){
+				
+				int index = tableNovedaesHoras.getSelectedRow();
+				eliminar(index);
+			}
 		}
 		else if( command.equals("Anterior")){
 			cont--;
@@ -336,20 +362,34 @@ public class DialogoDevengadoHoras extends JDialog implements ActionListener
 		}
 	}
 
-	private void agregarFila(TableModel mod){
+	private void agregarFila(MyTableModel mod){
 
-		DefaultTableModel model = (DefaultTableModel) mod;
-
+		btnAgregar.setEnabled(false);
+		escapeA.activar(true);
+		btnEliminar.setEnabled(false);
+		
+		MyTableModel model = mod;
 		model.addRow(new Object[]{"","","","","","",""});
-		model.isCellEditable(0, 0);
+		model.agregarFila();
 
 		int numeroFilas = model.getRowCount();
 		int numeroColumnas = model.getColumnCount();
 
 		model.setValueAt(sdf.format(new Date()), numeroFilas-1, 0);
+		
+		String user = control.darUsuario();
+		model.setValueAt(user, numeroFilas-1, 1);
 
 		int row = numeroFilas - 1;
-		int column = 1;
+		int column = 2;
+		
+		if (numeroFilas > 0){
+			for (int i = 0; i < numeroFilas-1; i++){
+				mod.setRowEditable(i, false);
+			}
+		}
+		
+//		mod.setRowEditable(mod.getRowCount()-1, true);
 
 		MyTableModel myMod = (MyTableModel) tableNovedaesHoras.getModel();
 		myMod.setRowEditable(myMod.getRowCount()-1, true);
@@ -359,7 +399,7 @@ public class DialogoDevengadoHoras extends JDialog implements ActionListener
 		tableNovedaesHoras.setColumnSelectionInterval(column, column);
 		tableNovedaesHoras.setRowSelectionInterval(row, row);
 
-		tableNovedaesHoras.requestFocus();
+//		tableNovedaesHoras.requestFocus();
 		tableNovedaesHoras.editCellAt(row, column);
 
 		if (tableNovedaesHoras.editCellAt(row, column))
@@ -367,31 +407,7 @@ public class DialogoDevengadoHoras extends JDialog implements ActionListener
 			Component editor = tableNovedaesHoras.getEditorComponent();
 			editor.requestFocusInWindow();
 		}
-
-		TableCellEditor tce = tableNovedaesHoras.getCellEditor();
-		tce.addCellEditorListener(new CellEditorListener(){
-
-			@Override
-			public void editingCanceled(ChangeEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void editingStopped(ChangeEvent e) {
-
-				int row = tableNovedaesHoras.getSelectedRow();
-				int column = tableNovedaesHoras.getSelectedColumn();
-
-				if (column == tableNovedaesHoras.getColumnCount()-1){
-
-					guardarNovedad();
-
-				}				
-
-			}
-
-		}) ;
+		
 	}
 
 	public void guardarNovedad(){
@@ -399,11 +415,97 @@ public class DialogoDevengadoHoras extends JDialog implements ActionListener
 		int confirm = JOptionPane.showConfirmDialog(this, "¿Desea guardar los cambios realizados?","Warning",JOptionPane.YES_NO_OPTION);		
 
 		if (confirm == JOptionPane.YES_NO_OPTION){
-
+			
+			btnAgregar.setEnabled(true);
+			btnModificar.setEnabled(true);
+			btnModificar.setEnabled(true);
+			
+			escapeA.activar(false);
+			
 			MyTableModel myMod = (MyTableModel) tableNovedaesHoras.getModel();
 			myMod.setRowEditable(myMod.getRowCount()-1, false);
+
+			int row = tableNovedaesHoras.getRowCount();
+			
+			String fechaRealizado = (String) tableNovedaesHoras.getValueAt(row-1, 2);
+			String cantidad = (String) tableNovedaesHoras.getValueAt(row-1, 3);
+			String concepto = (String) tableNovedaesHoras.getValueAt(row-1, 4);
+			String valorUnitario = (String) tableNovedaesHoras.getValueAt(row-1, 5);
+			String subTotal = (String) tableNovedaesHoras.getValueAt(row-1, 6);
+			
+			if (btnModificar.isEnabled()){
+				
+				switch ( cont ) {
+
+				case 0: control.editarOrdinarioExtraDiurno(tableNovedaesHoras.getSelectedRow(),fechaRealizado, cantidad, concepto, valorUnitario, subTotal); break;
+				case 1: control.editarOrdinarioExtraNocturno(tableNovedaesHoras.getSelectedRow(),fechaRealizado, cantidad, concepto, valorUnitario, subTotal); break;
+				case 2: control.editarDominicalExtraDiurno(tableNovedaesHoras.getSelectedRow(),fechaRealizado, cantidad, concepto, valorUnitario, subTotal); break;
+				case 3: control.editarDominicalExtraNocturno(tableNovedaesHoras.getSelectedRow(),fechaRealizado, cantidad, concepto, valorUnitario, subTotal); break;
+				case 4: control.editarDominicalDiasDominicalesYFestivos(tableNovedaesHoras.getSelectedRow(),fechaRealizado, cantidad, concepto, valorUnitario, subTotal);break;
+
+				default: ; break;
+				}
+			}
+			else{
+				
+				switch ( cont ) {
+
+				case 0: control.agregarOrdinarioExtraDiurno(fechaRealizado, cantidad, concepto, valorUnitario, subTotal); break;
+				case 1: control.agregarOrdinarioExtraNocturno(fechaRealizado, cantidad, concepto, valorUnitario, subTotal); break;
+				case 2: control.agregarDominicalExtraDiurno(fechaRealizado, cantidad, concepto, valorUnitario, subTotal); break;
+				case 3: control.agregarDominicalExtraNocturno(fechaRealizado, cantidad, concepto, valorUnitario, subTotal); break;
+				case 4: control.agregarDominicalDiasDominicalesYFestivos(fechaRealizado, cantidad, concepto, valorUnitario, subTotal);break;
+
+				default: ; break;
+				}
+				
+			}
+			
 		}
 
+	}
+	
+	public void cancelarCreación() {
+		
+		btnAgregar.setEnabled(true);
+		escapeA.activar(false);
+		
+		int row = tableNovedaesHoras.getRowCount();
+		DefaultTableModel model = (DefaultTableModel) tableNovedaesHoras.getModel();
+		model.removeRow(row-1);
+	} 
+	
+	public void modificar(int row, int column){
+		
+		btnAgregar.setEnabled(false);
+		btnModificar.setEnabled(true);
+		btnEliminar.setEnabled(true);
+		
+		MyTableModel myMod = (MyTableModel) tableNovedaesHoras.getModel();
+		myMod.setRowEditable(row, true);
+		
+		tableNovedaesHoras.editCellAt(row, column);
+
+		if (tableNovedaesHoras.editCellAt(row, column))
+		{
+			Component editor = tableNovedaesHoras.getEditorComponent();
+			editor.requestFocusInWindow();
+		}
+		
+	}
+	
+	public void eliminar(int index){
+		switch ( cont ) {
+
+		case 0: control.eliminarOrdinarioExtraDiurno(index);
+		case 1: control.eliminarOrdinarioExtraNocturno(index);
+		case 2: control.eliminarDominicalExtraDiurno(index);
+		case 3: control.eliminarDominicalExtraNocturno(index);
+		case 4: control.eliminarDominicalDiasDominicalesYFestivos(index);
+
+		default: ; break;
+		
+		}
 	}
 
 }

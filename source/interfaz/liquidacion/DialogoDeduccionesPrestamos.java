@@ -2,6 +2,7 @@ package interfaz.liquidacion;
 
 import interfaz.Control;
 import interfaz.EnterAction;
+import interfaz.EscapeAction;
 import interfaz.InterfazNomina;
 import interfaz.MyTableModel;
 import interfaz.ValidarCampos;
@@ -72,6 +73,7 @@ public class DialogoDeduccionesPrestamos extends JDialog implements ActionListen
 	private JPanel panel;
 	private JButton btnModificar;
 	private JButton btnAgregar;
+	private JButton btnEliminar;
 	private JButton btnAnterior;
 	private JButton btnSiguiente;
 	
@@ -81,9 +83,10 @@ public class DialogoDeduccionesPrestamos extends JDialog implements ActionListen
 	private TableCellEditor tce;
 	
 	private EnterAction enterA;
-	
+	private EscapeAction escapeA;
+
 	private static final String solve = "Solve";
-	private JButton btnEliminar;
+	private static final String cancel = "Cancel";
 
 	public DialogoDeduccionesPrestamos( InterfazNomina ventana, Control pControl) {
 		super(null, java.awt.Dialog.ModalityType.TOOLKIT_MODAL);
@@ -120,6 +123,13 @@ public class DialogoDeduccionesPrestamos extends JDialog implements ActionListen
 		tableDeduccionesPrestamos.getActionMap().put(solve, new EnterAction(this));
 		//
 		
+		//Escape action command para cancelar el proceso de agregar
+		escapeA = new EscapeAction(this);
+		KeyStroke escape = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0);
+		tableDeduccionesPrestamos.getInputMap(JTable.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(escape,cancel);
+		tableDeduccionesPrestamos.getActionMap().put(cancel, escapeA);
+		//		
+		
 		JScrollPane scrollPane = new JScrollPane(tableDeduccionesPrestamos);
 		scrollPane.setBounds(10, 22, 632, 221);
 		panel.add(scrollPane);
@@ -139,6 +149,7 @@ public class DialogoDeduccionesPrestamos extends JDialog implements ActionListen
 		btnEliminar = new JButton("Eliminar");
 		btnEliminar.addActionListener(this);
 		btnEliminar.setActionCommand("Eliminar");
+		btnEliminar.setEnabled(false);
 		btnEliminar.setBounds(435, 254, 169, 23);
 		panel.add(btnEliminar);
 
@@ -154,8 +165,14 @@ public class DialogoDeduccionesPrestamos extends JDialog implements ActionListen
 		btnSiguiente.setActionCommand("Siguiente");
 		getContentPane().add(btnSiguiente);
 
-		actualizarTitulo();
-//		actualizarInformacion();
+		try{
+			actualizarTitulo();
+			actualizarInformacion();
+		}
+
+		catch( Exception e){
+			JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+		}
 		
 	}
 
@@ -221,16 +238,31 @@ public class DialogoDeduccionesPrestamos extends JDialog implements ActionListen
 		System.out.println( command );
 		if(command.equals("Agregar"))
 		{
+			btnAgregar.setEnabled(false);
+			escapeA.activar(true);
+			btnEliminar.setEnabled(false);
+			
 			DefaultTableModel model = (DefaultTableModel) tableDeduccionesPrestamos.getModel();
 			model.addRow(new Object[]{"","","","","",""});
+			
+			MyTableModel myMod = (MyTableModel) tableDeduccionesPrestamos.getModel();
+			myMod.agregarFila();
 			
 			int numeroFilas = model.getRowCount();
 			model.setValueAt(sdf.format(new Date()), numeroFilas-1, 0);
 			
-			int row = numeroFilas - 1;
-			int column = 1;
+			String user = control.darUsuario();
+			model.setValueAt(user, numeroFilas-1, 1);
 			
-			MyTableModel myMod = (MyTableModel) tableDeduccionesPrestamos.getModel();
+			int row = numeroFilas - 1;
+			int column = 2;
+			
+			if (numeroFilas > 0){
+				for (int i = 0; i < numeroFilas-1; i++){
+					myMod.setRowEditable(i, false);
+				}
+			}
+			
 			myMod.setRowEditable(myMod.getRowCount()-1, true);
 			
 			tableDeduccionesPrestamos.setCellSelectionEnabled(true);
@@ -238,7 +270,7 @@ public class DialogoDeduccionesPrestamos extends JDialog implements ActionListen
 			tableDeduccionesPrestamos.setColumnSelectionInterval(column, column);
 			tableDeduccionesPrestamos.setRowSelectionInterval(row, row);
 
-			tableDeduccionesPrestamos.requestFocus();
+//			tableDeduccionesPrestamos.requestFocus();
 			tableDeduccionesPrestamos.editCellAt(row, column);
 			
 			if (tableDeduccionesPrestamos.editCellAt(row, column))
@@ -246,35 +278,23 @@ public class DialogoDeduccionesPrestamos extends JDialog implements ActionListen
 			    Component editor = tableDeduccionesPrestamos.getEditorComponent();
 			    editor.requestFocusInWindow();
 			}
-			
-			//CellEditorListener para guargdar datos cuando se edite la ultima columna
-			TableCellEditor tce = tableDeduccionesPrestamos.getCellEditor();
-			tce.addCellEditorListener(new CellEditorListener(){
-
-				@Override
-				public void editingCanceled(ChangeEvent e) {
-					// TODO Auto-generated method stub
-					
-				}
-
-				@Override
-				public void editingStopped(ChangeEvent e) {
-					
-					int row = tableDeduccionesPrestamos.getSelectedRow();
-					int column = tableDeduccionesPrestamos.getSelectedColumn();
-					
-					if (column == tableDeduccionesPrestamos.getColumnCount()-1){
-						
-						guardarNovedad();
-							
-					}				
-					
-				}
-				
-			}) ;
 		}
 		else if (command.equals("Modificar")){
 			
+			int row = tableDeduccionesPrestamos.getSelectedRow();
+			int column = tableDeduccionesPrestamos.getSelectedColumn();
+			modificar(row, column);
+		}
+		
+		else if (command.equals("Eliminar")){
+			
+			int confirm = JOptionPane.showConfirmDialog(this, "¿Desea eliminar la novedad seleccionada?","Warning",JOptionPane.YES_NO_OPTION);		
+
+			if (confirm == JOptionPane.YES_NO_OPTION){
+				
+				int index = tableDeduccionesPrestamos.getSelectedRow();
+				eliminar(index);
+			}
 		}
 		else if( command.equals("Anterior")){
 //			cont--;
@@ -293,17 +313,71 @@ public class DialogoDeduccionesPrestamos extends JDialog implements ActionListen
 	public void guardarNovedad(){
 		
 		int confirm = JOptionPane.showConfirmDialog(this, "¿Desea guardar los cambios realizados?","Warning",JOptionPane.YES_NO_OPTION);		
-		
+
 		if (confirm == JOptionPane.YES_NO_OPTION){
+			
+			btnAgregar.setEnabled(true);
+			btnModificar.setEnabled(true);
+			btnModificar.setEnabled(true);
+			
+			escapeA.activar(false);
 			
 			MyTableModel myMod = (MyTableModel) tableDeduccionesPrestamos.getModel();
 			myMod.setRowEditable(myMod.getRowCount()-1, false);
-		}
-		
+
+			int row = tableDeduccionesPrestamos.getRowCount();
+			
+			String fechaPrestamo = (String) tableDeduccionesPrestamos.getValueAt(row-1, 2);
+			String concepto = (String) tableDeduccionesPrestamos.getValueAt(row-1, 3);
+			String total = (String) tableDeduccionesPrestamos.getValueAt(row-1, 4);
+			String cuotaPeriodo = (String) tableDeduccionesPrestamos.getValueAt(row-1, 5);
+			String saldo = (String) tableDeduccionesPrestamos.getValueAt(row-1, 6);
+			
+			if (btnModificar.isEnabled()){
+				control.editarDeduccionesOtrosTotalPrestamos(tableDeduccionesPrestamos.getSelectedRow(), fechaPrestamo, concepto, total, cuotaPeriodo, saldo);
+			}
+			else{
+				control.agregarDeduccionesOtrosTotalPrestamos(fechaPrestamo, concepto, total, cuotaPeriodo, saldo);
+			}
+			
+		}		
 	}
 	
 	public ValidarCampos getValidador(){
 		return validador;
 	} 
+	
+	public void cancelarCreación() {
+		
+		btnAgregar.setEnabled(true);
+		escapeA.activar(false);
+		
+		int row = tableDeduccionesPrestamos.getRowCount();
+		DefaultTableModel model = (DefaultTableModel) tableDeduccionesPrestamos.getModel();
+		model.removeRow(row-1);
+	} 
+	
+	public void modificar(int row, int column){
+		
+		btnAgregar.setEnabled(false);
+		btnModificar.setEnabled(true);
+		btnEliminar.setEnabled(true);
+		
+		MyTableModel myMod = (MyTableModel) tableDeduccionesPrestamos.getModel();
+		myMod.setRowEditable(row, true);
+		
+		tableDeduccionesPrestamos.editCellAt(row, column);
+
+		if (tableDeduccionesPrestamos.editCellAt(row, column))
+		{
+			Component editor = tableDeduccionesPrestamos.getEditorComponent();
+			editor.requestFocusInWindow();
+		}
+		
+	}
+	
+	public void eliminar(int index){
+		control.eliminarDiaNoLaborado(index);
+	}
 
 }
