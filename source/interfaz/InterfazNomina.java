@@ -439,15 +439,16 @@ public class InterfazNomina extends JFrame implements ActionListener{
 			agregarEmpleado.setVisible(true);
 		}
 		else if (command.equals("Ver mas")){
-			int pos = -1;
+			int pos = tablaEmpleados.getSelectedRow();
 			
-			if( listaEmpleados.getSelectedValue() != null){
-				pos = listaEmpleados.getSelectedIndex();
+			if (pos > -1){
+				DialogoAgregarEmpleado verEmpleado = new DialogoAgregarEmpleado(control,this,pos);
+				verEmpleado.setLocationRelativeTo(this);
+				verEmpleado.setVisible(true);
 			}
-			
-			DialogoAgregarEmpleado verEmpleado = new DialogoAgregarEmpleado(control,this,pos);
-			verEmpleado.setLocationRelativeTo(this);
-			verEmpleado.setVisible(true);
+			else{
+				JOptionPane.showMessageDialog(this, "Debe seleccionar un empleado", "Error", JOptionPane.ERROR_MESSAGE);
+			}
 		}
 		else if (command.equals("Liquidación de Nómina")){
 			String periodo = darPeriodo();	
