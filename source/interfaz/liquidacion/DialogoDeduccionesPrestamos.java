@@ -400,7 +400,7 @@ public class DialogoDeduccionesPrestamos extends JDialog implements ActionListen
 		
 		if(tableDeduccionesPrestamos.getRowCount() == 0){
 			btnAgregar.setEnabled(true);
-			btnModificar.setEnabled(true);
+			btnModificar.setEnabled(false);
 			btnEliminar.setEnabled(false);
 		}
 		else{

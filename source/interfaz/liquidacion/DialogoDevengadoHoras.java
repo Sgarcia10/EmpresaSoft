@@ -517,7 +517,7 @@ public class DialogoDevengadoHoras extends JDialog implements ActionListener
 		
 		if(tableNovedaesHoras.getRowCount() == 0){
 			btnAgregar.setEnabled(true);
-			btnModificar.setEnabled(true);
+			btnModificar.setEnabled(false);
 			btnEliminar.setEnabled(false);
 		}
 		else{

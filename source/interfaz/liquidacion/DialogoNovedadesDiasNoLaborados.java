@@ -377,7 +377,7 @@ public class DialogoNovedadesDiasNoLaborados extends JDialog implements ActionLi
 	public void eliminar(int index){
 		if(tableNovedaesDiasNoLaborados.getRowCount() == 0){
 			btnAgregar.setEnabled(true);
-			btnModificar.setEnabled(true);
+			btnModificar.setEnabled(false);
 			btnEliminar.setEnabled(false);
 		}
 		else{
