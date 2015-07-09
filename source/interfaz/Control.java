@@ -466,7 +466,7 @@ public class Control {
 		return n.getDevengado().getListaDominicalExtraNocturno();
 	}
 
-	public ArrayList getListaDominicalDiasDominicalesYFestivos(String periodo) {
+	public ArrayList getListaDominicalDiasDominicalesYFestivos(String periodo) throws NoExisteEmpleadoException, NominaNoEncontradaException {
 		// TODO Auto-generated method stub
 		ArrayList rta = new ArrayList( );
 		return rta;

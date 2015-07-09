@@ -72,6 +72,17 @@ public class InterfazNomina extends JFrame implements ActionListener{
 	
 	private DecimalFormat formatoNumeros;
 	private DecimalFormat formatoDinero;
+	private JMenu mnAgregar;
+	private JMenu mnAgregarNovedades;
+	private JMenuItem mntmDiasNoLaborados;
+	private JMenu mnAgregarDevengados;
+	private JMenuItem mntmOrdinariosHorasExtrasDiurnas;
+	private JMenuItem mntmOrdinariosHorasExtrasNocturnas;
+	private JMenuItem mntmOrdinariosRecargoNocturno;
+	private JMenuItem mntmDominicalesHorasExtrasDirunas;
+	private JMenuItem mntmDominicalesHorasExtrasNocturnas;
+	private JMenuItem mntmDominicalesRecargoNocturno;
+	private JMenuItem mntmDominicalesDiasDominicalesY;
 	
 	public InterfazNomina() {
 		
@@ -328,6 +339,45 @@ public class InterfazNomina extends JFrame implements ActionListener{
 		JMenuItem mntmSalir = new JMenuItem("Salir");
 		mntmSalir.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F4, InputEvent.ALT_MASK));
 		mnArchivo.add(mntmSalir);
+		
+		mnAgregar = new JMenu("Agregar");
+		menuBar.add(mnAgregar);
+		
+		mnAgregarNovedades = new JMenu("Novedades");
+		mnAgregar.add(mnAgregarNovedades);
+		
+		mntmDiasNoLaborados = new JMenuItem("D\u00EDas No Laborados");
+		mnAgregarNovedades.add(mntmDiasNoLaborados);
+		
+		mnAgregarDevengados = new JMenu("Devengados");
+		mnAgregar.add(mnAgregarDevengados);
+		
+		JMenu mnDevengadosOrdinarios = new JMenu("Ordinarios");
+		mnAgregarDevengados.add(mnDevengadosOrdinarios);
+		
+		mntmOrdinariosHorasExtrasDiurnas = new JMenuItem("Horas Extras Diurnas");
+		mnDevengadosOrdinarios.add(mntmOrdinariosHorasExtrasDiurnas);
+		
+		mntmOrdinariosHorasExtrasNocturnas = new JMenuItem("Horas Extras Nocturnas");
+		mnDevengadosOrdinarios.add(mntmOrdinariosHorasExtrasNocturnas);
+		
+		mntmOrdinariosRecargoNocturno = new JMenuItem("Recargo Nocturno");
+		mnDevengadosOrdinarios.add(mntmOrdinariosRecargoNocturno);
+		
+		JMenu mnDominicalesYFestivos = new JMenu("Dominicales Y Festivos");
+		mnAgregarDevengados.add(mnDominicalesYFestivos);
+		
+		mntmDominicalesHorasExtrasDirunas = new JMenuItem("Horas Extras Dirunas");
+		mnDominicalesYFestivos.add(mntmDominicalesHorasExtrasDirunas);
+		
+		mntmDominicalesHorasExtrasNocturnas = new JMenuItem("Horas Extras Nocturnas");
+		mnDominicalesYFestivos.add(mntmDominicalesHorasExtrasNocturnas);
+		
+		mntmDominicalesRecargoNocturno = new JMenuItem("Recargo Nocturno");
+		mnDominicalesYFestivos.add(mntmDominicalesRecargoNocturno);
+		
+		mntmDominicalesDiasDominicalesY = new JMenuItem("D\u00EDas Dominicales y Festivos");
+		mnDominicalesYFestivos.add(mntmDominicalesDiasDominicalesY);
 		
 		JMenu mnAbout = new JMenu("About");
 		menuBar.add(mnAbout);
