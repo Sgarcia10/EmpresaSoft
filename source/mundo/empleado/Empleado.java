@@ -3,9 +3,11 @@ package mundo.empleado;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
 
 import javax.swing.ImageIcon;
 
+import Excepciones.NominaExistenteException;
 import mundo.Contrato;
 import mundo.nomina.Nomina;
 import mundo.nomina.Prestamo;
@@ -18,7 +20,7 @@ public class Empleado extends Persona implements Serializable{
 	
 	private ArrayList <Referencia> referencias;
 	
-	private ArrayList <Nomina> nominas;	
+	private LinkedList <Nomina> nominas;	
 	
 	private ArrayList<Prestamo> prestamos;
 
@@ -51,12 +53,12 @@ public class Empleado extends Persona implements Serializable{
 		super(identificacion, tipoDocumento, nombre, apellidos, sexo, fechaNacimiento,
 				estadoCivil, correo, edad, telefono, celularP, direccion, ciudad, 
 				departamento, nacionalidad);
-		nominas = new ArrayList<Nomina>();
+		nominas = new LinkedList<Nomina>();
 		
 		hijos = new ArrayList();
 		referencias = new ArrayList();
 		experiencia = new ArrayList();
-		nominas = new ArrayList<>();		
+	
 		prestamos = new ArrayList<Prestamo>();
 		foto = null;
 	}
@@ -181,6 +183,17 @@ public class Empleado extends Persona implements Serializable{
 		return null;
 	}
 	
+	public Nomina agregarNomina(String periodo) throws NominaExistenteException
+	{
+		if(buscarNominaPeriodo(periodo)==null){
+			Nomina n = new Nomina(this, periodo);
+			nominas.addFirst(n);
+			return n;
+		}
+		else
+			throw new NominaExistenteException("Ya esta creada la última nomina");
+	}
+	
 	public Contrato getContrato()
 	{
 		return contrato;
@@ -258,7 +271,6 @@ public class Empleado extends Persona implements Serializable{
 		return referencias;
 	}
 
-
 	public void setReferencias(ArrayList referenciasP) {
 		this.referencias = referenciasP;
 	}
@@ -270,7 +282,6 @@ public class Empleado extends Persona implements Serializable{
 	public void setExperiencia(ArrayList experiencia) {
 		this.experiencia = experiencia;
 	}
-	
 	
 	public String getCajaCompensacion(){
 		return cajaCompensacion;
@@ -293,11 +304,11 @@ public class Empleado extends Persona implements Serializable{
 		return prestamos;
 	}	
 
-	public ArrayList<Nomina> getNominas() {
+	public LinkedList<Nomina> getNominas() {
 		return nominas;
 	}
 
-	public void setNominas(ArrayList<Nomina> nominas) {
+	public void setNominas(LinkedList<Nomina> nominas) {
 		this.nominas = nominas;
 	}
 
