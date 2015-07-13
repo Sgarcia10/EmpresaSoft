@@ -7,11 +7,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 import javax.swing.ImageIcon;
 
+import Excepciones.NominaExistenteException;
 import mundo.empleado.Empleado;
 
 public class Empresa implements IEmpresa {
@@ -256,6 +259,29 @@ public class Empresa implements IEmpresa {
 	{
 		if(e!=null)
 			empleadoSeleccionado = e;
+		
+	}
+	
+	public void agregarNomina()
+	{
+		Calendar c = Calendar.getInstance();
+		int dia = c.get(Calendar.DATE);
+		int anio = c.get(Calendar.YEAR);
+		String mes = new SimpleDateFormat("MMMM").format(c.getTime());
+		String dias = "";
+		if(dia<16)
+			dias="1-15";
+		else
+			dias="16-30";
+		String periodo = dias+ "/" + mes + "/" + anio;
+		
+		try {
+			empleadoSeleccionado.agregarNomina(periodo);
+		} catch (NominaExistenteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 
 	@Override
