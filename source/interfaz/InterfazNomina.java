@@ -9,8 +9,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.text.DateFormatSymbols;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
@@ -227,12 +230,9 @@ public class InterfazNomina extends JFrame implements ActionListener{
 		
 		modeloTablaEmpleados = new DefaultTableModel();
 		
-	
-		
 		modeloTablaEmpleados.addColumn("Nombre");
 		modeloTablaEmpleados.addColumn("Indentificación");
-		
-		
+
 		TableColumn columnaNombre, columnaId;
 		DefaultTableColumnModel headers; 
 		DefaultTableModel rows;	
@@ -433,8 +433,8 @@ public class InterfazNomina extends JFrame implements ActionListener{
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					InterfazNomina frame = new InterfazNomina( );
 					
+					InterfazNomina frame = new InterfazNomina( );
 					//frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -535,7 +535,7 @@ public class InterfazNomina extends JFrame implements ActionListener{
 				}
 		String periodo = botonesPeriodo.getSelection().getActionCommand();
 		String year = "" + anoPeriodo.getValue();
-		return periodo + " " + mes + ", " + year;
+		return periodo + "/" + mes + "/" + year;
 	}
 	
 	public void actualizarListaEmpleados(){
