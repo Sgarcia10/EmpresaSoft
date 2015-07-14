@@ -258,7 +258,10 @@ public class Empresa implements IEmpresa {
 	public void seleccionarEmpleado(Empleado e)
 	{
 		if(e!=null)
+		{
 			empleadoSeleccionado = e;
+			agregarNomina();
+		}
 		
 	}
 	
@@ -277,6 +280,7 @@ public class Empresa implements IEmpresa {
 		
 		try {
 			empleadoSeleccionado.agregarNomina(periodo);
+			System.out.println("creo nomina periodo: "+periodo);
 		} catch (NominaExistenteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
