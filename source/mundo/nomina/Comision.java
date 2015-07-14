@@ -1,12 +1,15 @@
 package mundo.nomina;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import mundo.Registro;
 import mundo.Usuario;
 
-public class Comision extends Registro
-{
+public class Comision extends Registro implements Serializable {
+	
+	private final static long serialVersionUID = 200L;
+	
 	private double valor;
 	
 	private Date fecha;

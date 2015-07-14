@@ -1,5 +1,6 @@
 package mundo.nomina;
 
+import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -8,8 +9,10 @@ import java.util.Date;
 import mundo.Usuario;
 import mundo.empleado.Empleado;
 
-public class Nomina 
-{		
+public class Nomina  implements Serializable {
+	
+	private final static long serialVersionUID = 200L;
+	
 	private int salarioBasico;
 	
 	private boolean auxilioTransporte;

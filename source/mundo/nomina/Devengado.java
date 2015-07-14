@@ -1,12 +1,15 @@
 package mundo.nomina;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
 import mundo.Constantes;
 
-public class Devengado
-{
+public class Devengado implements Serializable {
+	
+	private final static long serialVersionUID = 200L;
+	
 	private boolean auxilioTransporte;
 	
 	private ArrayList<HoraExtra> horasExtra;

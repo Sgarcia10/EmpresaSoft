@@ -1,12 +1,15 @@
 package mundo.nomina;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import mundo.Registro;
 import mundo.Usuario;
 
-public class Prestamo extends Registro
-{
+public class Prestamo extends Registro implements Serializable {
+	
+	private final static long serialVersionUID = 200L;
+	
 	private Date fechaExpedicion;
 	
 	private double cantidad;

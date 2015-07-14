@@ -1,13 +1,16 @@
 package mundo.nomina;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import mundo.Constantes;
 import mundo.Registro;
 import mundo.Usuario;
 
-public class HoraExtra extends Registro
-{
+public class HoraExtra extends Registro implements Serializable {
+	
+	private final static long serialVersionUID = 200L;
+	
 	private Date fechaLaborada;
 	
 	private boolean festivo;

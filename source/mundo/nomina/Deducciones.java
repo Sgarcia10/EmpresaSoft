@@ -1,10 +1,12 @@
 package mundo.nomina;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Deducciones 
-{
+public class Deducciones implements Serializable {
 	
+	private final static long serialVersionUID = 200L;
+		
 	private int salarioBasico;
 	
 	private boolean auxilioTransporte;

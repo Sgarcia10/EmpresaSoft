@@ -1,12 +1,15 @@
 package mundo.nomina;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import mundo.Registro;
 import mundo.Usuario;
 
-public class DiasNoLaborados extends Registro
-{
+public class DiasNoLaborados extends Registro implements Serializable {
+	
+	private final static long serialVersionUID = 200L;
+	
 	private boolean excusa;
 	
 	private Date fechaInicio;
