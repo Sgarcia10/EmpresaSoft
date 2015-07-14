@@ -86,6 +86,8 @@ public class InterfazNomina extends JFrame implements ActionListener{
 	private JMenuItem mntmDominicalesHorasExtrasNocturnas;
 	private JMenuItem mntmDominicalesRecargoNocturno;
 	private JMenuItem mntmDominicalesDiasDominicalesY;
+	private JMenu mnDevengadosOrdinarios;
+	private JMenu mnDominicalesYFestivos;
 	
 	public InterfazNomina() {
 		
@@ -346,37 +348,53 @@ public class InterfazNomina extends JFrame implements ActionListener{
 		mnAgregarNovedades = new JMenu("Novedades");
 		mnAgregar.add(mnAgregarNovedades);
 		
-		mntmDiasNoLaborados = new JMenuItem("D\u00EDas No Laborados");
+		mntmDiasNoLaborados = new JMenuItem("Días No Laborados");
+		mntmDiasNoLaborados.setActionCommand("DiasNoLaborados");
+		mntmDiasNoLaborados.addActionListener(this);
 		mnAgregarNovedades.add(mntmDiasNoLaborados);
 		
 		mnAgregarDevengados = new JMenu("Devengados");
 		mnAgregar.add(mnAgregarDevengados);
 		
-		JMenu mnDevengadosOrdinarios = new JMenu("Ordinarios");
+		mnDevengadosOrdinarios = new JMenu("Ordinarios");
 		mnAgregarDevengados.add(mnDevengadosOrdinarios);
 		
 		mntmOrdinariosHorasExtrasDiurnas = new JMenuItem("Horas Extras Diurnas");
+		mntmOrdinariosHorasExtrasDiurnas.setActionCommand("OrdinariosHorasExtrasDiurnas");
+		mntmOrdinariosHorasExtrasDiurnas.addActionListener(this);
 		mnDevengadosOrdinarios.add(mntmOrdinariosHorasExtrasDiurnas);
 		
 		mntmOrdinariosHorasExtrasNocturnas = new JMenuItem("Horas Extras Nocturnas");
+		mntmOrdinariosHorasExtrasNocturnas.setActionCommand("OrdinariosHorasExtrasNocturnas");
+		mntmOrdinariosHorasExtrasNocturnas.addActionListener(this);
 		mnDevengadosOrdinarios.add(mntmOrdinariosHorasExtrasNocturnas);
 		
 		mntmOrdinariosRecargoNocturno = new JMenuItem("Recargo Nocturno");
+		mntmOrdinariosRecargoNocturno.setActionCommand("OrdinariosRecargoNocturno");
+		mntmOrdinariosRecargoNocturno.addActionListener(this);
 		mnDevengadosOrdinarios.add(mntmOrdinariosRecargoNocturno);
 		
-		JMenu mnDominicalesYFestivos = new JMenu("Dominicales Y Festivos");
+		mnDominicalesYFestivos = new JMenu("Dominicales Y Festivos");
 		mnAgregarDevengados.add(mnDominicalesYFestivos);
 		
 		mntmDominicalesHorasExtrasDirunas = new JMenuItem("Horas Extras Dirunas");
+		mntmDominicalesHorasExtrasDirunas.setActionCommand("DominicalesHorasExtrasDirunas");
+		mntmDominicalesHorasExtrasDirunas.addActionListener(this);
 		mnDominicalesYFestivos.add(mntmDominicalesHorasExtrasDirunas);
 		
 		mntmDominicalesHorasExtrasNocturnas = new JMenuItem("Horas Extras Nocturnas");
+		mntmDominicalesHorasExtrasDirunas.setActionCommand("DominicalesHorasExtrasDirunas");
+		mntmDominicalesHorasExtrasDirunas.addActionListener(this);
 		mnDominicalesYFestivos.add(mntmDominicalesHorasExtrasNocturnas);
 		
 		mntmDominicalesRecargoNocturno = new JMenuItem("Recargo Nocturno");
+		mntmDominicalesRecargoNocturno.setActionCommand("DominicalesRecargoNocturno");
+		mntmDominicalesRecargoNocturno.addActionListener(this);
 		mnDominicalesYFestivos.add(mntmDominicalesRecargoNocturno);
 		
-		mntmDominicalesDiasDominicalesY = new JMenuItem("D\u00EDas Dominicales y Festivos");
+		mntmDominicalesDiasDominicalesY = new JMenuItem("Días Dominicales y Festivos");
+		mntmDominicalesDiasDominicalesY.setActionCommand("DominicalesDiasDominicalesY");
+		mntmDominicalesDiasDominicalesY.addActionListener(this);
 		mnDominicalesYFestivos.add(mntmDominicalesDiasDominicalesY);
 		
 		JMenu mnAbout = new JMenu("About");
