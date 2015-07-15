@@ -23,6 +23,7 @@ import java.util.Date;
 import java.util.Vector;
 
 import javax.swing.DefaultCellEditor;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -130,6 +131,13 @@ public class DialogoNovedadesDiasNoLaborados extends JDialog implements ActionLi
 		KeyStroke escape = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0);
 		tableNovedaesDiasNoLaborados.getInputMap(JTable.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(escape,cancel);
 		tableNovedaesDiasNoLaborados.getActionMap().put(cancel, escapeA);
+		//
+		
+		//Agregar ComboBox
+		String[] opciones = { "Si", "No" };
+        JComboBox comboBox1 = new JComboBox( opciones );
+        DefaultCellEditor dce1 = new DefaultCellEditor( comboBox1 );
+        tableNovedaesDiasNoLaborados.getColumnModel().getColumn(5).setCellEditor(dce1);
 		//
 		
 		JScrollPane scrollPane = new JScrollPane(tableNovedaesDiasNoLaborados);
