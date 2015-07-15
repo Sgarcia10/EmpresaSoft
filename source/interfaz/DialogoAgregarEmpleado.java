@@ -1938,18 +1938,22 @@ public int verificarCamposEmpleado(){
 	String documentoP0 = cedulaEmpleado.getText();
 	String direccionP = direccionEmpleado.getText();
 	String ciudadP = ciudadEmpleado.getText();
-	String correoP = correoEmpleado.getText();
 	
 	String telefonoP0 = telefonoEmpleado.getText();
 	String celularP0 = celularEmpleado.getText();
 	
+	String correoP = correoEmpleado.getText();
+	String departamentoP = departamentoEmpleado.getText();
+	String nacionalidadP = nacionalidadEmpleado.getText();
 	
-	ArrayList<String> tipo = new ArrayList<String> (Arrays.asList("string","string","double","string","string","string","double","double"));
-	ArrayList<String> valor = new ArrayList<String> (Arrays.asList(nombreP, apellidosP, documentoP0, direccionP, ciudadP, correoP, telefonoP0, celularP0));
-	ArrayList<Integer> prioridad = new ArrayList<Integer> (Arrays.asList(1,1,1,1,1,0,1,1));
+	
+	ArrayList<String> tipo = new ArrayList<String> (Arrays.asList("string","string","double","string","string","double","double","string","string","string"));
+	ArrayList<String> valor = new ArrayList<String> (Arrays.asList(nombreP, apellidosP, documentoP0, direccionP, ciudadP, telefonoP0, celularP0,correoP,departamentoP,nacionalidadP));
+	ArrayList<Integer> prioridad = new ArrayList<Integer> (Arrays.asList(1,1,1,1,1,1,1,0,0,0));
 	ArrayList<String> nombre = new ArrayList<String> (Arrays.asList("Nombre Empleado", "Apellido Empleado", "Documento Empleado",
-																	"Direccion Empleado","Ciudad Empleado", "Correo Empleado",
-																	"Telefono Empleado", "Celular Empleado", "Información Empleado"));
+																	"Direccion Empleado","Ciudad Empleado", "Telefono Empleado", 
+																	"Celular Empleado","Correo Empleado","Departamento Empleado", 
+																	"Nacionalidad Empleado", "Información Empleado"));
 	
 	res = validar.validar(tipo, valor, prioridad, nombre);
 	

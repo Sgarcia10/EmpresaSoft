@@ -38,7 +38,8 @@ public class ValidarCampos {
 		ArrayList<String> valoresPrioritarios = darValoresConPrioridad(valor,prioridad,1);
 		ArrayList<String> valoresNoPrioritarios = darValoresConPrioridad(valor,prioridad,2);
 		ArrayList<String> valoresComplementarios = darValoresConPrioridad(valor,prioridad,3);
-
+		
+		ArrayList<String> tiposDeInteres = darTiposDeInteres(prioridad,tipo);
 		
 		ArrayList<String> valoresDeInteres = valoresPrioritarios;
 		valoresDeInteres.addAll(valoresNoPrioritarios);
@@ -48,7 +49,7 @@ public class ValidarCampos {
 		}
 		
 		else{
-			res = validarCampos(valoresDeInteres, valor, tipo, nombres);
+			res = validarCampos(valoresDeInteres, valor, tiposDeInteres, nombres);
 
 		}
 		
@@ -163,6 +164,19 @@ public class ValidarCampos {
 		for (int i = 0; i<prioridad.size(); i++){
 			if (prioridad.get(i) == numero){
 				res.add(valor.get(i));
+			}
+		}
+		
+		return res;
+	}
+	
+	private ArrayList darTiposDeInteres(ArrayList<Integer> prioridadP, ArrayList tipoP){
+		
+		ArrayList res = new ArrayList();
+		
+		for (int i = 0; i<prioridadP.size(); i++){
+			if (prioridadP.get(i) != 0){
+				res.add(tipoP.get(i));
 			}
 		}
 		
