@@ -175,7 +175,9 @@ public class DialogoNovedadesDiasNoLaborados extends JDialog implements ActionLi
 		btnSiguiente.addActionListener(this);
 		btnSiguiente.setActionCommand("Siguiente");
 		getContentPane().add(btnSiguiente);
-
+		
+		setLocationRelativeTo(principal);
+		
 		try{
 			actualizarTitulo();
 			actualizarInformacion();

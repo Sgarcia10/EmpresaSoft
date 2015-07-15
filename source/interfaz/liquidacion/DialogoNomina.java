@@ -440,7 +440,7 @@ public class DialogoNomina extends JDialog implements ActionListener, MouseListe
 			if( numClick > 1){
 				System.out.println("Doble Click");
 				DialogoNovedadesDiasNoLaborados novedadesDias = new DialogoNovedadesDiasNoLaborados(principal, control);
-				novedadesDias.setLocationRelativeTo(this);
+				novedadesDias.setLocationRelativeTo(principal);
 				novedadesDias.setVisible(true);
 			}
 		}
