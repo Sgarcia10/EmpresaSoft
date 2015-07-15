@@ -567,19 +567,19 @@ public class InterfazNomina extends JFrame implements ActionListener{
 		int m = mesPeriodo.getMonth();
 		String mes;
 		switch ( m ) {
-		case 0: mes = "Enero"; break;
-		case 1: mes = "Febrero"; break;
-		case 2: mes = "Marzo"; break;
-		case 3: mes = "Abril"; break;
-		case 4: mes = "Mayo"; break;
-		case 5: mes = "Junio"; break;
-		case 6: mes = "Julio"; break;
-		case 7: mes = "Agosto"; break;
-		case 8: mes = "Septiembre"; break;
-		case 9: mes = "Octubre"; break;
-		case 10: mes = "Noviembre"; break;
-		case 11: mes = "Diciembre"; break;
-		default:  mes = "Enero"; break;
+		case 0: mes = "enero"; break;
+		case 1: mes = "febrero"; break;
+		case 2: mes = "marzo"; break;
+		case 3: mes = "abril"; break;
+		case 4: mes = "mayo"; break;
+		case 5: mes = "junio"; break;
+		case 6: mes = "julio"; break;
+		case 7: mes = "agosto"; break;
+		case 8: mes = "septiembre"; break;
+		case 9: mes = "octubre"; break;
+		case 10: mes = "noviembre"; break;
+		case 11: mes = "diciembre"; break;
+		default:  mes = "enero"; break;
 		}
 		String periodo = botonesPeriodo.getSelection().getActionCommand();
 		String year = "" + anoPeriodo.getValue();
