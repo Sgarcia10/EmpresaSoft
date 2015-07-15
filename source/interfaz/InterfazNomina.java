@@ -628,6 +628,7 @@ public class InterfazNomina extends JFrame implements ActionListener{
 	public void actualizarListaEmpleados(){
 
 		ArrayList<Empleado> listaE = control.getEmpleados();
+		modeloTablaEmpleados.setRowCount(0);
 
 		if( !listaE.isEmpty( ) ){
 			//			listaEmpleados.setListData( listaE.toArray( ) );
