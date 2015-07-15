@@ -9,6 +9,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.text.DateFormatSymbols;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -138,6 +140,7 @@ public class InterfazNomina extends JFrame implements ActionListener{
 		nombresEmpleado = new JTextField();
 		nombresEmpleado.setBounds(323, 24, 157, 20);
 		panel_1.add(nombresEmpleado);
+		nombresEmpleado.setEditable(false);
 		nombresEmpleado.setColumns(10);
 
 		JLabel lblNombres = new JLabel("Nombres:");
@@ -151,6 +154,7 @@ public class InterfazNomina extends JFrame implements ActionListener{
 		apellidosEmpleado = new JTextField();
 		apellidosEmpleado.setColumns(10);
 		apellidosEmpleado.setBounds(323, 55, 157, 20);
+		apellidosEmpleado.setEditable(false);
 		panel_1.add(apellidosEmpleado);
 
 		JLabel lblFechaDeNacimiento = new JLabel("C\u00E9dula:");
@@ -160,6 +164,7 @@ public class InterfazNomina extends JFrame implements ActionListener{
 		cedulaEmpleado = new JTextField();
 		cedulaEmpleado.setColumns(10);
 		cedulaEmpleado.setBounds(323, 86, 157, 20);
+		cedulaEmpleado.setEditable(false);
 		panel_1.add(cedulaEmpleado);
 
 		JLabel lblFechaDeIngreso = new JLabel("Direcci\u00F3n:");
@@ -169,6 +174,7 @@ public class InterfazNomina extends JFrame implements ActionListener{
 		direccionEmpleado = new JTextField();
 		direccionEmpleado.setColumns(10);
 		direccionEmpleado.setBounds(323, 117, 157, 20);
+		direccionEmpleado.setEditable(false);
 		panel_1.add(direccionEmpleado);
 
 		JLabel lblFechaDeAfiliacin = new JLabel("Telefono Fijo:");
@@ -178,6 +184,7 @@ public class InterfazNomina extends JFrame implements ActionListener{
 		telefenoFijoEmpleado = new JTextField();
 		telefenoFijoEmpleado.setColumns(10);
 		telefenoFijoEmpleado.setBounds(323, 148, 157, 20);
+		telefenoFijoEmpleado.setEditable(false);
 		panel_1.add(telefenoFijoEmpleado);
 
 		JLabel lblSalarioBsico = new JLabel("Cargo:");
@@ -187,6 +194,7 @@ public class InterfazNomina extends JFrame implements ActionListener{
 		cargoEmpleado = new JTextField();
 		cargoEmpleado.setColumns(10);
 		cargoEmpleado.setBounds(323, 215, 157, 20);
+		cargoEmpleado.setEditable(false);
 		panel_1.add(cargoEmpleado);
 
 		JButton btnLiquidacindeNomina = new JButton("Liquidación de Nomina");
@@ -208,11 +216,13 @@ public class InterfazNomina extends JFrame implements ActionListener{
 		salarioTotalEmpleado = new JTextField();
 		salarioTotalEmpleado.setColumns(10);
 		salarioTotalEmpleado.setBounds(323, 251, 157, 20);
+		salarioTotalEmpleado.setEditable(false);
 		panel_1.add(salarioTotalEmpleado);
 
 		telefonoCelularEmpleado = new JTextField();
 		telefonoCelularEmpleado.setColumns(10);
 		telefonoCelularEmpleado.setBounds(323, 179, 157, 20);
+		telefonoCelularEmpleado.setEditable(false);
 		panel_1.add(telefonoCelularEmpleado);
 
 		JLabel lblTelefonoCelular = new JLabel("Telefono Celular:");
@@ -231,7 +241,15 @@ public class InterfazNomina extends JFrame implements ActionListener{
 		scrollPane.setBounds(10, 52, 400, 401);
 		panelListaEmpleado.add(scrollPane);
 
-		modeloTablaEmpleados = new DefaultTableModel();
+		modeloTablaEmpleados = new DefaultTableModel()
+		{
+
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				//all cells false
+				return false;
+			}
+		};
 
 		modeloTablaEmpleados.addColumn("Nombre");
 		modeloTablaEmpleados.addColumn("Indentificación");
@@ -255,21 +273,30 @@ public class InterfazNomina extends JFrame implements ActionListener{
 		headers = new DefaultTableColumnModel(); 
 		headers.addColumn(columnaNombre); 
 		headers.addColumn(columnaId);  
-
+		
 
 		tablaEmpleados = new JTable(modeloTablaEmpleados, headers);
 
 		tablaEmpleados.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-
-		tablaEmpleados.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
-			public void valueChanged(ListSelectionEvent event) {
-				// do some actions here, for example
-				// print first column value from selected row
-				String id = tablaEmpleados.getValueAt(tablaEmpleados.getSelectedRow(), 1).toString();
+//		tablaEmpleados.getSelectionModel().addListSelectionListener(new ListSelectionListener()
+//		{
+//			public void valueChanged(ListSelectionEvent event) {
+//				// do some actions here, for example
+//				// print first column value from selected row
+//				String id = tablaEmpleados.getValueAt(tablaEmpleados.getSelectedRow(), 1).toString();
+//				System.out.println(id);
+//				actualizarResumenDatosEmpleadoSeleccionado(id);
+//			}
+//		});
+		
+		tablaEmpleados.addMouseListener(new MouseAdapter() {
+		    @Override
+		    public void mouseClicked(MouseEvent evt) {
+		    	String id = tablaEmpleados.getValueAt(tablaEmpleados.getSelectedRow(), 1).toString();
 				System.out.println(id);
 				actualizarResumenDatosEmpleadoSeleccionado(id);
-			}
+		    }
 		});
 
 		//		listaEmpleados = new JList();
