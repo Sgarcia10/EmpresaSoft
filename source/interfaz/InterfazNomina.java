@@ -11,12 +11,13 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.text.DateFormatSymbols;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
+import java.util.Properties;
 
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
@@ -37,8 +38,6 @@ import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
@@ -51,6 +50,7 @@ import interfaz.liquidacion.DialogoNovedadesDiasNoLaborados;
 import mundo.Contrato;
 import mundo.Empresa;
 import mundo.empleado.Empleado;
+import seguridad.EncriptadorPassword;
 
 public class InterfazNomina extends JFrame implements ActionListener{
 	private JTextField busquedaEmpleados;
@@ -489,8 +489,60 @@ public class InterfazNomina extends JFrame implements ActionListener{
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
+//				try {
+//					 
+//					String content = "This is the content to write into file";
+//		 
+//					File file = new File("./data/Persistencia/usuarios.properties");
+//		 
+//					// if file doesnt exists, then create it
+//					if (!file.exists()) {
+//						file.createNewFile();
+//					}
+//		 
+//					FileWriter fw = new FileWriter(file.getAbsoluteFile(), true);
+//					BufferedWriter bw = new BufferedWriter(fw);
+//					PrintWriter out = new PrintWriter(bw);
+//					out.println("hola2");
+//					bw.close();
+//		 
+//					System.out.println("Done");
+//		 
+//				} catch (IOException e) {
+//					e.printStackTrace();
+//				}
+				
+				Properties prop = new Properties();
+				InputStream inStream = null;
+			 
 				try {
-
+			 
+					inStream = new FileInputStream("./data/Persistencia/admin.properties");
+					prop.load(inStream);
+					System.out.println(prop.getProperty("admin.password"));
+					// set the properties value
+					
+			 
+				} catch (IOException io) {
+					io.printStackTrace();
+				} finally {
+					if (inStream != null) {
+						try {
+							inStream.close();
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+					}
+			 
+				}
+				
+				try {
+					EncriptadorPassword encripter = new EncriptadorPassword("2952450");
+					String enc = encripter.encrypt("Conexsur2015");
+					String dec = encripter.decrypt(enc);
+					
+					System.out.println("Conexsur2015"+" - "+enc+" - "+dec);
+					
 					InterfazNomina frame = new InterfazNomina( );
 					//frame.setVisible(true);
 				} catch (Exception e) {
@@ -518,7 +570,7 @@ public class InterfazNomina extends JFrame implements ActionListener{
 	{
 		try
 		{
-			control.getEmpresa().guardarEstado(Empresa.RUTA_ARCHIVO_PERSISTENCIA);
+			control.getEmpresa().guardarEstadoEmpleados(Empresa.RUTA_ARCHIVO_PERSISTENCIA);
 			super.dispose();
 			System.out.println("se cerro correctamente el proyecto");
 		}
