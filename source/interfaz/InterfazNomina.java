@@ -276,8 +276,8 @@ public class InterfazNomina extends JFrame implements ActionListener{
 		
 
 		tablaEmpleados = new JTable(modeloTablaEmpleados, headers);
-
 		tablaEmpleados.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		tablaEmpleados.getTableHeader().setReorderingAllowed(false);
 
 //		tablaEmpleados.getSelectionModel().addListSelectionListener(new ListSelectionListener()
 //		{
