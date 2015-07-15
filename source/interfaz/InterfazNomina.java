@@ -16,6 +16,7 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
@@ -63,7 +64,6 @@ public class InterfazNomina extends JFrame implements ActionListener{
 	private JTextField telefonoCelularEmpleado;
 
 	private Control control;
-	private int periodo;
 	private JYearChooser anoPeriodo;
 	private JMonthChooser mesPeriodo;
 	private JRadioButton radioButtonPeriodo1;
@@ -225,7 +225,7 @@ public class InterfazNomina extends JFrame implements ActionListener{
 		telefonoCelularEmpleado.setEditable(false);
 		panel_1.add(telefonoCelularEmpleado);
 
-		JLabel lblTelefonoCelular = new JLabel("Telefono Celular:");
+		JLabel lblTelefonoCelular = new JLabel("Teléfono Celular:");
 		lblTelefonoCelular.setBounds(168, 182, 135, 14);
 		panel_1.add(lblTelefonoCelular);
 
@@ -450,17 +450,28 @@ public class InterfazNomina extends JFrame implements ActionListener{
 		mesPeriodo.setBounds(152, 39, 116, 20);
 		panel_Periodo.add(mesPeriodo);
 
-		radioButtonPeriodo1 = new JRadioButton("1-15", true);
+		radioButtonPeriodo1 = new JRadioButton("1-15", false);
 		radioButtonPeriodo1.setActionCommand("1-15");
 		radioButtonPeriodo1.setBackground(Color.WHITE);
 		radioButtonPeriodo1.setBounds(6, 39, 65, 23);
 		panel_Periodo.add(radioButtonPeriodo1);
 
-		radioButtonPeriodo2 = new JRadioButton("16-30");
+		radioButtonPeriodo2 = new JRadioButton("16-30", false);
 		radioButtonPeriodo2.setActionCommand("16-30");
 		radioButtonPeriodo2.setBackground(Color.WHITE);
 		radioButtonPeriodo2.setBounds(81, 39, 65, 23);
 		panel_Periodo.add(radioButtonPeriodo2);
+
+		Date dia =  new Date( );
+//		System.err.println(dia.getDay() + "-" + dia.getDate()+ "-" + dia.toString()+ "-" + dia.toLocaleString());
+		String[] d = dia.toLocaleString().split("/");
+		int d1 = Integer.parseInt(d[0]);
+		if( d1 > 15){
+			radioButtonPeriodo2.setSelected(true);
+		}
+		else{
+			radioButtonPeriodo1.setSelected(true);
+		}
 
 		botonesPeriodo = new ButtonGroup();
 		botonesPeriodo.add(radioButtonPeriodo1);
@@ -567,7 +578,7 @@ public class InterfazNomina extends JFrame implements ActionListener{
 		else if (command.equals("OrdinariosHorasExtrasDiurnas")){
 
 		}
-		
+
 		else if (command.equals("OrdinariosHorasExtrasNocturnas")){
 
 		}
@@ -578,7 +589,7 @@ public class InterfazNomina extends JFrame implements ActionListener{
 		else if (command.equals("DominicalesHorasExtrasDiurnas")){
 
 		}
-		
+
 		else if (command.equals("DominicalesRecargoNocturno")){
 
 		}
@@ -586,7 +597,7 @@ public class InterfazNomina extends JFrame implements ActionListener{
 		else if (command.equals("DominicalesDiasDominicalesY")){
 
 		}
-		
+
 
 	}
 
@@ -610,6 +621,7 @@ public class InterfazNomina extends JFrame implements ActionListener{
 		}
 		String periodo = botonesPeriodo.getSelection().getActionCommand();
 		String year = "" + anoPeriodo.getValue();
+		//		System.out.println(periodo + "/" + mes + "/" + year);
 		return periodo + "/" + mes + "/" + year;
 	}
 
