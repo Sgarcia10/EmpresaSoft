@@ -78,8 +78,8 @@ public interface IEmpresa {
 	
 	public ArrayList getEmpleados();
 	
-    public void cargarEstado( String pRutaNombre ) throws PersistenciaException;
+    public void cargarEstadoEmpleados( String pRutaNombre ) throws PersistenciaException;
 	
-	public void guardarEstado( String pRutaNombre) throws PersistenciaException;
+	public void guardarEstadoEmpleados( String pRutaNombre) throws PersistenciaException;
 	
 }
