@@ -21,7 +21,7 @@ public class Control {
 	{
 		empresa = new Empresa( );
 		
-		empresa.cargarEstado(Empresa.RUTA_ARCHIVO_PERSISTENCIA);
+		empresa.cargarEstadoEmpleados(Empresa.RUTA_ARCHIVO_PERSISTENCIA);
 	}
 
 	public void agregarEmpleado(){
