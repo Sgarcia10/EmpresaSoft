@@ -118,11 +118,16 @@ public class Nomina  implements Serializable {
 //		}
 //	}
 	
-	protected void agregarDiaNoLaborado(Usuario user, String concepto, boolean excusa, Date fechaInicio, int duracion)
+	public void agregarDiaNoLaborado(Usuario user, String concepto, boolean excusa, Date fechaInicio, int duracion)
 	{
 		DiasNoLaborados nuevo = new DiasNoLaborados(user, concepto, excusa, fechaInicio, duracion);
 		
 		diasNoLaborados.add(nuevo);
+	}
+	
+	public void eliminarDiaNoLaborado(int pos)
+	{
+		diasNoLaborados.remove(pos);
 	}
 	
 	public void liquidar()
