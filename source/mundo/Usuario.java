@@ -6,11 +6,23 @@ public class Usuario
 	
 	private String pass;
 	
-	public Usuario(String user, String pass)
+	private String categoria;
+	
+	public Usuario(String user, String pass, String categoria)
 	{
 		this.user = user;
 		
 		this.pass = pass;
+		
+		this.categoria = categoria;
+	}
+
+	public String getCategoria() {
+		return categoria;
+	}
+
+	public void setCategoria(String categoria) {
+		this.categoria = categoria;
 	}
 
 	public String getUser() {
