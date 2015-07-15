@@ -5,12 +5,14 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Properties;
 
 import javax.swing.ImageIcon;
 
@@ -20,17 +22,24 @@ import mundo.empleado.Empleado;
 public class Empresa implements IEmpresa {
 	
 	private ArrayList <Empleado> empleados;
+	private ArrayList <Usuario> usuarios;
 	
 	private Empleado empleadoNuevo;
 	
 	private Empleado empleadoSeleccionado;
+	
+	private Usuario usuarioConectado;
 	
 	public static final String RUTA_ARCHIVO_PERSISTENCIA = "./data/Persistencia/";
 	
 	public static final String RUTA_ARCHIVO_FOTOS = "./data/Imagenes/";
 	
 	public Empresa(){
-		empleados = new ArrayList();
+		empleados = new ArrayList<Empleado>();
+		usuarios = new ArrayList<Usuario>();
+		empleadoNuevo = null;
+		empleadoSeleccionado = null;
+		usuarioConectado = null;
 	}
 	
 	public boolean validacionUsuario(String usuarioP, String contraseniaP){
@@ -184,7 +193,7 @@ public class Empresa implements IEmpresa {
 
 
 	
-	public void cargarEstado( String pRutaNombre ) throws PersistenciaException
+	public void cargarEstadoEmpleados( String pRutaNombre ) throws PersistenciaException
 	{
 		
 		String rutaEmpleados = pRutaNombre + "estadoEmpleados.data";
@@ -222,7 +231,7 @@ public class Empresa implements IEmpresa {
 
 	}
 
-	public void guardarEstado( String pRutaNombre) throws PersistenciaException
+	public void guardarEstadoEmpleados( String pRutaNombre) throws PersistenciaException
 	{
 		try
 		{
@@ -230,20 +239,42 @@ public class Empresa implements IEmpresa {
 			String rutaEmpleados = pRutaNombre + "estadoEmpleados.data";
 			
 			//Serializar
-			FileOutputStream archivoEmpleados = new FileOutputStream( rutaEmpleados );
-			ObjectOutputStream objetoSaliente = new ObjectOutputStream( archivoEmpleados );
-			objetoSaliente.writeObject( empleados );
-			objetoSaliente.close( );
-			archivoEmpleados.close( );
-			
+			ObjectOutputStream oosEmpleado= new ObjectOutputStream( new FileOutputStream( rutaEmpleados ) );
+			oosEmpleado.writeObject( empleados );
+			oosEmpleado.close( );
 		}
 		catch( IOException e )
 		{
 			throw new PersistenciaException( "Error al salvar: " + e.getMessage( ) );
 		}
-
 	}
-
+	
+	public void cargarAdmin()
+	{
+		Properties prop = new Properties();
+		InputStream inStream = null;
+	 
+		try {
+	 
+			inStream = new FileInputStream("./data/Persistencia/admin.properties");
+			prop.load(inStream);
+			// set the properties value
+			
+	 
+		} catch (IOException io) {
+			io.printStackTrace();
+		} finally {
+			if (inStream != null) {
+				try {
+					inStream.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+	 
+		}
+	}
+	
 	@Override
 	public ArrayList getEmpleados() {
 		// TODO Auto-generated method stub
@@ -260,7 +291,6 @@ public class Empresa implements IEmpresa {
 		if(e!=null)
 		{
 			empleadoSeleccionado = e;
-			
 			agregarNomina();
 		}
 		
@@ -284,7 +314,7 @@ public class Empresa implements IEmpresa {
 			System.out.println("creo nomina periodo: "+periodo);
 		} catch (NominaExistenteException e) {
 			// TODO Auto-generated catch block
-//			e.printStackTrace();
+			e.printStackTrace();
 		}
 		
 	}
@@ -300,5 +330,7 @@ public class Empresa implements IEmpresa {
 		}
 		return e;
 	}
+	
+	
 	
 }
