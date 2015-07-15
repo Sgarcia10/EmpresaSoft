@@ -505,6 +505,20 @@ public class Control {
 		
 	}
 	
+	public double liquidarPrima(){
+		Empleado e = getEmpleadoSeleccionado();
+		//return e.darPrimaAcumulada();
+		//e.setPrimaAcumulada(0);
+		return 0;
+	}
+	
+	public double liquidarCesantias(){
+		Empleado e = getEmpleadoSeleccionado();
+		//return e.darCesantiasAcumuladas();
+		//e.setCesantiasAcumuladas(0);
+		return 0;
+	}
+	
 	public String darUsuario(){
 		String res = "usuario";
 		return res;

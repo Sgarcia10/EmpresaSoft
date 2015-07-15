@@ -289,6 +289,16 @@ public class DialogoNomina extends JDialog implements ActionListener, MouseListe
 		panel.add(btnModificar);
 		btnModificar.addActionListener(this);
 		btnModificar.setActionCommand("Modificar");
+		
+		JButton btnPrima = new JButton("Liquidar Prima");
+		btnPrima.setActionCommand("LiquidarPrima");
+		btnPrima.setBounds(438, 453, 169, 23);
+		panel.add(btnPrima);
+		
+		JButton btnCesantias = new JButton("Liquidar Cesantias");
+		btnCesantias.setActionCommand("LiquidarCesantias");
+		btnCesantias.setBounds(644, 453, 169, 23);
+		panel.add(btnCesantias);
 
 		try{
 			actualizarInformacion( );
@@ -424,8 +434,17 @@ public class DialogoNomina extends JDialog implements ActionListener, MouseListe
 		{
 
 		}
-		else if (command.equals("Modificar")){
+		else if (command.equals("Modificar"))
+		{
 
+		}
+		else if (command.equals("LiquidarPrima"))
+		{
+			liquidarPrima();
+		}
+		else if (command.equals("LiquidarCesantias"))
+		{
+			liquidarCesantias();
 		}
 
 	}
@@ -473,5 +492,12 @@ public class DialogoNomina extends JDialog implements ActionListener, MouseListe
 		// TODO Auto-generated method stub
 
 	}
-
+	
+	public void liquidarPrima(){
+		double prima = control.liquidarPrima();
+	}
+	
+	public void liquidarCesantias(){
+		double cesantias = control.liquidarCesantias();
+	}
 }
