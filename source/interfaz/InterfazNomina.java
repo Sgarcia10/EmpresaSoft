@@ -563,7 +563,7 @@ public class InterfazNomina extends JFrame implements ActionListener{
 			if (tablaEmpleados.getSelectedRow() >= 0){
 				DialogoNomina nomina = new DialogoNomina(this, control, periodo);
 				nomina.setLocationRelativeTo(this);
-				nomina.setVisible(true);
+//				nomina.setVisible(true);
 			}
 			else{
 				JOptionPane.showMessageDialog(this, "Debe seleccionar un empleado", "Error", JOptionPane.ERROR_MESSAGE);
@@ -572,7 +572,7 @@ public class InterfazNomina extends JFrame implements ActionListener{
 		else if (command.equals("DiasNoLaborados")){
 			DialogoNovedadesDiasNoLaborados novedadesDias = new DialogoNovedadesDiasNoLaborados(this, control);
 			novedadesDias.setLocationRelativeTo(this);
-			novedadesDias.setVisible(true);
+//			novedadesDias.setVisible(true);
 		}
 
 		else if (command.equals("OrdinariosHorasExtrasDiurnas")){

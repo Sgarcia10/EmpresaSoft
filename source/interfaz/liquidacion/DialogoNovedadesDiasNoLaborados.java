@@ -179,11 +179,13 @@ public class DialogoNovedadesDiasNoLaborados extends JDialog implements ActionLi
 		try{
 			actualizarTitulo();
 			actualizarInformacion();
-			
+			this.setVisible(true);
 		}
 
 		catch( Exception e){
 			JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+			this.setVisible(false);
+			this.dispose();
 		}
 		
 		if(tableNovedaesDiasNoLaborados.getRowCount() == 0){

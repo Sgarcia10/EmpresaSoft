@@ -292,14 +292,25 @@ public class DialogoNomina extends JDialog implements ActionListener, MouseListe
 
 		try{
 			actualizarInformacion( );
-
+			setVisible(true);
 		}
 
 		catch( Exception e){
-			JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+			
+			JOptionPane.showMessageDialog(principal, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+			cerrar();
+			
 		}
 		//		actualizarAbonos();
 		//		actualizarNotas();
+	}
+
+
+	private void cerrar() {
+		// TODO Auto-generated method stub
+		this.setVisible(false);
+		this.dispose();
+//		System.out.println("Si está cerrando");
 	}
 
 
