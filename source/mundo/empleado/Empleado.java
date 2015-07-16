@@ -44,6 +44,9 @@ public class Empleado extends Persona implements Serializable{
 	
 	private Conyuge conyugue;
 		
+	private double primaAcumulada;
+	
+	private double cesantiasAcumuladas;
 	
 	public Empleado(double identificacion, String tipoDocumento, String nombre, 
 			String apellidos, String sexo, Date fechaNacimiento, String estadoCivil,
