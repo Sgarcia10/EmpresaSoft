@@ -256,7 +256,6 @@ public class InterfazNomina extends JFrame implements ActionListener{
 
 		TableColumn columnaNombre, columnaId;
 		DefaultTableColumnModel headers; 
-		DefaultTableModel rows;	
 
 		//create and define columns 
 		columnaNombre = new TableColumn(0); 
@@ -698,10 +697,7 @@ public class InterfazNomina extends JFrame implements ActionListener{
 				Object [] row = {e.toString().toUpperCase(), format.format(d)};
 				modeloTablaEmpleados.addRow(row);
 			}
-
 		}
-
-
 	}
 
 	public void actualizarResumenDatosEmpleadoSeleccionado(String id)
