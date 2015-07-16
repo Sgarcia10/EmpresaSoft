@@ -204,8 +204,8 @@ public class DialogoDevengadoHoras extends JDialog implements ActionListener
 			this.setVisible(false);
 			this.dispose();
 			DialogoNovedadesDiasNoLaborados novedadesDias = new DialogoNovedadesDiasNoLaborados(principal, control);
-			novedadesDias.setLocationRelativeTo(principal);
-			novedadesDias.setVisible(true); break;
+			novedadesDias.setLocationRelativeTo(principal);break;
+//			novedadesDias.setVisible(true); 
 
 
 		case 0: titulo = "Ordinaria - Extra Diurno"; /*actualizarOrdinariaExtraDiurno();*/ tableNovedaesHoras.setModel(ordinaria_extra_diurno);break;
