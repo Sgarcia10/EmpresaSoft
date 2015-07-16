@@ -69,7 +69,7 @@ public class Cesantias implements Serializable {
 		else{
 			//se suma el aporte por la ultima nomina y se recalcula la porción del acumulado anterior para ajustarlo al promedio
 			valor = ((valor * numeroDiasAcumulados)/dias) + parcial;  
-			numeroDiasAcumulados = numeroDiasAcumulados + dias;  //se ajusta el numero de dias para tener proporcion entre dias acumulados y faltantes para la proxima nomina 
+			numeroDiasAcumulados = dias;  //se ajusta el numero de dias para tener proporcion entre dias acumulados y faltantes para la proxima nomina 
 		}
 		
 		valorFijo = (devengadoUltimaLiquidacion * dias)/360;
