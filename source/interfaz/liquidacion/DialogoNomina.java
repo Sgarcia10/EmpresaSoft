@@ -384,7 +384,8 @@ public class DialogoNomina extends JDialog implements ActionListener, MouseListe
 		panel.add(textFieldValorNetoAPagar);
 		textFieldValorNetoAPagar.setColumns(10);
 		
-
+		setLocationRelativeTo(null);
+		
 		try{
 			actualizarInformacion( );
 			setVisible(true);
