@@ -524,5 +524,20 @@ public class Control {
 		return res;
 	}
 
+	public double getDevengadoPrestacionesTotalPrima(String periodo) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public double getDevengadoPrestacionesTotalCesantias(String periodo) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public double getDevengadoPrestacionesTotalVacaciones(String periodo) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 	
 }

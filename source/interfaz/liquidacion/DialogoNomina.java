@@ -75,6 +75,9 @@ public class DialogoNomina extends JDialog implements ActionListener, MouseListe
 	private JTable tableDeduccionesSeguridadSocial;
 	private JTable tableDeduccionesOtras;
 	private String mensajeErrorConNomina;
+	private JPanel panelDevengadoPrestaciones;
+	private JScrollPane scrollPaneDevengadoPrestaciones;
+	private JTable tableDevengadoPrestaciones;
 
 	public DialogoNomina( InterfazNomina ventana, Control pControl, String pPeriodo) {
 		
@@ -90,14 +93,14 @@ public class DialogoNomina extends JDialog implements ActionListener, MouseListe
 		setTitle("Nómina Para Pago De Salarios");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		getContentPane().setLayout(null);
-		setBounds(100, 100, 1050, 548);
+		setBounds(100, 100, 1319, 548);
 
 
 		panel = new JPanel();
 		panel.setLayout(null);
 		panel.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "El Barto CC 123456789 - " + periodo, TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		panel.setBackground(Color.WHITE);
-		panel.setBounds(10, 11, 1014, 487);
+		panel.setBounds(10, 11, 1283, 487);
 		getContentPane().add(panel);
 		getContentPane().addMouseListener(this);
 
@@ -106,7 +109,7 @@ public class DialogoNomina extends JDialog implements ActionListener, MouseListe
 		JPanel panel_Novedades = new JPanel();
 		panel_Novedades.setBorder(new TitledBorder(new LineBorder(new Color(0, 0, 0), 1, true), "Novedades", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		panel_Novedades.setBackground(Color.WHITE);
-		panel_Novedades.setBounds(10, 21, 994, 104);
+		panel_Novedades.setBounds(10, 21, 1263, 104);
 		panel_Novedades.setLayout(null);
 
 
@@ -126,7 +129,7 @@ public class DialogoNomina extends JDialog implements ActionListener, MouseListe
 		tableNovedades.getTableHeader().setReorderingAllowed(false);
 
 		scrollPaneNovedades = new JScrollPane(tableNovedades);
-		scrollPaneNovedades.setBounds(10, 21, 974, 72);
+		scrollPaneNovedades.setBounds(10, 21, 1243, 72);
 		panel_Novedades.add(scrollPaneNovedades);
 
 		panel.add(panel_Novedades);
@@ -135,7 +138,7 @@ public class DialogoNomina extends JDialog implements ActionListener, MouseListe
 		panel_Devengado = new JPanel();
 		panel_Devengado.setBorder(new TitledBorder(new LineBorder(new Color(0, 0, 0), 1, true), "Devengado", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		panel_Devengado.setBackground(Color.WHITE);
-		panel_Devengado.setBounds(10, 142, 994, 104);
+		panel_Devengado.setBounds(10, 142, 1263, 104);
 		panel.add(panel_Devengado);
 		panel_Devengado.setLayout(null);
 
@@ -226,14 +229,14 @@ public class DialogoNomina extends JDialog implements ActionListener, MouseListe
 		panel_Deducciones.setLayout(null);
 		panel_Deducciones.setBorder(new TitledBorder(new LineBorder(new Color(0, 0, 0), 1, true), "Deducciones", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		panel_Deducciones.setBackground(Color.WHITE);
-		panel_Deducciones.setBounds(10, 272, 994, 104);
+		panel_Deducciones.setBounds(10, 272, 1263, 104);
 		panel.add(panel_Deducciones);
 
 		panelDeduccionesSeguridadSocial = new JPanel();
 		panelDeduccionesSeguridadSocial.setLayout(null);
 		panelDeduccionesSeguridadSocial.setBorder(new TitledBorder(new LineBorder(new Color(0, 0, 0), 0), "Seguridad Social", TitledBorder.CENTER, TitledBorder.BELOW_TOP, null, null));
 		panelDeduccionesSeguridadSocial.setBackground(Color.WHITE);
-		panelDeduccionesSeguridadSocial.setBounds(10, 25, 567, 68);
+		panelDeduccionesSeguridadSocial.setBounds(10, 25, 659, 68);
 		panel_Deducciones.add(panelDeduccionesSeguridadSocial);
 
 		//Seguridad Social
@@ -253,7 +256,7 @@ public class DialogoNomina extends JDialog implements ActionListener, MouseListe
 		tableDeduccionesSeguridadSocial.getTableHeader().setReorderingAllowed(false);
 
 		scrollPane = new JScrollPane(tableDeduccionesSeguridadSocial);
-		scrollPane.setBounds(0, 21, 567, 36);
+		scrollPane.setBounds(0, 21, 659, 36);
 		panelDeduccionesSeguridadSocial.add(scrollPane);
 
 		// Otras Deducciones
@@ -261,7 +264,7 @@ public class DialogoNomina extends JDialog implements ActionListener, MouseListe
 		panelDeduccionesOtras.setLayout(null);
 		panelDeduccionesOtras.setBorder(new TitledBorder(new LineBorder(new Color(0, 0, 0), 0), "Otras", TitledBorder.CENTER, TitledBorder.BELOW_TOP, null, null));
 		panelDeduccionesOtras.setBackground(Color.WHITE);
-		panelDeduccionesOtras.setBounds(587, 25, 397, 68);
+		panelDeduccionesOtras.setBounds(687, 25, 542, 68);
 		panel_Deducciones.add(panelDeduccionesOtras);
 
 		Object[] dataDeduccionesOtras = { "", "",""};
@@ -280,7 +283,7 @@ public class DialogoNomina extends JDialog implements ActionListener, MouseListe
 		tableDeduccionesOtras.getTableHeader().setReorderingAllowed(false);
 
 		scrollPane_2 = new JScrollPane(tableDeduccionesOtras);
-		scrollPane_2.setBounds(0, 21, 397, 36);
+		scrollPane_2.setBounds(0, 21, 542, 36);
 		panelDeduccionesOtras.add(scrollPane_2);
 
 
@@ -299,6 +302,37 @@ public class DialogoNomina extends JDialog implements ActionListener, MouseListe
 		btnCesantias.setActionCommand("LiquidarCesantias");
 		btnCesantias.setBounds(644, 453, 169, 23);
 		panel.add(btnCesantias);
+		
+		panelDevengadoPrestaciones = new JPanel();
+		panelDevengadoPrestaciones.setBounds(994, 25, 259, 68);
+		panel_Devengado.add(panelDevengadoPrestaciones);
+		panelDevengadoPrestaciones.setLayout(null);
+		panelDevengadoPrestaciones.setBorder(new TitledBorder(new LineBorder(new Color(0, 0, 0), 0), "Prestaciones", TitledBorder.CENTER, TitledBorder.BELOW_TOP, null, null));
+		panelDevengadoPrestaciones.setBackground(Color.WHITE);
+		
+		
+		Object[] dataDevengadoPrestaciones = { "", "",""};
+		Object[] columnsDevengadoPrestaciones = {"Prima","Cesantías","Vacaciones"};
+		DefaultTableModel modDevengadoPrestaciones = new DefaultTableModel(columnsDevengadoPrestaciones, 0)
+		{
+
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				//all cells false
+				return false;
+			}
+		};
+
+		tableDeduccionesOtras = new JTable(modDeduccionesOtras);
+		tableDeduccionesOtras.getTableHeader().setReorderingAllowed(false);
+
+		tableDevengadoPrestaciones = new JTable(modDevengadoPrestaciones);
+		tableDevengadoPrestaciones.getTableHeader().setReorderingAllowed(false);
+
+		scrollPaneDevengadoPrestaciones = new JScrollPane(tableDevengadoPrestaciones);
+		scrollPaneDevengadoPrestaciones.setBounds(0, 21, 259, 36);
+		panelDevengadoPrestaciones.add(scrollPaneDevengadoPrestaciones);
+		
 
 		try{
 			actualizarInformacion( );
@@ -350,6 +384,17 @@ public class DialogoNomina extends JDialog implements ActionListener, MouseListe
 		actualizarPanelDevengadoOridnaria();
 		actualizarPanelDevengadoDominical();
 		actualizarPanelDevengadoOtros();
+		actualizarPanelDevengadoPrestaciones();
+	}
+
+
+	private void actualizarPanelDevengadoPrestaciones() {
+		// TODO Auto-generated method stub
+		double totalPrima = control.getDevengadoPrestacionesTotalPrima(periodo);
+		double totalCesantias = control.getDevengadoPrestacionesTotalCesantias(periodo);
+		double totalVacaciones = control.getDevengadoPrestacionesTotalVacaciones(periodo);
+		DefaultTableModel model = ( DefaultTableModel) tableDevengadoPrestaciones.getModel();
+		model.addRow(new Object[]{totalPrima, totalCesantias, totalVacaciones});
 	}
 
 
@@ -460,7 +505,7 @@ public class DialogoNomina extends JDialog implements ActionListener, MouseListe
 				System.out.println("Doble Click");
 				DialogoNovedadesDiasNoLaborados novedadesDias = new DialogoNovedadesDiasNoLaborados(principal, control);
 				novedadesDias.setLocationRelativeTo(principal);
-				novedadesDias.setVisible(true);
+//				novedadesDias.setVisible(true);
 			}
 		}
 	}
