@@ -44,6 +44,7 @@ import Excepciones.NoExisteEmpleadoException;
 import Excepciones.NominaNoEncontradaException;
 
 import java.awt.Component;
+import java.awt.Font;
 
 
 
@@ -78,6 +79,16 @@ public class DialogoNomina extends JDialog implements ActionListener, MouseListe
 	private JPanel panelDevengadoPrestaciones;
 	private JScrollPane scrollPaneDevengadoPrestaciones;
 	private JTable tableDevengadoPrestaciones;
+	private JLabel lblTotalDevengado;
+	private JTextField textFieldTotalDevengado;
+	private JTextField textFieldTotalDeducciones;
+	private JLabel lblTotalDeducciones;
+	private JTextField textFieldValorNetoAPagar;
+	private JLabel lblValorNetoAPagar;
+	private double totalDevengado;
+	private double totalNovedades;
+	private double totalDeducciones;
+	private double totalAPagar;
 
 	public DialogoNomina( InterfazNomina ventana, Control pControl, String pPeriodo) {
 		
@@ -87,20 +98,24 @@ public class DialogoNomina extends JDialog implements ActionListener, MouseListe
 		principal = ventana;
 		control = pControl;
 		periodo = pPeriodo;
+		totalDeducciones = 0;
+		totalDevengado = 0;
+		totalNovedades = 0;
+		totalAPagar = 0;
 		mensajeErrorConNomina = "El empleado seleccionado no posee la nómina seleccionada";
 		//		titulo = "Horas Extras Diurnas";
 		cont = 0;
 		setTitle("Nómina Para Pago De Salarios");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		getContentPane().setLayout(null);
-		setBounds(100, 100, 1319, 548);
+		setBounds(100, 100, 1319, 564);
 
 
 		panel = new JPanel();
 		panel.setLayout(null);
 		panel.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "El Barto CC 123456789 - " + periodo, TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		panel.setBackground(Color.WHITE);
-		panel.setBounds(10, 11, 1283, 487);
+		panel.setBounds(10, 11, 1283, 503);
 		getContentPane().add(panel);
 		getContentPane().addMouseListener(this);
 
@@ -138,7 +153,7 @@ public class DialogoNomina extends JDialog implements ActionListener, MouseListe
 		panel_Devengado = new JPanel();
 		panel_Devengado.setBorder(new TitledBorder(new LineBorder(new Color(0, 0, 0), 1, true), "Devengado", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		panel_Devengado.setBackground(Color.WHITE);
-		panel_Devengado.setBounds(10, 142, 1263, 104);
+		panel_Devengado.setBounds(10, 142, 1263, 134);
 		panel.add(panel_Devengado);
 		panel_Devengado.setLayout(null);
 
@@ -229,7 +244,7 @@ public class DialogoNomina extends JDialog implements ActionListener, MouseListe
 		panel_Deducciones.setLayout(null);
 		panel_Deducciones.setBorder(new TitledBorder(new LineBorder(new Color(0, 0, 0), 1, true), "Deducciones", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		panel_Deducciones.setBackground(Color.WHITE);
-		panel_Deducciones.setBounds(10, 272, 1263, 104);
+		panel_Deducciones.setBounds(10, 287, 1263, 134);
 		panel.add(panel_Deducciones);
 
 		panelDeduccionesSeguridadSocial = new JPanel();
@@ -285,22 +300,34 @@ public class DialogoNomina extends JDialog implements ActionListener, MouseListe
 		scrollPane_2 = new JScrollPane(tableDeduccionesOtras);
 		scrollPane_2.setBounds(0, 21, 542, 36);
 		panelDeduccionesOtras.add(scrollPane_2);
+		
+		lblTotalDeducciones = new JLabel("Total Deducciones");
+		lblTotalDeducciones.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblTotalDeducciones.setBounds(452, 111, 133, 14);
+		panel_Deducciones.add(lblTotalDeducciones);
+		
+		textFieldTotalDeducciones = new JTextField();
+		textFieldTotalDeducciones.setFont(new Font("Tahoma", Font.BOLD, 14));
+		textFieldTotalDeducciones.setEditable(false);
+		textFieldTotalDeducciones.setBounds(609, 108, 156, 20);
+		panel_Deducciones.add(textFieldTotalDeducciones);
+		textFieldTotalDeducciones.setColumns(10);
 
 
 		btnModificar = new JButton("Modificar");
-		btnModificar.setBounds(235, 453, 169, 23);
+		btnModificar.setBounds(231, 469, 169, 23);
 		panel.add(btnModificar);
 		btnModificar.addActionListener(this);
 		btnModificar.setActionCommand("Modificar");
 		
 		JButton btnPrima = new JButton("Liquidar Prima");
 		btnPrima.setActionCommand("LiquidarPrima");
-		btnPrima.setBounds(438, 453, 169, 23);
+		btnPrima.setBounds(438, 469, 169, 23);
 		panel.add(btnPrima);
 		
 		JButton btnCesantias = new JButton("Liquidar Cesantias");
 		btnCesantias.setActionCommand("LiquidarCesantias");
-		btnCesantias.setBounds(644, 453, 169, 23);
+		btnCesantias.setBounds(644, 469, 169, 23);
 		panel.add(btnCesantias);
 		
 		panelDevengadoPrestaciones = new JPanel();
@@ -332,6 +359,30 @@ public class DialogoNomina extends JDialog implements ActionListener, MouseListe
 		scrollPaneDevengadoPrestaciones = new JScrollPane(tableDevengadoPrestaciones);
 		scrollPaneDevengadoPrestaciones.setBounds(0, 21, 259, 36);
 		panelDevengadoPrestaciones.add(scrollPaneDevengadoPrestaciones);
+		
+		lblTotalDevengado = new JLabel("Total Devengados");
+		lblTotalDevengado.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblTotalDevengado.setBounds(452, 105, 145, 19);
+		panel_Devengado.add(lblTotalDevengado);
+		
+		textFieldTotalDevengado = new JTextField();
+		textFieldTotalDevengado.setFont(new Font("Tahoma", Font.BOLD, 14));
+		textFieldTotalDevengado.setEditable(false);
+		textFieldTotalDevengado.setBounds(609, 104, 151, 20);
+		panel_Devengado.add(textFieldTotalDevengado);
+		textFieldTotalDevengado.setColumns(10);
+		
+		lblValorNetoAPagar = new JLabel("Valor Neto A Pagar");
+		lblValorNetoAPagar.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblValorNetoAPagar.setBounds(464, 432, 144, 26);
+		panel.add(lblValorNetoAPagar);
+		
+		textFieldValorNetoAPagar = new JTextField();
+		textFieldValorNetoAPagar.setFont(new Font("Tahoma", Font.BOLD, 14));
+		textFieldValorNetoAPagar.setEditable(false);
+		textFieldValorNetoAPagar.setBounds(620, 437, 155, 20);
+		panel.add(textFieldValorNetoAPagar);
+		textFieldValorNetoAPagar.setColumns(10);
 		
 
 		try{
@@ -373,7 +424,7 @@ public class DialogoNomina extends JDialog implements ActionListener, MouseListe
 		double sueldoBasico = control.getNovedadesSueldoBasico(periodo);
 		int tiempoPeriodo = control.getNovedadesTiempoPeriodo(periodo );
 		double sueldoPeriodo = control.getNovedadesSueldoPeriodo(periodo );
-
+		totalNovedades = sueldoPeriodo;
 		DefaultTableModel model = ( DefaultTableModel) tableNovedades.getModel();
 		model.addRow(new Object[]{periodo, sueldoBasico, tiempoPeriodo, sueldoPeriodo});
 	}
@@ -381,34 +432,40 @@ public class DialogoNomina extends JDialog implements ActionListener, MouseListe
 
 	private void actualizarPanelDevengado() throws NoExisteEmpleadoException, NominaNoEncontradaException {
 		// TODO Auto-generated method stub
-		actualizarPanelDevengadoOridnaria();
-		actualizarPanelDevengadoDominical();
-		actualizarPanelDevengadoOtros();
-		actualizarPanelDevengadoPrestaciones();
+		double totalOrdinaria = actualizarPanelDevengadoOridnaria();
+		double totalDominical = actualizarPanelDevengadoDominical();
+		double totalOtros = actualizarPanelDevengadoOtros();
+		double totalPrestaciones = actualizarPanelDevengadoPrestaciones();
+		
+		totalDevengado = totalOrdinaria+totalDominical+totalOtros+totalPrestaciones;
+		textFieldTotalDevengado.setText(""+totalDevengado);
 	}
 
 
-	private void actualizarPanelDevengadoPrestaciones() {
+	private double actualizarPanelDevengadoPrestaciones() {
 		// TODO Auto-generated method stub
 		double totalPrima = control.getDevengadoPrestacionesTotalPrima(periodo);
 		double totalCesantias = control.getDevengadoPrestacionesTotalCesantias(periodo);
 		double totalVacaciones = control.getDevengadoPrestacionesTotalVacaciones(periodo);
 		DefaultTableModel model = ( DefaultTableModel) tableDevengadoPrestaciones.getModel();
 		model.addRow(new Object[]{totalPrima, totalCesantias, totalVacaciones});
+		
+		return totalPrima + totalCesantias + totalVacaciones;
 	}
 
 
-	private void actualizarPanelDevengadoOtros() throws NoExisteEmpleadoException, NominaNoEncontradaException {
+	private double actualizarPanelDevengadoOtros() throws NoExisteEmpleadoException, NominaNoEncontradaException {
 		// TODO Auto-generated method stub
 		double totalAuxilioTransporte = control.getDevengadoOtrosTotalAuxilioTransporte(periodo);
 		double totalComisiones = control.getDevengadoOtrosTotalComisiones(periodo);
 		DefaultTableModel model = ( DefaultTableModel) tableDevengadoOtros.getModel();
 		model.addRow(new Object[]{totalAuxilioTransporte, totalComisiones});
-
+		
+		return totalAuxilioTransporte + totalComisiones;
 	}
 
 
-	private void actualizarPanelDevengadoDominical() throws NoExisteEmpleadoException, NominaNoEncontradaException{
+	private double actualizarPanelDevengadoDominical() throws NoExisteEmpleadoException, NominaNoEncontradaException{
 		// TODO Auto-generated method stub
 		double totalRecargoNocturno = control.getDevengadoDominicalTotalRecargoNocturno(periodo);
 		double totalExtraDiurno = control.getDevengadoDominicalTotalExtraDiurno(periodo);
@@ -417,10 +474,12 @@ public class DialogoNomina extends JDialog implements ActionListener, MouseListe
 
 		DefaultTableModel model = ( DefaultTableModel) tableDevengadoDominical.getModel();
 		model.addRow(new Object[]{totalRecargoNocturno, totalExtraDiurno, totalExtraNocturno, totalDominicalDias});
+		
+		return totalDominicalDias + totalExtraDiurno + totalExtraNocturno + totalDominicalDias;
 	}
 
 
-	private void actualizarPanelDevengadoOridnaria() throws NoExisteEmpleadoException, NominaNoEncontradaException {
+	private double actualizarPanelDevengadoOridnaria() throws NoExisteEmpleadoException, NominaNoEncontradaException {
 		// TODO Auto-generated method stub
 		double totalRecargoNocturno = control.getDevengadoOrdinarioTotalRecargoNocturno(periodo);
 		double totalExtraDiurno = control.getDevengadoOrdinarioTotalExtraDiurno(periodo);
@@ -428,17 +487,22 @@ public class DialogoNomina extends JDialog implements ActionListener, MouseListe
 
 		DefaultTableModel model = ( DefaultTableModel) tableDevengadoOrdinaria.getModel();
 		model.addRow(new Object[]{totalRecargoNocturno, totalExtraDiurno, totalExtraNocturno});
+		
+		return totalExtraDiurno + totalExtraNocturno + totalRecargoNocturno;
 	}
 
 
 	private void actualizarPanelDeducciones() throws NoExisteEmpleadoException, NominaNoEncontradaException{
 		// TODO Auto-generated method stub
-		actualizarPanelDeduccionesSeguridadSocial();
-		actualizarPanelDeduccionesOtros();
+		double totalSeguridadSocial = actualizarPanelDeduccionesSeguridadSocial();
+		double totalOtros = actualizarPanelDeduccionesOtros();
+		
+		totalDeducciones = totalOtros + totalSeguridadSocial;
+		textFieldTotalDeducciones.setText(""+totalDeducciones);
 	}
 
 
-	private void actualizarPanelDeduccionesOtros() throws NoExisteEmpleadoException, NominaNoEncontradaException{
+	private double actualizarPanelDeduccionesOtros() throws NoExisteEmpleadoException, NominaNoEncontradaException{
 		// TODO Auto-generated method stub
 		double totalRetencion = control.getDeduccionesOtrasTotalRetencion(periodo);
 		double totalJuzgados = control.getDeduccionesOtrasTotalJuzgados(periodo);
@@ -447,10 +511,12 @@ public class DialogoNomina extends JDialog implements ActionListener, MouseListe
 
 		DefaultTableModel model = ( DefaultTableModel) tableDeduccionesOtras.getModel();
 		model.addRow(new Object[]{totalRetencion, totalJuzgados, totalPrestamos, totalFondoEmpleados});
+	
+		return totalRetencion + totalJuzgados + totalPrestamos + totalFondoEmpleados;
 	}
 
 
-	private void actualizarPanelDeduccionesSeguridadSocial() throws NoExisteEmpleadoException, NominaNoEncontradaException{
+	private double actualizarPanelDeduccionesSeguridadSocial() throws NoExisteEmpleadoException, NominaNoEncontradaException{
 		// TODO Auto-generated method stub
 		double totalSalud = control.getDeduccionesSeguridadSocialTotalSalud(periodo);
 		double totalPension = control.getDeduccionesSeguridadSocialTotalPension(periodo);
@@ -460,12 +526,15 @@ public class DialogoNomina extends JDialog implements ActionListener, MouseListe
 
 		DefaultTableModel model = ( DefaultTableModel) tableDeduccionesSeguridadSocial.getModel();
 		model.addRow(new Object[]{totalSalud, totalPension, totalPensionVoluntaria, totalSolidaridad, totalAFC});
+	
+		return totalAFC + totalPension + totalPensionVoluntaria + totalSalud + totalSolidaridad;
 	}
 
 
 	private void actualizarTotal() {
 		// TODO Auto-generated method stub
-
+		totalAPagar = totalDevengado + totalNovedades - totalDeducciones;
+		textFieldValorNetoAPagar.setText("" + totalAPagar);
 	}
 
 
