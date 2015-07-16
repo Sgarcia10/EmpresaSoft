@@ -1652,7 +1652,7 @@ public void actualizarTablaReferecnias(int pos){
 	for (int i = 0;  i<listaReferencias.size(); i++){
 
 		Referencia actual = (Referencia) listaReferencias.get(i);
-		model.addRow(new Object[]{i+1,actual.getNombres() + "" + actual.getApellidos(), actual.getTipo()});
+		model.addRow(new Object[]{i+1,actual.getNombres() + " " + actual.getApellidos(), actual.getTipo()});
 	}	
 	
 	tableReferencias.getSelectionModel().addListSelectionListener(listenerTablas);
