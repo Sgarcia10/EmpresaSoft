@@ -9,8 +9,10 @@ import javax.swing.ImageIcon;
 
 import Excepciones.NominaExistenteException;
 import mundo.Contrato;
+import mundo.nomina.Cesantias;
 import mundo.nomina.Nomina;
 import mundo.nomina.Prestamo;
+import mundo.nomina.Prima;
 
 public class Empleado extends Persona implements Serializable{
 
@@ -44,9 +46,10 @@ public class Empleado extends Persona implements Serializable{
 	
 	private Conyuge conyugue;
 		
-	private double primaAcumulada;
+	private Prima prima;
 	
-	private double cesantiasAcumuladas;
+	private Cesantias cesantias;
+	
 	
 	public Empleado(double identificacion, String tipoDocumento, String nombre, 
 			String apellidos, String sexo, Date fechaNacimiento, String estadoCivil,
@@ -64,6 +67,7 @@ public class Empleado extends Persona implements Serializable{
 	
 		prestamos = new ArrayList<Prestamo>();
 		foto = null;
+
 	}
 	
 	public void agregarConyugue( String nombresParejaP, String apellidosParejaP, double cedulaParejaP,
@@ -146,6 +150,8 @@ public class Empleado extends Persona implements Serializable{
 				tipoLiquidacionP, fechaInicioP, tipoP, fechaFinP, duracionP, horasP);
 		
 		contrato = contratoNuevo;
+		prima = new Prima(0, fechaInicioP);
+		cesantias = new Cesantias(0, fechaInicioP);
 	}
 	
 	public void editarHijo(int index, String nombreP, String apellidosP, String tipoP,
