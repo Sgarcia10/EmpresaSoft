@@ -42,7 +42,7 @@ public class Cesantias implements Serializable {
 		int dia = actual.getDate();
 		
 		//Reiniciar cesantias
-		if ( (mes == 6 && dia >= 1) || (mes == 11 && dia > 21)){  //se reinicia el estado de prima pagada con el nuevo semestre
+		if ( (mes == 0 && dia >= 1)){  //se reinicia el estado de cesantias pagadas con el nuevo año
 			cesantiasPagadas = false;
 		}
 		
