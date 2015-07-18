@@ -115,7 +115,7 @@ public class DialogoNomina extends JDialog implements ActionListener, MouseListe
 		panel.setLayout(null);
 		panel.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "El Barto CC 123456789 - " + periodo, TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		panel.setBackground(Color.WHITE);
-		panel.setBounds(10, 11, 1283, 503);
+		panel.setBounds(-24, 0, 1283, 503);
 		getContentPane().add(panel);
 		getContentPane().addMouseListener(this);
 
@@ -315,19 +315,19 @@ public class DialogoNomina extends JDialog implements ActionListener, MouseListe
 
 
 		btnModificar = new JButton("Modificar");
-		btnModificar.setBounds(231, 469, 169, 23);
+		btnModificar.setBounds(831, 436, 169, 23);
 		panel.add(btnModificar);
 		btnModificar.addActionListener(this);
 		btnModificar.setActionCommand("Modificar");
 		
 		JButton btnPrima = new JButton("Liquidar Prima");
 		btnPrima.setActionCommand("LiquidarPrima");
-		btnPrima.setBounds(438, 469, 169, 23);
+		btnPrima.setBounds(1054, 432, 169, 23);
 		panel.add(btnPrima);
 		
 		JButton btnCesantias = new JButton("Liquidar Cesantias");
 		btnCesantias.setActionCommand("LiquidarCesantias");
-		btnCesantias.setBounds(644, 469, 169, 23);
+		btnCesantias.setBounds(1054, 469, 169, 23);
 		panel.add(btnCesantias);
 		
 		panelDevengadoPrestaciones = new JPanel();
@@ -416,6 +416,8 @@ public class DialogoNomina extends JDialog implements ActionListener, MouseListe
 		actualizarPanelDevengado( );
 		actualizarPanelDeducciones( );
 		actualizarTotal( );
+		calcularCesantias();
+		calcularPrima();
 	}
 
 
@@ -555,11 +557,21 @@ public class DialogoNomina extends JDialog implements ActionListener, MouseListe
 		}
 		else if (command.equals("LiquidarPrima"))
 		{
-			liquidarPrima();
+			int rta = JOptionPane.showConfirmDialog(this, "¿Desea liquidar la Prima acumulada en esta Nomina?", "Advertencia", JOptionPane.YES_NO_OPTION);
+			if (rta == JOptionPane.YES_OPTION){
+				
+				control.liquidarPrima(periodo);
+				actualizarPanelDevengadoPrestaciones();
+			}			
 		}
 		else if (command.equals("LiquidarCesantias"))
 		{
-			liquidarCesantias();
+			int rta = JOptionPane.showConfirmDialog(this, "¿Desea liquidar las Cesantías acumuladas en esta Nomina?", "Advertencia", JOptionPane.YES_NO_OPTION);
+			if (rta == JOptionPane.YES_OPTION){
+				
+				control.liquidarCesantias(periodo);
+				actualizarPanelDevengadoPrestaciones();
+			}	
 		}
 
 	}
@@ -573,7 +585,7 @@ public class DialogoNomina extends JDialog implements ActionListener, MouseListe
 			int numClick =  e.getClickCount( );
 			if( numClick > 1){
 				System.out.println("Doble Click");
-				DialogoNovedadesDiasNoLaborados novedadesDias = new DialogoNovedadesDiasNoLaborados(principal, control);
+				DialogoNovedadesDiasNoLaborados novedadesDias = new DialogoNovedadesDiasNoLaborados(principal, control,this);
 				novedadesDias.setLocationRelativeTo(principal);
 //				novedadesDias.setVisible(true);
 			}
@@ -608,11 +620,11 @@ public class DialogoNomina extends JDialog implements ActionListener, MouseListe
 
 	}
 	
-	public void liquidarPrima(){
-		double prima = control.liquidarPrima();
+	public void calcularPrima(){
+		control.calcularPrima(totalAPagar);
 	}
 	
-	public void liquidarCesantias(){
-		double cesantias = control.liquidarCesantias();
+	public void calcularCesantias(){
+		control.calcularCesantias(totalAPagar);
 	}
 }

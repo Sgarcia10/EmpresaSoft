@@ -56,6 +56,8 @@ import java.awt.Toolkit;
 
 import javax.swing.JButton;
 
+import Excepciones.NoExisteEmpleadoException;
+import Excepciones.NominaNoEncontradaException;
 import mundo.nomina.DiasNoLaborados;
 import mundo.nomina.Prestamo;
 
@@ -66,6 +68,7 @@ public class DialogoDeduccionesPrestamos extends JDialog implements ActionListen
 {
 	private InterfazNomina principal;
 	private Control control;
+	private DialogoNomina dialogoNomina;
 	private ArrayList<Integer> indices;
 	private Date fecha;
 	private int cont;
@@ -90,12 +93,13 @@ public class DialogoDeduccionesPrestamos extends JDialog implements ActionListen
 	private static final String solve = "Solve";
 	private static final String cancel = "Cancel";
 
-	public DialogoDeduccionesPrestamos( InterfazNomina ventana, Control pControl) {
+	public DialogoDeduccionesPrestamos( InterfazNomina ventana, Control pControl, DialogoNomina pNomina) {
 		super(null, java.awt.Dialog.ModalityType.TOOLKIT_MODAL);
 		setIconImage(Toolkit.getDefaultToolkit().getImage(DialogoDeduccionesPrestamos.class.getResource("/com/sun/java/swing/plaf/windows/icons/Computer.gif")));
 		getContentPane().setBackground(Color.WHITE);
 		principal = ventana;
 		control = pControl;
+		dialogoNomina = pNomina;
 		//		titulo = "Horas Extras Diurnas";
 		cont = 0;
 		setTitle("Deducciones");
@@ -321,7 +325,7 @@ public class DialogoDeduccionesPrestamos extends JDialog implements ActionListen
 //			actualizarTitulo();
 			this.setVisible(false);
 			this.dispose();
-			DialogoDevengadoHoras novedadesHora = new DialogoDevengadoHoras(principal, control, 4);
+			DialogoDevengadoHoras novedadesHora = new DialogoDevengadoHoras(principal, control, dialogoNomina, 4);
 			novedadesHora.setLocationRelativeTo(principal);
 			novedadesHora.setVisible(true);
 		}
@@ -415,5 +419,21 @@ public class DialogoDeduccionesPrestamos extends JDialog implements ActionListen
 		}
 		control.eliminarDiaNoLaborado(index);
 	}
-
+	
+	public void dispose(){
+		
+		if (dialogoNomina != null){
+			try {
+				dialogoNomina.actualizarInformacion();
+			} catch (NoExisteEmpleadoException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (NominaNoEncontradaException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		super.dispose();
+	}
 }

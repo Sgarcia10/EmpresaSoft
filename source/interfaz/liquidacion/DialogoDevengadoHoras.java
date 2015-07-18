@@ -60,6 +60,7 @@ public class DialogoDevengadoHoras extends JDialog implements ActionListener
 {
 	private InterfazNomina principal;
 	private Control control;
+	private DialogoNomina dialogoNomina;
 	private ArrayList<Integer> indices;
 	private Date fecha;
 	private int cont;
@@ -87,12 +88,13 @@ public class DialogoDevengadoHoras extends JDialog implements ActionListener
 	private static final String solve = "Solve";
 	private static final String cancel = "Cancel";
 
-	public DialogoDevengadoHoras( InterfazNomina ventana,  Control pControl, int pCont) {
+	public DialogoDevengadoHoras( InterfazNomina ventana,  Control pControl, DialogoNomina pNomina,int pCont) {
 		super(null, java.awt.Dialog.ModalityType.TOOLKIT_MODAL);
 		setIconImage(Toolkit.getDefaultToolkit().getImage(DialogoDevengadoHoras.class.getResource("/com/sun/java/swing/plaf/windows/icons/Computer.gif")));
 		getContentPane().setBackground(Color.WHITE);
 		principal = ventana;
 		control = pControl;
+		dialogoNomina = pNomina;
 		//		titulo = "Horas Extras Diurnas";
 		cont = pCont;
 		setTitle("Devengado");
@@ -203,7 +205,7 @@ public class DialogoDevengadoHoras extends JDialog implements ActionListener
 		case -1: 
 			this.setVisible(false);
 			this.dispose();
-			DialogoNovedadesDiasNoLaborados novedadesDias = new DialogoNovedadesDiasNoLaborados(principal, control);
+			DialogoNovedadesDiasNoLaborados novedadesDias = new DialogoNovedadesDiasNoLaborados(principal, control, dialogoNomina);
 			novedadesDias.setLocationRelativeTo(principal);break;
 //			novedadesDias.setVisible(true); 
 
@@ -217,7 +219,7 @@ public class DialogoDevengadoHoras extends JDialog implements ActionListener
 
 			this.setVisible(false);
 			this.dispose();
-			DialogoDeduccionesPrestamos deducciones = new DialogoDeduccionesPrestamos(principal, control);
+			DialogoDeduccionesPrestamos deducciones = new DialogoDeduccionesPrestamos(principal, control,dialogoNomina);
 			deducciones.setLocationRelativeTo(principal);
 			deducciones.setVisible(true); break;
 		default:  titulo = "Ordinaria - Extra Diurno"; break;
@@ -556,6 +558,23 @@ public class DialogoDevengadoHoras extends JDialog implements ActionListener
 		catch (Exception e){
 			JOptionPane.showMessageDialog(this, "Cantidad y Valor Unitario deben ser valores numéricos enteros", "Error", JOptionPane.ERROR_MESSAGE);
 		}
+	}
+	
+	public void dispose(){
+		
+		if (dialogoNomina != null){
+			try {
+				dialogoNomina.actualizarInformacion();
+			} catch (NoExisteEmpleadoException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (NominaNoEncontradaException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		super.dispose();
 	}
 
 }

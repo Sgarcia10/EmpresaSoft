@@ -505,18 +505,14 @@ public class Control {
 		
 	}
 	
-	public double liquidarPrima(){
+	public void calcularPrima(double pTotal){
 		Empleado e = getEmpleadoSeleccionado();
-		//return e.darPrimaAcumulada();
-		//e.setPrimaAcumulada(0);
-		return 0;
+		e.calcularPrima(pTotal);
 	}
 	
-	public double liquidarCesantias(){
+	public void calcularCesantias(double pTotal){
 		Empleado e = getEmpleadoSeleccionado();
-		//return e.darCesantiasAcumuladas();
-		//e.setCesantiasAcumuladas(0);
-		return 0;
+		e.calcularCesantias(pTotal);
 	}
 	
 	public String darUsuario(){
@@ -525,18 +521,30 @@ public class Control {
 	}
 
 	public double getDevengadoPrestacionesTotalPrima(String periodo) {
-		// TODO Auto-generated method stub
-		return 0;
+		Empleado e = getEmpleadoSeleccionado();
+		double res = e.darTotalPrima(periodo);
+		return res;
 	}
 
 	public double getDevengadoPrestacionesTotalCesantias(String periodo) {
-		// TODO Auto-generated method stub
-		return 0;
+		Empleado e = getEmpleadoSeleccionado();
+		double res = e.darTotalCesantias(periodo);
+		return res;
 	}
 
 	public double getDevengadoPrestacionesTotalVacaciones(String periodo) {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+	
+	public void liquidarPrima(String pPeriodo){
+		Empleado e = getEmpleadoSeleccionado();
+		e.liquidarPrima(pPeriodo);
+	}
+	
+	public void liquidarCesantias(String pPeriodo){
+		Empleado e = getEmpleadoSeleccionado();
+		e.liquidarCesantias(pPeriodo);
 	}
 
 	

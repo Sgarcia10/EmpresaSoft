@@ -62,6 +62,7 @@ import java.beans.PropertyChangeListener;
 public class DialogoNovedadesDiasNoLaborados extends JDialog implements ActionListener
 {
 	private InterfazNomina principal;
+	private DialogoNomina dialogoNomina;
 	private Control control;
 	private ArrayList<Integer> indices;
 	private Date fecha;
@@ -89,13 +90,14 @@ public class DialogoNovedadesDiasNoLaborados extends JDialog implements ActionLi
 
 
 
-	public DialogoNovedadesDiasNoLaborados( InterfazNomina ventana, Control pControl) {
+	public DialogoNovedadesDiasNoLaborados( InterfazNomina ventana, Control pControl, DialogoNomina pNomina) {
 
 		super(null, java.awt.Dialog.ModalityType.TOOLKIT_MODAL);
 		setIconImage(Toolkit.getDefaultToolkit().getImage(DialogoNovedadesDiasNoLaborados.class.getResource("/com/sun/java/swing/plaf/windows/icons/Computer.gif")));
 		getContentPane().setBackground(Color.WHITE);
 		principal = ventana;
 		control = pControl;
+		dialogoNomina = pNomina;
 		//		titulo = "Horas Extras Diurnas";
 		cont = 0;
 		setTitle("Novedades");
@@ -311,7 +313,7 @@ public class DialogoNovedadesDiasNoLaborados extends JDialog implements ActionLi
 			//			cont++;
 			this.setVisible(false);
 			this.dispose();
-			DialogoDevengadoHoras novedadesHora = new DialogoDevengadoHoras(principal, control, 0);
+			DialogoDevengadoHoras novedadesHora = new DialogoDevengadoHoras(principal, control,dialogoNomina, 0);
 			novedadesHora.setLocationRelativeTo(principal);
 			novedadesHora.setVisible(true);
 		}
@@ -401,5 +403,22 @@ public class DialogoNovedadesDiasNoLaborados extends JDialog implements ActionLi
 			btnEliminar.setEnabled(true);
 		}
 		control.eliminarDiaNoLaborado(index);
+	}
+	
+	public void dispose(){
+		
+		if (dialogoNomina != null){
+			try {
+				dialogoNomina.actualizarInformacion();
+			} catch (NoExisteEmpleadoException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (NominaNoEncontradaException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		super.dispose();
 	}
 }

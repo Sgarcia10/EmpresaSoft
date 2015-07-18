@@ -624,7 +624,7 @@ public class InterfazNomina extends JFrame implements ActionListener{
 			}
 		}
 		else if (command.equals("Agregar Novedades")){
-			DialogoNovedadesDiasNoLaborados novedadesDias = new DialogoNovedadesDiasNoLaborados(this, control);
+			DialogoNovedadesDiasNoLaborados novedadesDias = new DialogoNovedadesDiasNoLaborados(this, control, null);
 			novedadesDias.setLocationRelativeTo(this);
 //			novedadesDias.setVisible(true);
 		}
