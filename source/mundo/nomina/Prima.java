@@ -24,7 +24,7 @@ public class Prima implements Serializable {
 		primaPagada = false;
 	}
 	
-	public void calcularAcumulado(double devengadoUltimaLiquidacion) throws Exception{
+	public void calcularAcumulado(double devengadoUltimaLiquidacion){
 		
 		int dias = 0;
 		double parcial = 0;

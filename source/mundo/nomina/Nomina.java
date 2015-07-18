@@ -37,6 +37,10 @@ public class Nomina  implements Serializable {
 	
 	private ArrayList<Prestamo> prestamos;
 	
+	private double prima;
+	
+	private double cesantias;
+	
 	public Nomina(Empleado empleadoP, String peridoP)
 	{
 		salarioBasico = (int) empleadoP.getContrato().getSueldoBasico();
@@ -59,7 +63,9 @@ public class Nomina  implements Serializable {
 		
 		deducciones = new Deducciones(this);
 		
+		prima = 0;
 		
+		cesantias = 0;
 	}
 	
 //	private void crearPeriodoActual()
@@ -201,6 +207,22 @@ public class Nomina  implements Serializable {
 	public ArrayList<Prestamo> getPrestamos()
 	{
 		return prestamos;
+	}
+
+	public double getPrima() {
+		return prima;
+	}
+
+	public void setPrima(double prima) {
+		this.prima = prima;
+	}
+
+	public double getCesantias() {
+		return cesantias;
+	}
+
+	public void setCesantias(double cesantias) {
+		this.cesantias = cesantias;
 	}
 	
 	

@@ -29,7 +29,7 @@ public class Cesantias implements Serializable {
 		ultimosTresSalarios = new double[3];
 	}
 	
-	public void calcularAcumulado(double devengadoUltimaLiquidacion) throws Exception{
+	public void calcularAcumulado(double devengadoUltimaLiquidacion){
 		
 		actualizarUltimosTresSalarios(devengadoUltimaLiquidacion);
 		

@@ -325,6 +325,32 @@ public class Empleado extends Persona implements Serializable{
 	{
 		return getApellidos() + " " + getNombres();
 	}
-		
 
+	public void calcularPrima(double pTotal) {
+		prima.calcularAcumulado(pTotal);
+	}
+	
+	public void calcularCesantias(double pTotal) {
+		cesantias.calcularAcumulado(pTotal);
+	}
+		
+	public void liquidarPrima(String pPeriodo){
+		Nomina actual = buscarNominaPeriodo(pPeriodo);
+		actual.setPrima(prima.getValor());
+	}
+	
+	public void liquidarCesantias(String pPeriodo){
+		Nomina actual = buscarNominaPeriodo(pPeriodo);
+		actual.setCesantias(cesantias.getValor());
+	}
+	
+	public double darTotalPrima(String periodo){
+		Nomina actual = buscarNominaPeriodo(periodo);
+		return actual.getPrima();
+	}
+	
+	public double darTotalCesantias(String periodo){
+		Nomina actual = buscarNominaPeriodo(periodo);
+		return actual.getCesantias();
+	}
 }
