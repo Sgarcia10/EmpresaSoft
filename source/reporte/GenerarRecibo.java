@@ -43,15 +43,17 @@ public class GenerarRecibo
     // Constantes y Atributos
     // -----------------------------------------------------------------
 	
+	public static byte[] USER = "Hello".getBytes();
+	public static byte[] OWNER = "World".getBytes();
     /**
      * Ruta del pdf generado
      */
-	public static final String RUTA_PDF = "./data/";
+	public static final String RUTA_PDF = "./data/Reporte/";
 	
     /**
      * Ruta de la plantilla 
      */
-	public static final String RUTA_PLANTILLA = "./data/Plantilla/plantilla.pdf";
+	public static final String RUTA_PLANTILLA = "./data/Reporte/Plantilla/plantilla.pdf";
 	
     /**
      * Nombre del archivo
@@ -133,7 +135,9 @@ public class GenerarRecibo
 		//Get a PdfWriter instance (2)
 		FileOutputStream out = new FileOutputStream(RUTA_PDF + nombre + ".pdf");
 		PdfWriter writer = PdfWriter.getInstance(document, out);	
-	
+		
+		writer.setEncryption(USER, OWNER,PdfWriter.ALLOW_PRINTING, PdfWriter.STANDARD_ENCRYPTION_128);
+		
 		//Open the document (3)
 		document.open();
 		
