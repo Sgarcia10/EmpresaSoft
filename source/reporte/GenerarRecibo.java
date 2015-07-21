@@ -43,8 +43,8 @@ public class GenerarRecibo
     // Constantes y Atributos
     // -----------------------------------------------------------------
 	
-	public static byte[] USER = "Hello".getBytes();
-	public static byte[] OWNER = "World".getBytes();
+//	public static byte[] USER = "Hello".getBytes();
+	public static byte[] OWNER = "maluquita".getBytes();
     /**
      * Ruta del pdf generado
      */
@@ -88,16 +88,23 @@ public class GenerarRecibo
 	
 	private String deducc; 
     
-	
+	private byte[] user;
 	
 	public GenerarRecibo (String pEmpleado, String pDevengado, String pDeducciones) throws MalformedURLException, DocumentException, IOException
 	{
 		empleado = pEmpleado;
 		deveng = pDevengado;
 		deducc = pDeducciones;
+		setContrasenaUser();
 		nuevoDocumento();
 	}
 	
+	private void setContrasenaUser() {
+		// TODO Auto-generated method stub
+		String[] empleado1 = empleado.split("/");
+		user = empleado1[1].getBytes();
+	}
+
 	private void nuevoDocumento () throws MalformedURLException, DocumentException, IOException
 	{	
 		//Create a Document (1)
@@ -109,7 +116,7 @@ public class GenerarRecibo
 		FileOutputStream out = new FileOutputStream(RUTA_PDF + nombre + ".pdf");
 		PdfWriter writer = PdfWriter.getInstance(document, out);	
 		
-		writer.setEncryption(USER, OWNER,PdfWriter.ALLOW_PRINTING, PdfWriter.STANDARD_ENCRYPTION_128);
+		writer.setEncryption(user, OWNER,PdfWriter.ALLOW_PRINTING, PdfWriter.STANDARD_ENCRYPTION_128);
 		
 		//Open the document (3)
 		document.open();
