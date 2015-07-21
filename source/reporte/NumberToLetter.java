@@ -52,7 +52,7 @@ public class NumberToLetter
                 + String.valueOf(getDigitAt(splitNumber[0], 6)));
         
         if (millon == 1)
-            converted.append("UN MILLON ");
+            converted.append("UN MILLÓN ");
         else if (millon > 1)
             converted.append(convertNumber(String.valueOf(millon))
                     + "MILLONES ");

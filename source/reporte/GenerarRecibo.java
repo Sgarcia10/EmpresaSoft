@@ -81,47 +81,20 @@ public class GenerarRecibo
      * Total Deducciones
      */
 	private double totalDeducciones;
-	
-	/**
-     * PROVE ---------------------------------------------------------EMPLEADO
-     */
-	private String empleado = "BARTOLOMEO SIMPSON/CC 1.111'111.111/NARCODEALER AUTORIZADO DE HEROINA";
-	
-	/**
-     * PROVE ---------------------------------------------------------DEVENGADO
-     */
-	private String deveng = "1/Sueldo Básico/750000-75/Comisiones/250000-40/Horas Extra (Noche)/300000";
-	
-	
-	/**
-     * PROVE ---------------------------------------------------------DEDUCCIONES
-     */
-	private String deducc = "1/Aporte a salud/76000-1/ARL/9918";
-	
-    // -----------------------------------------------------------------
-    // Main
-    // -----------------------------------------------------------------
-	
-	public static void main (String[] args)
-	{
-		try
-		{
-			GenerarRecibo g = new GenerarRecibo();		
-		}
-		catch (Exception e){
-			System.err.println("Hay un error");
-		}
-	}
 		
-	private void tamañoPlantilla (PdfReader reader)
-	{
-		Rectangle tamaño1 = reader.getPageSize(1);
-		ancho = tamaño1.getRight();
-		alto = tamaño1.getTop();
-	}
+	private String empleado;
 	
-	public GenerarRecibo () throws MalformedURLException, DocumentException, IOException
+	private String deveng;
+	
+	private String deducc; 
+    
+	
+	
+	public GenerarRecibo (String pEmpleado, String pDevengado, String pDeducciones) throws MalformedURLException, DocumentException, IOException
 	{
+		empleado = pEmpleado;
+		deveng = pDevengado;
+		deducc = pDeducciones;
 		nuevoDocumento();
 	}
 	
@@ -161,7 +134,14 @@ public class GenerarRecibo
 		document.close();			
 	}
 	
-    // -----------------------------------------------------------------
+    private void tamañoPlantilla (PdfReader reader)
+	{
+		Rectangle tamaño1 = reader.getPageSize(1);
+		ancho = tamaño1.getRight();
+		alto = tamaño1.getTop();
+	}
+
+	// -----------------------------------------------------------------
     // Canvas
     // -----------------------------------------------------------------
 	
